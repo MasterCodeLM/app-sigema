@@ -22,7 +22,7 @@
                     <template #loading>
                         Loading customers data. Please wait.
                     </template>
-                    <Column field="name" header="Full Name" style="min-width:12rem">
+                    <Column field="name" header="Name" style="min-width:12rem">
                         <template #body="{data}">
                             {{data.name}}
                         </template>
