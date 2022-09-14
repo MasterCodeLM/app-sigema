@@ -86,6 +86,7 @@ export default {
                         {label: 'Not Found', icon: 'pi pi-fw pi-exclamation-circle', to: '/notfound'},
                         {label: 'Access Denied', icon: 'pi pi-fw pi-lock', to: '/access'},
 						{label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty'},
+            {label: 'Article Types', icon: 'pi pi-fw pi-user-edit', to: '/article-types'},
 					]
 				},
                 {
