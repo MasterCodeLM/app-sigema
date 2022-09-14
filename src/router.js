@@ -143,6 +143,11 @@ const routes = [
                 path: '/article-types',
                 name: 'article-types',
                 component: () => import('./pages/ArticleTypes.vue')
+            },
+            {
+                path: '/users',
+                name: 'users',
+                component: () => import('./pages/Users.vue')
             }
         ]
     },

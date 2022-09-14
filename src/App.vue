@@ -87,6 +87,7 @@ export default {
                         {label: 'Access Denied', icon: 'pi pi-fw pi-lock', to: '/access'},
 						{label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty'},
             {label: 'Article Types', icon: 'pi pi-fw pi-user-edit', to: '/article-types'},
+            {label: 'Users', icon: 'pi pi-fw pi-user-edit', to: '/users'},
 					]
 				},
                 {
