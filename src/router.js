@@ -138,6 +138,11 @@ const routes = [
                 path: '/icons',
                 name: 'icons',
                 component: () => import('./components/IconsDemo.vue')
+            },
+            {
+                path: '/article-types',
+                name: 'article-types',
+                component: () => import('./pages/ArticleTypes.vue')
             }
         ]
     },
@@ -165,7 +170,7 @@ const routes = [
         path: '/access',
         name: 'access',
         component: () => import('./pages/Access.vue')
-    }
+    },
 ];
 
 const router = createRouter({
