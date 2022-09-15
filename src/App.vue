@@ -141,6 +141,11 @@ export default {
               to: "/employees",
             },
             {
+              label: "Inventory",
+              icon: "pi pi-fw pi-user-edit",
+              to: "/articles",
+            },
+            {
               label: "Article Types",
               icon: "pi pi-fw pi-user-edit",
               to: "/article-types",

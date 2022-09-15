@@ -52,7 +52,7 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Suppliers</h5>
+              <h5 class="m-0">Articles</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -65,95 +65,81 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-            field="ruc"
-            header="RUC"
+            field="name"
+            header="Name"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">RUC</span>
+              <span class="p-column-title">Name</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
 
           <Column
-            field="businessName"
-            header="Business Name"
+            field="serialNumber"
+            header="Serial Number"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Business Name</span>
+              <span class="p-column-title">Serial Number</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
           <Column
-            field="email"
-            header="Email"
+            field="model"
+            header="Model"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Email</span>
+              <span class="p-column-title">Model</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
           <Column
-            field="telephone"
-            header="Telephone"
+            field="brand"
+            header="Brand"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Telephone</span>
+              <span class="p-column-title">Brand</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
-          <Column
-            field="address"
-            header="Address"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
+          <Column header="Image" headerStyle="width:14%; min-width:10rem;">
             <template #body="slotProps">
-              <span class="p-column-title">Address</span>
-              {{ slotProps.data.name }}
+              <span class="p-column-title">Image</span>
+              <img
+                :src="'images/product/' + slotProps.data.image"
+                :alt="slotProps.data.image"
+                class="shadow-2"
+                width="100"
+              />
             </template>
           </Column>
-
           <Column
-            field="bankingEntity"
-            header="Banking Entity"
+            field="quantity"
+            header="Quantity"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Banking Entity</span>
-              {{ slotProps.data.name }}
+              <span class="p-column-title">Quantity</span>
+              {{ formatCurrency(slotProps.data.price) }}
             </template>
           </Column>
-
           <Column
-            field="accountNumber"
-            header="Account Number"
+            field="price"
+            header="Price"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Account Number</span>
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column
-            field="interbankCode"
-            header="Interbank Code"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Interbank Code</span>
-              {{ slotProps.data.name }}
+              <span class="p-column-title">Price</span>
+              {{ formatCurrency(slotProps.data.price) }}
             </template>
           </Column>
 
@@ -197,205 +183,209 @@
 
         <Dialog
           v-model:visible="productDialog"
-          :style="{ width: '700px' }"
-          header="Suppliers Details"
+          :style="{ width: '1000px' }"
+          header="Article Details"
           :modal="true"
           class="p-fluid"
         >
-          <!--  <div class="formgrid grid">-->
-
-          <div class="field">
-            <label for="ruc">RUC</label>
-            <InputText
-              id="ruc"
-              v-model.trim="product.ruc"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >RUC is required.</small
-            >
-          </div>
-
-          <div class="field">
-            <label for="businessName">Business Name</label>
-            <InputText
-              id="businessName"
-              v-model.trim="product.businessName"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Business Name is required.</small
-            >
-          </div>
-
-          <!-- </div> -->
-
           <div class="formgrid grid">
-            <div class="field col">
-              <label for="telephone">Telephone</label>
-              <InputText
-                id="telephone"
-                v-model.trim="product.telephone"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
-              />
-              <small class="p-invalid" v-if="submitted && !product.name"
-                >Telephone is required.</small
-              >
-            </div>
-
-            <div class="field col">
-              <label for="email">Email</label>
-              <InputText
-                id="email"
-                v-model.trim="product.email"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
-              />
-              <small class="p-invalid" v-if="submitted && !product.name"
-                >Email is required.</small
-              >
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="address">Address</label>
-            <InputText
-              id="address"
-              v-model.trim="product.address"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Address is required.</small
-            >
-          </div>
-
-          <div class="card">
-            <div class="formgrid grid">
-              <div class="field col">
-                <label for="bankingEntity">Banking Entity</label>
-                <Listbox
-                  v-model="listboxValue"
-                  :options="listboxValues"
-                  optionLabel="bankingEntity"
-                  :filter="true"
-                />
-              </div>
-
-              <div class="field col">
-                <label for="accountNumber">Account Number</label>
-                <InputText
-                  id="accountNumber"
-                  v-model.trim="product.accountNumber"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
-                />
-                <small class="p-invalid" v-if="submitted && !product.name"
-                  >Account Number is required.</small
-                >
-              </div>
-
-              <div class="field col">
-                <label for="interbankCode">Interbank Code</label>
-                <InputText
-                  id="interbankCode"
-                  v-model.trim="product.interbankCode"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
-                />
-                <small class="p-invalid" v-if="submitted && !product.name"
-                  >Interbank Code is required.</small
-                >
-              </div>
-            </div>
-
-            <DataTable
-              ref="dt"
-              :value="products"
-              v-model:selection="selectedProducts"
-              dataKey="id"
-              :paginator="true"
-              :rows="10"
-              :filters="filters"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              :rowsPerPageOptions="[5, 10, 25]"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              responsiveLayout="scroll"
-            >
-              <template #header>
-                <div
-                  class="
-                    flex flex-column
-                    md:flex-row md:justify-content-between md:align-items-center
-                  "
-                >
-                  <h5 class="m-0">Suppliers</h5>
-                  <span class="block mt-2 md:mt-0 p-input-icon-left">
-                    <i class="pi pi-search" />
-                  </span>
+            <div class="col-6">
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="serialNumber">Serial Number</label>
+                  <InputText
+                    id="serialNumber"
+                    v-model.trim="product.serialNumber"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
+                  />
+                  <small class="p-invalid" v-if="submitted && !product.name"
+                    >Serial Number is required.</small
+                  >
                 </div>
-              </template>
 
-              <Column headerStyle="width: 3rem"></Column>
+                <div class="field col">
+                  <label for="name">Name</label>
+                  <InputText
+                    id="name"
+                    v-model.trim="product.name"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
+                  />
+                  <small class="p-invalid" v-if="submitted && !product.name"
+                    >Name is required.</small
+                  >
+                </div>
+              </div>
 
-              <Column
-                field="bankingEntity"
-                header="Banking Entity"
-                :sortable="true"
-                headerStyle="width:14%; min-width:10rem;"
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="brand">Brand</label>
+                  <InputText
+                    id="brand"
+                    v-model.trim="product.telephone"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
+                  />
+                  <small class="p-invalid" v-if="submitted && !product.name"
+                    >Brand is required.</small
+                  >
+                </div>
+
+                <div class="field col">
+                  <label for="model">Model</label>
+                  <InputText
+                    id="model"
+                    v-model.trim="product.email"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
+                  />
+                  <small class="p-invalid" v-if="submitted && !product.name"
+                    >Model is required.</small
+                  >
+                </div>
+              </div>
+
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="quantity">Quantity</label>
+                  <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
+                  <InputNumber
+                    id="quantity"
+                    v-model="inputNumberValue"
+                    showButtons
+                    mode="decimal"
+                  />
+                </div>
+                <div class="field col">
+                  <label for="articleType">Article Type</label>
+                  <Listbox
+                    v-model="listboxValue"
+                    :options="listboxValues"
+                    optionLabel="articleType"
+                    :filter="true"
+                  />
+                </div>
+              </div>
+
+              <div class="card">
+                <h5>Imagen</h5>
+                <FileUpload
+                  mode="basic"
+                  name="demo[]"
+                  url="./upload.php"
+                  accept="image/*"
+                  :maxFileSize="1000000"
+                  @upload="onUpload"
+                />
+                <h5>Hoja Ténica</h5>
+                <FileUpload
+                  name="demo[]"
+                  url="./upload.php"
+                  @upload="onUpload"
+                  :multiple="true"
+                  accept="image/*"
+                  :maxFileSize="1000000"
+                />
+              </div>
+            </div>
+
+            <div class="card col-6">
+              <div class="formgrid grid">
+                <div class="field col">
+                  <label for="suppliers">Suppliers</label>
+                  <Listbox
+                    v-model="listboxValue"
+                    :options="listboxValues"
+                    optionLabel="suppliers"
+                    :filter="true"
+                  />
+                </div>
+
+                <div class="field col">
+                  <label for="price">Price</label>
+                  <InputNumber
+                    id="price"
+                    v-model="product.price"
+                    mode="currency"
+                    currency="USD"
+                    locale="en-US"
+                  />
+                </div>
+              </div>
+
+              <DataTable
+                ref="dt"
+                :value="products"
+                v-model:selection="selectedProducts"
+                dataKey="id"
+                :paginator="true"
+                :rows="10"
+                :filters="filters"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[5, 10, 25]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                responsiveLayout="scroll"
               >
-                <template #body="slotProps">
-                  <span class="p-column-title">Banking Entity</span>
-                  {{ slotProps.data.bankingEntity }}
-                </template>
-              </Column>
-
-              <Column
-                field="accountNumber"
-                header="Account Number"
-                :sortable="true"
-                headerStyle="width:14%; min-width:10rem;"
-              >
-                <template #body="slotProps">
-                  <span class="p-column-title">Account Number</span>
-                  {{ slotProps.data.accountNumber }}
-                </template>
-              </Column>
-
-              <Column
-                field="interbankCode"
-                header="Interbank Code"
-                :sortable="true"
-                headerStyle="width:14%; min-width:10rem;"
-              >
-                <template #body="slotProps">
-                  <span class="p-column-title">Interbank Code</span>
-                  {{ slotProps.data.interbankCode }}
-                </template>
-              </Column>
-
-              <Column headerStyle="min-width:10rem;">
-                <template #body="slotProps">
-                  <div style="display: flex; justify-content: end">
-                    <Button
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-danger"
-                      @click="confirmDeleteProduct(slotProps.data)"
-                    />
+                <template #header>
+                  <div
+                    class="
+                      flex flex-column
+                      md:flex-row
+                      md:justify-content-between
+                      md:align-items-center
+                    "
+                  >
+                    <h5 class="m-0">Refrence Prices</h5>
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                      <i class="pi pi-search" />
+                    </span>
                   </div>
                 </template>
-              </Column>
-            </DataTable>
+
+                <Column headerStyle="width: 3rem"></Column>
+
+                <Column
+                  field="suppliers"
+                  header="Suppliers"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Suppliers</span>
+                    {{ slotProps.data.bankingEntity }}
+                  </template>
+                </Column>
+
+                <Column
+                  field="price"
+                  header="Price"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Price</span>
+                    {{ slotProps.data.accountNumber }}
+                  </template>
+                </Column>
+
+                <Column headerStyle="min-width:10rem;">
+                  <template #body="slotProps">
+                    <div style="display: flex; justify-content: end">
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        @click="confirmDeleteProduct(slotProps.data)"
+                      />
+                    </div>
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
           </div>
 
           <template #footer>
