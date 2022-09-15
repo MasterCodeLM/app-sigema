@@ -263,12 +263,15 @@
                 </div>
                 <div class="field col">
                   <label for="articleType">Article Type</label>
-                  <Listbox
-                    v-model="listboxValue"
-                    :options="listboxValues"
-                    optionLabel="articleType"
+                  <Dropdown
+                    id="articleType"
+                    v-model="dropdownItem"
+                    :options="dropdownItems"
+                    optionLabel="name"
+                    placeholder="Select One"
                     :filter="true"
-                  />
+                    :loading="false"
+                  ></Dropdown>
                 </div>
               </div>
 
@@ -298,12 +301,15 @@
               <div class="formgrid grid">
                 <div class="field col">
                   <label for="suppliers">Suppliers</label>
-                  <Listbox
-                    v-model="listboxValue"
-                    :options="listboxValues"
-                    optionLabel="suppliers"
+                  <Dropdown
+                    id="Suppliers"
+                    v-model="dropdownItem"
+                    :options="dropdownItems"
+                    optionLabel="name"
+                    placeholder="Select One"
                     :filter="true"
-                  />
+                    :loading="false"
+                  ></Dropdown>
                 </div>
 
                 <div class="field col">
@@ -317,74 +323,45 @@
                   />
                 </div>
               </div>
-
-              <DataTable
-                ref="dt"
-                :value="products"
-                v-model:selection="selectedProducts"
-                dataKey="id"
-                :paginator="true"
-                :rows="10"
-                :filters="filters"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                :rowsPerPageOptions="[5, 10, 25]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                responsiveLayout="scroll"
-              >
-                <template #header>
-                  <div
-                    class="
-                      flex flex-column
-                      md:flex-row
-                      md:justify-content-between
-                      md:align-items-center
-                    "
+              <div class="card">
+                <DataTable
+                  :value="products1"
+                  editMode="cell"
+                  @cell-edit-complete="onCellEditComplete"
+                  class="editable-cells-table"
+                  responsiveLayout="scroll"
+                >
+                  <Column
+                    v-for="col of columns"
+                    :field="col.field"
+                    :header="col.header"
+                    :key="col.field"
+                    style="width: 25%"
                   >
-                    <h5 class="m-0">Refrence Prices</h5>
-                    <span class="block mt-2 md:mt-0 p-input-icon-left">
-                      <i class="pi pi-search" />
-                    </span>
-                  </div>
-                </template>
-
-                <Column headerStyle="width: 3rem"></Column>
-
-                <Column
-                  field="suppliers"
-                  header="Suppliers"
-                  :sortable="true"
-                  headerStyle="width:14%; min-width:10rem;"
-                >
-                  <template #body="slotProps">
-                    <span class="p-column-title">Suppliers</span>
-                    {{ slotProps.data.bankingEntity }}
-                  </template>
-                </Column>
-
-                <Column
-                  field="price"
-                  header="Price"
-                  :sortable="true"
-                  headerStyle="width:14%; min-width:10rem;"
-                >
-                  <template #body="slotProps">
-                    <span class="p-column-title">Price</span>
-                    {{ slotProps.data.accountNumber }}
-                  </template>
-                </Column>
-
-                <Column headerStyle="min-width:10rem;">
-                  <template #body="slotProps">
-                    <div style="display: flex; justify-content: end">
-                      <Button
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger"
-                        @click="confirmDeleteProduct(slotProps.data)"
+                    <template #editor="{ data, field }">
+                      <InputNumber
+                        v-model="data[field]"
+                        mode="currency"
+                        currency="USD"
+                        locale="en-US"
+                        autofocus
                       />
-                    </div>
-                  </template>
-                </Column>
-              </DataTable>
+                    </template>
+                  </Column>
+
+                  <Column headerStyle="min-width:10rem;">
+                    <template #body="slotProps">
+                      <div style="display: flex; justify-content: end">
+                        <Button
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger"
+                          @click="confirmDeleteProduct(slotProps.data)"
+                        />
+                      </div>
+                    </template>
+                  </Column>
+                </DataTable>
+              </div>
             </div>
           </div>
 
