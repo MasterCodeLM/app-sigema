@@ -153,6 +153,11 @@ const routes = [
                 path: '/profile',
                 name: 'profile',
                 component: () => import('./pages/Profile.vue')
+            },
+            {
+                path: '/new-maintenance-sheet',
+                name: 'new-maintenance-sheet',
+                component: () => import('./pages/NewMaintenanceSheet.vue')
             }
         ]
     },
