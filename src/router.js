@@ -163,6 +163,22 @@ const routes = [
                 path: '/suppliers',
                 name: 'suppliers',
                 component: () => import('./pages/Suppliers.vue')
+            },
+            {
+
+                path: '/users',
+                name: 'users',
+                component: () => import('./pages/Users.vue')
+            },
+            {
+                path: '/profile',
+                name: 'profile',
+                component: () => import('./pages/Profile.vue')
+            },
+            {
+                path: '/new-maintenance-sheet',
+                name: 'new-maintenance-sheet',
+                component: () => import('./pages/NewMaintenanceSheet.vue')
             }
             
         ]
@@ -170,7 +186,7 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('./pages/Login.vue')
+        component: () => import('./pages/LoginCustom.vue')
     },
     {
         path: '/landing',
