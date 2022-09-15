@@ -140,10 +140,26 @@ const routes = [
                 component: () => import('./components/IconsDemo.vue')
             },
             {
+                path: '/machines',
+                name: 'machines',
+                component: () => import('./pages/Machines.vue')
+            },
+            {
+                path: '/employees',
+                name: 'employees',
+                component: () => import('./pages/Employees.vue')
+            },
+            {
                 path: '/article-types',
                 name: 'article-types',
                 component: () => import('./pages/ArticleTypes.vue')
+            },
+            {
+                path: '/suppliers',
+                name: 'suppliers',
+                component: () => import('./pages/Suppliers.vue')
             }
+            
         ]
     },
     {
