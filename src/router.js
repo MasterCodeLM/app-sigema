@@ -185,6 +185,11 @@ const routes = [
                 path: '/new-maintenance-sheet',
                 name: 'new-maintenance-sheet',
                 component: () => import('./pages/NewMaintenanceSheet.vue')
+            },
+            {
+                path: '/new-work-start',
+                name: 'new-work-start',
+                component: () => import('./pages/NewWorkStart.vue')
             }
             
         ]
