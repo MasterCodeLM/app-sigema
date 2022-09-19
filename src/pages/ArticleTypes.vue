@@ -18,6 +18,7 @@
         </Toolbar>
 
         <DataTable ref="dt" :value="articleTypes" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
+                   :loading="loading"
                    :rows="10" :filters="filters"
                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                    :rowsPerPageOptions="[5,10,25]"
@@ -110,6 +111,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
+      loading: false,
       statuses: [
         {label: 'INSTOCK', value: 'instock'},
         {label: 'LOWSTOCK', value: 'lowstock'},
@@ -123,7 +125,9 @@ export default {
     this.initFilters();
   },
   mounted() {
+    this.loading = true;
     this.articleTypesService.getAll().then(data => this.articleTypes = data);
+    this.loading = false;
   },
   methods: {
     openNew() {
