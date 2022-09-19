@@ -4,143 +4,101 @@
       <Button icon="pi pi-arrow-left" class="p-button-rounded mr-2 mb-2" />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">JEX TECHNOLOGIES</h3>
+          <h3 class="text-900 font-medium">OPERATION CONTROL</h3>
           <span class="text-600 font-medium text-lg">Machine Name</span>
         </div>
       </div>
     </div>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
+        <h5>Pre-check description</h5>
+        <div class="field">
+          <!--          <label for="name1">Description</label>-->
+          <Textarea
+            placeholder="Your Message"
+            :autoResize="true"
+            rows="9"
+            cols="30"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <div class="card p-fluid">
         <h5>Information</h5>
         <div class="grid">
-          <div class="field col-12 sm:col-6">
-            <label for="name1">Date</label>
-            <Calendar
-              :showIcon="true"
-              :showButtonBar="true"
-              v-model="calendarValue"
-              :minDate="minDateValue"
-            ></Calendar>
-          </div>
-
-          <div class="field col-12 sm:col-6">
-            <label for="state">Maintenance Type</label>
-            <Dropdown
-              id="state"
-              v-model="dropdownItem"
-              :options="dropdownItems"
-              optionLabel="name"
-              placeholder="Select One"
-            ></Dropdown>
+          <div class="field col-12">
+            <label for="name1">Status: .......</label>
           </div>
           <div class="field col-12">
-            <label for="name1">Responsible</label>
-            <InputText id="name1" type="text" />
+            <label for="name1">Last use: .../.../...</label>
+          </div>
+          <div class="field col-12">
+            <label for="name1">Total accumulated hours: ......</label>
+          </div>
+          <div class="field col-12">
+            <label for="name1">Last maintenance date: .../.../...</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <div class="card p-fluid">
+        <h5 style="text-align: center">OPERATION</h5>
+
+        <div class="grid">
+          <div class="col-12 mg:col-6">
+            <div class="card">
+              <Button
+                @click="showSuccess()"
+                label="START"
+                class="p-button-success mr-2"
+              />
+            </div>
           </div>
           <div class="field col-12 sm:col-6">
-            <label for="state">Supplier</label>
-            <Dropdown
-              id="state"
-              v-model="dropdownItem"
-              :options="dropdownItems"
-              optionLabel="name"
-              placeholder="Select One"
-              :filter="true"
-              :loading="false"
-            ></Dropdown>
+            <label for="username1">Start Time</label>
+            <InputText id="username1" :required="true" disabled></InputText>
           </div>
           <div class="field col-12 sm:col-6">
-            <label for="name1">Technical</label>
-            <InputText id="name1" type="text" />
+            <label for="username1">End Time</label>
+            <InputText id="username1" :required="true" disabled></InputText>
+          </div>
+          <Divider layout="horizontal" align="center">
+            <span class="p-tag">Badge</span>
+          </Divider>
+
+          <div class="field col-5">
+            <label for="username1">Total Hours Worked Today</label>
+            <InputText id="username1" :required="true" disabled></InputText>
+            <br /><br />
+            <label for="username1">Total Hours Left Today</label>
+            <InputText id="username1" :required="true" disabled></InputText>
+          </div>
+
+          <div class="col-2">
+            <Divider layout="vertical"> </Divider>
+          </div>
+
+          <div class="field col-5">
+            <label for="username1">Total Hours Of Life Useful Remaining</label>
+            <InputText id="username1" :required="true" disabled></InputText>
           </div>
         </div>
       </div>
     </div>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
-        <h5>Description</h5>
-        <div class="field">
-          <!--          <label for="name1">Description</label>-->
-          <Textarea
-            placeholder="Your Message"
-            :autoResize="true"
-            rows="12"
-            cols="30"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
-      <div class="card">
-        <h5>Details</h5>
-        <div class="p-fluid formgrid grid">
-          <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
-            <div class="flex flex-column sm:flex-row">
-              <Button
-                label="Add Article"
-                class="p-button-secondary mr-2 mb-2"
-                @click="openNew"
-              />
-              <Button
-                label="Add Service"
-                class="p-button-secondary mr-2 mb-2"
-                @click="openNew"
-              />
-            </div>
-          </div>
-          <div
-            class="
-              field
-              col-12
-              md:col-6
-              lg:col-4 lg:col-offset-2
-              xl:col-3 xl:col-offset-6
-            "
-          >
-            <div
-              class="flex flex-column justify-content-center align-items-center"
-            >
-              <h3 class="text-900 text-5xl font-medium p-0 m-0">S/00.00</h3>
-              <span class="text-600 text-md font-medium p-0">Total</span>
-            </div>
-          </div>
+        <h5>Photo and Name of machine</h5>
+        <div class="grid">
           <div class="field col-12">
-            <DataTable
-              :value="products1"
-              editMode="cell"
-              @cell-edit-complete="onCellEditComplete"
-              class="editable-cells-table"
-              responsiveLayout="scroll"
-            >
-              <Column
-                v-for="col of columns"
-                :field="col.field"
-                :header="col.header"
-                :key="col.field"
-                style="width: 25%"
-              >
-                <template #editor="{ data, field }">
-                  <InputNumber
-                    v-model="data[field]"
-                    mode="currency"
-                    currency="USD"
-                    locale="en-US"
-                    autofocus
-                  />
-                </template>
-              </Column>
-              <Column headerStyle="min-width:10rem;">
-                <template #body="slotProps">
-                  <div style="display: flex; justify-content: end">
-                    <Button
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-danger"
-                      @click="confirmDeleteProduct(slotProps.data)"
-                    />
-                  </div>
-                </template>
-              </Column>
-            </DataTable>
+            <img
+              src="@/assets/demo/flags/D33HOQRT4BEGNPOI5BZ6MBEAHM.png"
+              width="100%"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -201,7 +159,7 @@
 </template>
 
 <script>
-import ProductService from "./../service/ProductService";
+import ProductService from "../service/ProductService";
 import { FilterMatchMode } from "primevue/api";
 
 export default {

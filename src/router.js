@@ -150,6 +150,11 @@ const routes = [
                 component: () => import('./pages/Employees.vue')
             },
             {
+                path: '/new-attendance-control',
+                name: 'new-attendance-control',
+                component: () => import('./pages/NewAttendanceControl.vue')
+            },
+            {
                 path: '/article-types',
                 name: 'article-types',
                 component: () => import('./pages/ArticleTypes.vue')
@@ -171,6 +176,12 @@ const routes = [
                 component: () => import('./pages/Users.vue')
             },
             {
+
+                path: '/roles',
+                name: 'roles',
+                component: () => import('./pages/Roles.vue')
+            },
+            {
                 path: '/profile',
                 name: 'profile',
                 component: () => import('./pages/Profile.vue')
@@ -179,6 +190,11 @@ const routes = [
                 path: '/new-maintenance-sheet',
                 name: 'new-maintenance-sheet',
                 component: () => import('./pages/NewMaintenanceSheet.vue')
+            },
+            {
+                path: '/new-work-start',
+                name: 'new-work-start',
+                component: () => import('./pages/NewWorkStart.vue')
             }
             
         ]
