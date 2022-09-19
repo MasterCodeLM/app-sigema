@@ -150,6 +150,11 @@ const routes = [
                 component: () => import('./pages/Employees.vue')
             },
             {
+                path: '/new-attendance-control',
+                name: 'new-attendance-control',
+                component: () => import('./pages/NewAttendanceControl.vue')
+            },
+            {
                 path: '/article-types',
                 name: 'article-types',
                 component: () => import('./pages/ArticleTypes.vue')
