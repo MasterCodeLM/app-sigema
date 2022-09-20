@@ -302,18 +302,34 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="telephone">Telephone</label>
-            <InputText
-              id="telephone"
-              v-model.trim="product.telephone"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Telephone is required.</small
-            >
+          <div class="formgrid grid">
+            <div class="field col">
+              <label for="telephone">Telephone</label>
+              <InputText
+                id="telephone"
+                v-model.trim="product.telephone"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
+                >Telephone is required.</small
+              >
+            </div>
+
+            <div class="field col">
+              <label for="email">Email</label>
+              <InputText
+                id="email"
+                v-model.trim="product.email"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
+                >Email is required.</small
+              >
+            </div>
           </div>
 
           <div class="field">
@@ -332,17 +348,14 @@
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="email">Email</label>
-              <InputText
-                id="email"
-                v-model.trim="product.email"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
-              />
-              <small class="p-invalid" v-if="submitted && !product.name"
-                >Email is required.</small
-              >
+              <label for="state">Native Language</label>
+              <Dropdown
+                id="state"
+                v-model="dropdownItem"
+                :options="dropdownItems"
+                optionLabel="name"
+                placeholder="Select One"
+              ></Dropdown>
             </div>
 
             <div class="field col">
@@ -467,6 +480,11 @@ import EmployeesService from "../service/EmployeesService";
 export default {
   data() {
     return {
+      dropdownItems: [
+        { name: "English", code: "Option 1" },
+        { name: "Spanish", code: "Option 2" },
+      ],
+      dropdownItem: null,
       employees: null,
       productDialog: false,
       deleteDialog: false,

@@ -1,6 +1,14 @@
 <template>
   <div class="grid">
     <div class="col-12">
+      <Button icon="pi pi-arrow-left" class="p-button-rounded mr-2 mb-2" />
+      <div class="card p-fluid">
+        <div class="flex flex-column align-items-center">
+          <h3 class="text-900 font-medium">INVENTORY</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
       <div class="card">
         <Toast />
         <Toolbar class="mb-4">
@@ -52,7 +60,20 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Articles</h5>
+              <div class="field col-12 sm:col-6">
+                <h5 class="m-0">
+                  Filter by:
+                  <Dropdown
+                    id="state"
+                    v-model="dropdownItem"
+                    :options="dropdownItems"
+                    optionLabel="name"
+                    placeholder="Select One"
+                    :filter="true"
+                    :loading="false"
+                  ></Dropdown>
+                </h5>
+              </div>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
