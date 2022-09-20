@@ -34,7 +34,7 @@
 
         <DataTable
           ref="dt"
-          :value="products"
+          :value="machines"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
@@ -78,14 +78,14 @@
           </Column>
 
           <Column
-            field="serialNumber"
+            field="serie_number"
             header="Serial Number"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.serie_number }}
             </template>
           </Column>
 
@@ -97,7 +97,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Model</span>
-              {{ slotProps.data.price }}
+              {{ slotProps.data.model }}
             </template>
           </Column>
 
@@ -109,7 +109,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Brand</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.brand }}
             </template>
           </Column>
 
@@ -126,14 +126,14 @@
           </Column>
 
           <Column
-            field="dailyWorkinghours"
+            field="maximum_working_time"
             header="Daily Working Hours"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Daily Working Hours</span>
-              {{ slotProps.data.price }}
+              {{ slotProps.data.maximum_working_time }}
             </template>
           </Column>
 
@@ -180,7 +180,7 @@
                 <Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
-                  @click="confirmDeleteProduct(slotProps.data)"
+                  @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -363,67 +363,6 @@
             </div>
           </div>
 
-          <!-- 
-						<div class="field">
-              <label for="name">Last Name</label>
-              <InputText id="name" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
-              <small class="p-invalid" v-if="submitted && !product.name">Last Name is required.</small>
-						</div>
-
-					
-
-          <div class="formgrid grid">
-          <div class="field col">
-							<label for="age">Age</label>
-							<InputNumber id="age" v-model="product.quantity" integeronly />
-              <InputNumber id="age"  v-model="inputNumberValue" showButtons mode="decimal" />
-					</div>
-
-          <div class="field col">
-            <label for="title">Title</label>
-            <InputText id="title" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
-            <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
-          </div>
-          </div>
-
-          <div class="field">
-            <label for="telephone">Telephone</label>
-            <InputText id="telephone" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
-            <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
-          </div>
-
-          <div class="field">
-            <label for="address">Address</label>
-            <InputText id="address" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
-            <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
-          </div>
-
-        <div class="formgrid grid">
-          <div class="field col">
-            <label for="email">Email</label>
-            <InputText id="email" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
-            <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
-          </div>
-
-
-          <div class="field col">
-              <label for="inventoryStatus" >Status</label>
-              <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
-                <template #value="slotProps">
-                  <div v-if="slotProps.value && slotProps.value.value">
-                    <span :class="'product-badge status-' +slotProps.value.value">{{slotProps.value.label}}</span>
-                  </div>
-                  <div v-else-if="slotProps.value && !slotProps.value.value">
-                    <span :class="'product-badge status-' +slotProps.value.toLowerCase()">{{slotProps.value}}</span>
-                  </div>
-                  <span v-else>
-                    {{slotProps.placeholder}}
-                  </span>
-                </template>
-              </Dropdown>
-            </div>
-        </div> -->
-
           <template #footer>
             <Button
               label="Cancel"
@@ -441,7 +380,7 @@
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductDialog"
+          v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
           header="Confirm"
           :modal="true"
@@ -451,8 +390,8 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
+            <span v-if="resource"
+              >Are you sure you want to delete <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -461,13 +400,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductDialog = false"
+              @click="deletetDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteProduct"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -492,13 +431,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductsDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteSelectedProducts"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -509,19 +448,22 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import ProductService from "../service/ProductService";
+import MachinesService from "../service/MachinesService";
 
 export default {
   data() {
     return {
-      products: null,
+      machines: null,
       productDialog: false,
-      deleteProductDialog: false,
+      deleteDialog: false,
       deleteProductsDialog: false,
       product: {},
+      resource: {},
       selectedProducts: null,
       filters: {},
       submitted: false,
+      message: null,
+      loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -529,13 +471,15 @@ export default {
       ],
     };
   },
-  productService: null,
+  machinesService: null,
   created() {
-    this.productService = new ProductService();
+    this.machinesService = new MachinesService();
     this.initFilters();
   },
   mounted() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.loading = true;
+    this.machinesService.getAll().then((data) => (this.machines = data));
+    this.loading = false;
   },
   methods: {
     onUpload() {
@@ -601,19 +545,23 @@ export default {
       this.product = { ...product };
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    confirmDelete(resource) {
+      this.resource = resource;
+      this.deleteDialog = true;
     },
-    deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
-      this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+    deleteResource() {
+      this.deleteDialog = false;
+      this.machinesService.delete(this.resource.id).then((data) => {
+        this.machines = this.machines.filter(
+          (val) => val.id !== this.resource.id
+        );
+        this.resource = {};
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
     },
     findIndexById(id) {
