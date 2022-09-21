@@ -1,7 +1,6 @@
 <template>
   <div class="grid">
     <div class="col-12">
-      <Button icon="pi pi-arrow-left" class="p-button-rounded mr-2 mb-2" />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
           <h3 class="text-900 font-medium">INVENTORY</h3>
