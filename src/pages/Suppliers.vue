@@ -378,7 +378,7 @@
                       <Button
                           icon="pi pi-trash"
                           class="p-button-rounded p-button-danger"
-                          @click="confirmDeleteProduct(slotProps.data)"
+                          @click="removeBank(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -642,15 +642,11 @@ export default {
     addBank() {
       this.submittedAddBank = true;
       if (this.validateFormBank()) {
-        if(this.findBankIndexById(this.bankItem.id) === -1){
+        if (this.findBankIndexById(this.bankItem.id) === -1) {
           // INSERT DATA
           this.bank = {...this.bank, ...this.bankItem}
           this.supplier.banks.push(this.bank)
-          // RESERT DATA
-          this.bank = {}
-          this.bankItem = null
-          this.submittedAddBank = false;
-        }else{
+        } else {
           this.$toast.add({
             severity: "error",
             summary: "Ooops!",
@@ -658,13 +654,25 @@ export default {
             life: 3000,
           });
         }
+        // RESERT DATA
+        this.bank = {}
+        this.bankItem = null
+        this.submittedAddBank = false;
       }
     },
     validateFormBank() {
       return this.bankItem && this.bank.account_number && this.bank.interbank_account_number
     },
-    removeBank() {
-      //  TODO:METHOND
+    removeBank(data) {
+      this.supplier.banks = this.supplier.banks.filter((val) => val.id !== data.id);
+      // this.deleteProductDialog = false;
+      // this.product = {};
+      // this.$toast.add({
+      //   severity: "success",
+      //   summary: "Successful",
+      //   detail: "Product Deleted",
+      //   life: 3000,
+      // });
     },
     initFilters() {
       this.filters = {
