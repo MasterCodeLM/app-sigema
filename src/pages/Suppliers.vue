@@ -208,7 +208,6 @@
             <div class="field col">
               <label for="bankingEntity">Document Type</label>
               <Dropdown
-                  id="bankingEntity"
                   v-model="supplier.document_type"
                   :options="documentTypeItems"
                   optionLabel="name"
@@ -295,7 +294,6 @@
             <div class="field col-4">
               <label for="bankingEntity">Supplier Type</label>
               <Dropdown
-                  id="bankingEntity"
                   v-model="supplier.supplier_type"
                   :options="supplierTypeItems"
                   optionLabel="name"
@@ -308,59 +306,57 @@
 
           <div class="card">
             <div class="formgrid grid">
-              <div class="field col">
+              <div class="field col-4">
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
-                    id="bankingEntity"
                     v-model="bankItem"
                     :options="bankItems"
                     optionLabel="name"
                     placeholder="Select One"
                     :filter="false"
                     :loading="false"
+
                 ></Dropdown>
               </div>
 
-              <div class="field col">
+              <div class="field col-3">
                 <label for="accountNumber">Account Number</label>
                 <InputText
                     id="accountNumber"
-                    v-model.trim="product.accountNumber"
+                    v-model.trim="bank.account_number"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !bank.account_number }"
                 />
-                <small class="p-invalid" v-if="submitted && !product.name"
+                <small class="p-invalid" v-if="submitted && !bank.account_number"
                 >Account Number is required.</small
                 >
               </div>
 
-              <div class="field col">
+              <div class="field col-4">
                 <label for="interbankCode">Interbank Code</label>
                 <InputText
                     id="interbankCode"
-                    v-model.trim="product.interbankCode"
+                    v-model.trim="bank.interbank_account_number"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !bank.interbank_account_number }"
                 />
-                <small class="p-invalid" v-if="submitted && !product.name"
+                <small class="p-invalid" v-if="submitted && !bank.interbank_account_number"
                 >Interbank Code is required.</small
                 >
               </div>
 
               <div class="field col-1 flex justify-content-center align-items-center">
-                <Button icon="pi pi-plus" class="p-button-secondary" style="margin-top:1.85rem"></Button>
+                <Button icon="pi pi-plus" class="p-button-secondary" style="margin-top:1.85rem"
+                        @click="addBanks"></Button>
               </div>
 
             </div>
 
             <div class="card">
               <DataTable
-                  :value="products1"
-                  editMode="cell"
-                  @cell-edit-complete="onCellEditComplete"
-                  class="editable-cells-table"
+                  :value="supplier.banks"
                   responsiveLayout="scroll"
               >
                 <Column
@@ -370,15 +366,6 @@
                     :key="col.field"
                     style="width: 25%"
                 >
-                  <template #editor="{ data, field }">
-                    <InputNumber
-                        v-model="data[field]"
-                        mode="currency"
-                        currency="USD"
-                        locale="en-US"
-                        autofocus
-                    />
-                  </template>
                 </Column>
 
                 <Column headerStyle="min-width:10rem;">
@@ -505,11 +492,7 @@ export default {
         supplier_type: {},
         banks: []
       },
-      bank: {
-        name: null,
-        account_number: null,
-        interbank_account_number: null,
-      },
+      bank: {},
       selectedProducts: null,
       filters: {},
       submitted: false,
@@ -517,6 +500,11 @@ export default {
         {label: "INSTOCK", value: "instock"},
         {label: "LOWSTOCK", value: "lowstock"},
         {label: "OUTOFSTOCK", value: "outofstock"},
+      ],
+      columns: [
+        {field: "name", header: "Bank Entity"},
+        {field: "account_number", header: "Account Number"},
+        {field: "interbank_account_number", header: "Interbank Code"},
       ],
 
       documentTypeItem: null,
@@ -632,6 +620,16 @@ export default {
         detail: "Products Deleted",
         life: 3000,
       });
+    },
+    addBanks() {
+      //  TODO:VALIDATE FIELDS BANK
+      //VALIDATE DATA NOT DUPLICATE ADD
+      // INSERT DATA
+      this.bank = {...this.bank, ...this.bankItem}
+      this.supplier.banks.push(this.bank)
+      // RESERT DATA
+      this.bank = {}
+      this.bankItem = {}
     },
     initFilters() {
       this.filters = {
