@@ -137,7 +137,7 @@
                 <Button
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                    @click="editSupplier(slotProps.data)"
                 />
                 <Button
                     icon="pi pi-trash"
@@ -525,12 +525,11 @@ export default {
       if (this.validateFormSupplier()) {
         if (this.supplier.id) {
           //UPDATE
-          // const id = this.resource.id;
-          // const payload = this.resource;
-          // this.articleTypesService.update(id, payload).then(data => {
-          //   this.articleTypes[this.findIndexById(id)] = data.data;
-          //   this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
-          // })
+          const payload = this.supplier;
+          this.supplierService.update(this.supplier.id, payload).then(data => {
+            this.supplier[this.findIndexById(this.supplier.id)] = data.data;
+            this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+          })
         } else {
           // CREATE
           const payload = this.supplier;
@@ -543,9 +542,14 @@ export default {
         this.default()
       }
     },
-    editProduct(product) {
-      this.product = {...product};
-      this.productDialog = true;
+    editSupplier(supplier) {
+      this.supplierService.getOne(supplier.id).then(data => {
+        // console.log(data)
+        this.supplier = {...data};
+        this.productDialog = true;
+        // this.suppliers.push(data.data);
+        // this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+      })
     },
     confirmDelete(supplier) {
       this.supplier = supplier;
@@ -567,8 +571,8 @@ export default {
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.suppliers.length; i++) {
+        if (this.suppliers[i].id === id) {
           index = i;
           break;
         }

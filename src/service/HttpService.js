@@ -7,6 +7,12 @@ export default class HttpService {
         }).then(res => res.json())
             .then(d => d.data);
     }
+    async getOne(uri, id) {
+        return await httpService(`${apiHost}/${uri}/${id}`, {
+            method: 'GET',
+        }).then(res => res.json())
+            .then(d => d.data);
+    }
 
     async create(uri, payload) {
         return await httpService(`${apiHost}/${uri}`, {
