@@ -309,14 +309,18 @@
               <div class="field col-4">
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
+                    id="bankingEntity"
                     v-model="bankItem"
                     :options="bankItems"
                     optionLabel="name"
                     placeholder="Select One"
                     :filter="false"
                     :loading="false"
+                    :class="{ 'p-invalid': submittedAddBank && !bankItem }"
 
                 ></Dropdown>
+                <small class="p-invalid" v-if="submittedAddBank && !bankItem"
+                >Banking Entity is required.</small>
               </div>
 
               <div class="field col-3">
@@ -326,9 +330,9 @@
                     v-model.trim="bank.account_number"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !bank.account_number }"
+                    :class="{ 'p-invalid': submittedAddBank && !bank.account_number }"
                 />
-                <small class="p-invalid" v-if="submitted && !bank.account_number"
+                <small class="p-invalid" v-if="submittedAddBank && !bank.account_number"
                 >Account Number is required.</small
                 >
               </div>
@@ -340,16 +344,16 @@
                     v-model.trim="bank.interbank_account_number"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !bank.interbank_account_number }"
+                    :class="{ 'p-invalid': submittedAddBank && !bank.interbank_account_number }"
                 />
-                <small class="p-invalid" v-if="submitted && !bank.interbank_account_number"
+                <small class="p-invalid" v-if="submittedAddBank && !bank.interbank_account_number"
                 >Interbank Code is required.</small
                 >
               </div>
 
               <div class="field col-1 flex justify-content-center align-items-center">
                 <Button icon="pi pi-plus" class="p-button-secondary" style="margin-top:1.85rem"
-                        @click="addBanks"></Button>
+                        @click="addBank"></Button>
               </div>
 
             </div>
@@ -492,10 +496,16 @@ export default {
         supplier_type: {},
         banks: []
       },
-      bank: {},
+      bank: {
+        id: null,
+        name: null,
+        account_number: null,
+        interbank_account_number: null,
+      },
       selectedProducts: null,
       filters: {},
       submitted: false,
+      submittedAddBank: false,
       statuses: [
         {label: "INSTOCK", value: "instock"},
         {label: "LOWSTOCK", value: "lowstock"},
@@ -568,10 +578,8 @@ export default {
           this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
         })
       }
-      //TODO: Close Dialog and Reset Supplier
       this.productDialog = false;
       this.default()
-      // this.supplier = {};
     },
     editProduct(product) {
       this.product = {...product};
@@ -602,6 +610,16 @@ export default {
       }
       return index;
     },
+    findBankIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.supplier.banks.length; i++) {
+        if (this.supplier.banks[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      return index;
+    },
     exportCSV() {
       this.$refs.dt.exportCSV();
     },
@@ -621,15 +639,32 @@ export default {
         life: 3000,
       });
     },
-    addBanks() {
-      //  TODO:VALIDATE FIELDS BANK
-      //VALIDATE DATA NOT DUPLICATE ADD
-      // INSERT DATA
-      this.bank = {...this.bank, ...this.bankItem}
-      this.supplier.banks.push(this.bank)
-      // RESERT DATA
-      this.bank = {}
-      this.bankItem = {}
+    addBank() {
+      this.submittedAddBank = true;
+      if (this.validateFormBank()) {
+        if(this.findBankIndexById(this.bankItem.id) === -1){
+          // INSERT DATA
+          this.bank = {...this.bank, ...this.bankItem}
+          this.supplier.banks.push(this.bank)
+          // RESERT DATA
+          this.bank = {}
+          this.bankItem = null
+          this.submittedAddBank = false;
+        }else{
+          this.$toast.add({
+            severity: "error",
+            summary: "Ooops!",
+            detail: "bank already exists in the list.",
+            life: 3000,
+          });
+        }
+      }
+    },
+    validateFormBank() {
+      return this.bankItem && this.bank.account_number && this.bank.interbank_account_number
+    },
+    removeBank() {
+      //  TODO:METHOND
     },
     initFilters() {
       this.filters = {
