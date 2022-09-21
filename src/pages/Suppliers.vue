@@ -2,62 +2,62 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast />
+        <Toast/>
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="openNew"
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success mr-2"
+                  @click="openNew"
               />
               <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
+                  label="Delete"
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  @click="confirmDeleteSelected"
+                  :disabled="!selectedProducts || !selectedProducts.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-              label="Export"
-              icon="pi pi-upload"
-              class="p-button-help"
-              @click="exportCSV($event)"
+                label="Export"
+                icon="pi pi-upload"
+                class="p-button-help"
+                @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-          ref="dt"
-          :value="products"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="10"
-          :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-          responsiveLayout="scroll"
+            ref="dt"
+            :value="products"
+            v-model:selection="selectedProducts"
+            dataKey="id"
+            :paginator="true"
+            :rows="10"
+            :filters="filters"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rowsPerPageOptions="[5, 10, 25]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+            responsiveLayout="scroll"
         >
           <template #header>
             <div
-              class="
+                class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Suppliers</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="pi pi-search"/>
                 <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
                 />
               </span>
             </div>
@@ -65,10 +65,10 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-            field="ruc"
-            header="RUC"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="ruc"
+              header="RUC"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">RUC</span>
@@ -77,10 +77,10 @@
           </Column>
 
           <Column
-            field="businessName"
-            header="Business Name"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="businessName"
+              header="Business Name"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Business Name</span>
@@ -88,10 +88,10 @@
             </template>
           </Column>
           <Column
-            field="email"
-            header="Email"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="email"
+              header="Email"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
@@ -99,10 +99,10 @@
             </template>
           </Column>
           <Column
-            field="telephone"
-            header="Telephone"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="telephone"
+              header="Telephone"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
@@ -110,10 +110,10 @@
             </template>
           </Column>
           <Column
-            field="address"
-            header="Address"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="address"
+              header="Address"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Address</span>
@@ -122,10 +122,10 @@
           </Column>
 
           <Column
-            field="bankingEntity"
-            header="Banking Entity"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="bankingEntity"
+              header="Banking Entity"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Banking Entity</span>
@@ -134,10 +134,10 @@
           </Column>
 
           <Column
-            field="accountNumber"
-            header="Account Number"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="accountNumber"
+              header="Account Number"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Account Number</span>
@@ -146,10 +146,10 @@
           </Column>
 
           <Column
-            field="interbankCode"
-            header="Interbank Code"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="interbankCode"
+              header="Interbank Code"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Interbank Code</span>
@@ -158,21 +158,21 @@
           </Column>
 
           <Column
-            field="inventoryStatus"
-            header="Status"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="inventoryStatus"
+              header="Status"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span
-                :class="
+                  :class="
                   'product-badge status-' +
                   (slotProps.data.inventoryStatus
                     ? slotProps.data.inventoryStatus.toLowerCase()
                     : '')
                 "
-                >{{ slotProps.data.inventoryStatus }}</span
+              >{{ slotProps.data.inventoryStatus }}</span
               >
             </template>
           </Column>
@@ -181,14 +181,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger"
-                  @click="confirmDeleteProduct(slotProps.data)"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    @click="confirmDeleteProduct(slotProps.data)"
                 />
               </div>
             </template>
@@ -196,41 +196,55 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '700px' }"
-          header="Suppliers Details"
-          :modal="true"
-          class="p-fluid"
+            v-model:visible="productDialog"
+            :style="{ width: '700px' }"
+            header="Suppliers Details"
+            :modal="true"
+            class="p-fluid"
         >
           <!--  <div class="formgrid grid">-->
 
-          <div class="field">
-            <label for="ruc">RUC</label>
+          <div class="formgrid grid">
+            <div class="field col">
+              <label for="bankingEntity">Document Type</label>
+              <Dropdown
+                  id="bankingEntity"
+                  v-model="dropdownItem"
+                  :options="dropdownItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :filter="false"
+                  :loading="false"
+              ></Dropdown>
+            </div>
+            <div class="field col">
+              <label for="ruc">Document Number</label>
+              <InputText
+                  id="ruc"
+                  v-model.trim="product.ruc"
+                  required="true"
+                  autofocus
+                  :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
+              >RUC is required.</small
+              >
+            </div>
+          </div>
+          <div class="field col">
+            <label for="businessName">Business Name</label>
             <InputText
-              id="ruc"
-              v-model.trim="product.ruc"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+                id="businessName"
+                v-model.trim="product.businessName"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !product.name }"
             />
             <small class="p-invalid" v-if="submitted && !product.name"
-              >RUC is required.</small
+            >Business Name is required.</small
             >
           </div>
 
-          <div class="field">
-            <label for="businessName">Business Name</label>
-            <InputText
-              id="businessName"
-              v-model.trim="product.businessName"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Business Name is required.</small
-            >
-          </div>
 
           <!-- </div> -->
 
@@ -238,44 +252,58 @@
             <div class="field col">
               <label for="telephone">Telephone</label>
               <InputText
-                id="telephone"
-                v-model.trim="product.telephone"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                  id="telephone"
+                  v-model.trim="product.telephone"
+                  required="true"
+                  autofocus
+                  :class="{ 'p-invalid': submitted && !product.name }"
               />
               <small class="p-invalid" v-if="submitted && !product.name"
-                >Telephone is required.</small
+              >Telephone is required.</small
               >
             </div>
 
             <div class="field col">
               <label for="email">Email</label>
               <InputText
-                id="email"
-                v-model.trim="product.email"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                  id="email"
+                  v-model.trim="product.email"
+                  required="true"
+                  autofocus
+                  :class="{ 'p-invalid': submitted && !product.name }"
               />
               <small class="p-invalid" v-if="submitted && !product.name"
-                >Email is required.</small
+              >Email is required.</small
               >
             </div>
           </div>
 
-          <div class="field">
-            <label for="address">Address</label>
-            <InputText
-              id="address"
-              v-model.trim="product.address"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
+          <div class="formgrid grid">
+            <div class="field col-8">
+              <label for="address">Address</label>
+              <InputText
+                  id="address"
+                  v-model.trim="product.address"
+                  required="true"
+                  autofocus
+                  :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
               >Address is required.</small
-            >
+              >
+            </div>
+            <div class="field col-4">
+              <label for="bankingEntity">Supplier Type</label>
+              <Dropdown
+                  id="bankingEntity"
+                  v-model="dropdownItem"
+                  :options="dropdownItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :filter="false"
+                  :loading="false"
+              ></Dropdown>
+            </div>
           </div>
 
           <div class="card">
@@ -283,67 +311,72 @@
               <div class="field col">
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
-                  id="bankingEntity"
-                  v-model="dropdownItem"
-                  :options="dropdownItems"
-                  optionLabel="name"
-                  placeholder="Select One"
-                  :filter="true"
-                  :loading="false"
+                    id="bankingEntity"
+                    v-model="dropdownItem"
+                    :options="dropdownItems"
+                    optionLabel="name"
+                    placeholder="Select One"
+                    :filter="false"
+                    :loading="false"
                 ></Dropdown>
               </div>
 
               <div class="field col">
                 <label for="accountNumber">Account Number</label>
                 <InputText
-                  id="accountNumber"
-                  v-model.trim="product.accountNumber"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                    id="accountNumber"
+                    v-model.trim="product.accountNumber"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
                 />
                 <small class="p-invalid" v-if="submitted && !product.name"
-                  >Account Number is required.</small
+                >Account Number is required.</small
                 >
               </div>
 
               <div class="field col">
                 <label for="interbankCode">Interbank Code</label>
                 <InputText
-                  id="interbankCode"
-                  v-model.trim="product.interbankCode"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                    id="interbankCode"
+                    v-model.trim="product.interbankCode"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !product.name }"
                 />
                 <small class="p-invalid" v-if="submitted && !product.name"
-                  >Interbank Code is required.</small
+                >Interbank Code is required.</small
                 >
               </div>
+
+              <div class="field col-1 flex justify-content-center align-items-center">
+                <Button icon="pi pi-plus" class="p-button-secondary" style="margin-top:1.85rem"></Button>
+              </div>
+
             </div>
 
             <div class="card">
               <DataTable
-                :value="products1"
-                editMode="cell"
-                @cell-edit-complete="onCellEditComplete"
-                class="editable-cells-table"
-                responsiveLayout="scroll"
+                  :value="products1"
+                  editMode="cell"
+                  @cell-edit-complete="onCellEditComplete"
+                  class="editable-cells-table"
+                  responsiveLayout="scroll"
               >
                 <Column
-                  v-for="col of columns"
-                  :field="col.field"
-                  :header="col.header"
-                  :key="col.field"
-                  style="width: 25%"
+                    v-for="col of columns"
+                    :field="col.field"
+                    :header="col.header"
+                    :key="col.field"
+                    style="width: 25%"
                 >
                   <template #editor="{ data, field }">
                     <InputNumber
-                      v-model="data[field]"
-                      mode="currency"
-                      currency="USD"
-                      locale="en-US"
-                      autofocus
+                        v-model="data[field]"
+                        mode="currency"
+                        currency="USD"
+                        locale="en-US"
+                        autofocus
                     />
                   </template>
                 </Column>
@@ -352,9 +385,9 @@
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger"
-                        @click="confirmDeleteProduct(slotProps.data)"
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger"
+                          @click="confirmDeleteProduct(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -365,79 +398,79 @@
 
           <template #footer>
             <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-text p-button-danger"
+                @click="hideDialog"
             />
             <Button
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
-              >?</span
+            >Are you sure you want to delete <b>{{ product.name }}</b
+            >?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteProductDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteProductDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteProduct"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductsDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductsDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete the selected suppliers?</span
+            >Are you sure you want to delete the selected suppliers?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteProductsDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteProductsDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteSelectedProducts"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -447,7 +480,7 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode} from "primevue/api";
 import ProductService from "../service/ProductService";
 
 export default {
@@ -462,9 +495,9 @@ export default {
       filters: {},
       submitted: false,
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
     };
   },
@@ -499,8 +532,8 @@ export default {
       if (this.product.name.trim()) {
         if (this.product.id) {
           this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
+              ? this.product.inventoryStatus.value
+              : this.product.inventoryStatus;
           this.products[this.findIndexById(this.product.id)] = this.product;
           this.$toast.add({
             severity: "success",
@@ -513,8 +546,8 @@ export default {
           this.product.code = this.createId();
           this.product.image = "product-placeholder.svg";
           this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
+              ? this.product.inventoryStatus.value
+              : "INSTOCK";
           this.products.push(this.product);
           this.$toast.add({
             severity: "success",
@@ -528,7 +561,7 @@ export default {
       }
     },
     editProduct(product) {
-      this.product = { ...product };
+      this.product = {...product};
       this.productDialog = true;
     },
     confirmDeleteProduct(product) {
@@ -559,7 +592,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -573,7 +606,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-        (val) => !this.selectedProducts.includes(val)
+          (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -586,7 +619,7 @@ export default {
     },
     initFilters() {
       this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
   },
