@@ -209,7 +209,7 @@
               <label for="bankingEntity">Document Type</label>
               <Dropdown
                   id="bankingEntity"
-                  v-model="documentTypeItem"
+                  v-model="supplier.document_type"
                   :options="documentTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
@@ -221,12 +221,12 @@
               <label for="ruc">Document Number</label>
               <InputText
                   id="ruc"
-                  v-model.trim="product.ruc"
+                  v-model.trim="supplier.document_number"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !supplier.document_number }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small class="p-invalid" v-if="submitted && !supplier.document_number"
               >RUC is required.</small
               >
             </div>
@@ -235,12 +235,12 @@
             <label for="businessName">Business Name</label>
             <InputText
                 id="businessName"
-                v-model.trim="product.businessName"
+                v-model.trim="supplier.name"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                :class="{ 'p-invalid': submitted && !supplier.name }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
+            <small class="p-invalid" v-if="submitted && !supplier.name"
             >Business Name is required.</small
             >
           </div>
@@ -253,12 +253,12 @@
               <label for="telephone">Telephone</label>
               <InputText
                   id="telephone"
-                  v-model.trim="product.telephone"
+                  v-model.trim="supplier.phone"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !supplier.phone }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small class="p-invalid" v-if="submitted && !supplier.phone"
               >Telephone is required.</small
               >
             </div>
@@ -267,12 +267,12 @@
               <label for="email">Email</label>
               <InputText
                   id="email"
-                  v-model.trim="product.email"
+                  v-model.trim="supplier.email"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !supplier.email }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small class="p-invalid" v-if="submitted && !supplier.email"
               >Email is required.</small
               >
             </div>
@@ -283,12 +283,12 @@
               <label for="address">Address</label>
               <InputText
                   id="address"
-                  v-model.trim="product.address"
+                  v-model.trim="supplier.address"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !supplier.address }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small class="p-invalid" v-if="submitted && !supplier.address"
               >Address is required.</small
               >
             </div>
@@ -296,7 +296,7 @@
               <label for="bankingEntity">Supplier Type</label>
               <Dropdown
                   id="bankingEntity"
-                  v-model="supplierTypeItem"
+                  v-model="supplier.supplier_type"
                   :options="supplierTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
@@ -485,6 +485,7 @@ import ProductService from "../service/ProductService";
 import SupplierTypeServices from "../service/SupplierTypeServices";
 import DocumentTypeServices from "../service/DocumentTypeServices";
 import BankServices from "../service/BankServices";
+import SupplierService from "../service/SupplierService";
 
 
 export default {
@@ -494,7 +495,21 @@ export default {
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
-      product: {},
+      supplier: {
+        document_type: {},
+        document_number: null,
+        name: null,
+        phone: null,
+        email: null,
+        address: null,
+        supplier_type: {},
+        banks: []
+      },
+      bank: {
+        name: null,
+        account_number: null,
+        interbank_account_number: null,
+      },
       selectedProducts: null,
       filters: {},
       submitted: false,
@@ -517,11 +532,13 @@ export default {
   documentTypeService: null,
   supplierTypeService: null,
   bankService: null,
+  supplierService: null,
   created() {
     this.productService = new ProductService();
     this.documentTypeService = new DocumentTypeServices();
     this.supplierTypeService = new SupplierTypeServices();
     this.bankService = new BankServices();
+    this.supplierService = new SupplierService();
     this.initFilters();
   },
   mounted() {
@@ -541,37 +558,32 @@ export default {
       this.submitted = false;
     },
     saveProduct() {
-      this.submitted = true;
-      if (this.product.name.trim()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-              ? this.product.inventoryStatus.value
-              : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
-          });
-        } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-              ? this.product.inventoryStatus.value
-              : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
-          });
-        }
-        this.productDialog = false;
-        this.product = {};
+      // this.submitted = true;
+      // console.log(this.supplier)
+      //TODO:VALIDATE FIELDS
+      if (this.supplier.id) {
+        //UPDATE
+        // const id = this.resource.id;
+        // const payload = this.resource;
+        // this.articleTypesService.update(id, payload).then(data => {
+        //   this.articleTypes[this.findIndexById(id)] = data.data;
+        //   this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+        // })
+      } else {
+        // CREATE
+        const payload = this.supplier;
+        console.log(payload)
+        this.supplierService.create(payload).then(data => {
+          //TODO:INSERT DATA IN DATATABLE
+          // this.articleTypes.push(data.data);
+          // console.log(data)
+          this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+        })
       }
+      //TODO: Close Dialog and Reset Supplier
+      this.productDialog = false;
+      this.default()
+      // this.supplier = {};
     },
     editProduct(product) {
       this.product = {...product};
@@ -602,15 +614,6 @@ export default {
       }
       return index;
     },
-    createId() {
-      let id = "";
-      var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      for (var i = 0; i < 5; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return id;
-    },
     exportCSV() {
       this.$refs.dt.exportCSV();
     },
@@ -635,6 +638,18 @@ export default {
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
+    default() {
+      this.supplier = {
+        document_type: {},
+        document_number: null,
+        name: null,
+        phone: null,
+        email: null,
+        address: null,
+        supplier_type: {},
+        banks: []
+      }
+    }
   },
 };
 </script>
