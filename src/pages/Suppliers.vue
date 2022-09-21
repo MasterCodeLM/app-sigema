@@ -209,8 +209,8 @@
               <label for="bankingEntity">Document Type</label>
               <Dropdown
                   id="bankingEntity"
-                  v-model="dropdownItem"
-                  :options="dropdownItems"
+                  v-model="documentTypeItem"
+                  :options="documentTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
                   :filter="false"
@@ -296,8 +296,8 @@
               <label for="bankingEntity">Supplier Type</label>
               <Dropdown
                   id="bankingEntity"
-                  v-model="dropdownItem"
-                  :options="dropdownItems"
+                  v-model="supplierTypeItem"
+                  :options="supplierTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
                   :filter="false"
@@ -312,8 +312,8 @@
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
                     id="bankingEntity"
-                    v-model="dropdownItem"
-                    :options="dropdownItems"
+                    v-model="bankItem"
+                    :options="bankItems"
                     optionLabel="name"
                     placeholder="Select One"
                     :filter="false"
@@ -482,6 +482,10 @@
 <script>
 import {FilterMatchMode} from "primevue/api";
 import ProductService from "../service/ProductService";
+import SupplierTypeServices from "../service/SupplierTypeServices";
+import DocumentTypeServices from "../service/DocumentTypeServices";
+import BankServices from "../service/BankServices";
+
 
 export default {
   data() {
@@ -499,25 +503,34 @@ export default {
         {label: "LOWSTOCK", value: "lowstock"},
         {label: "OUTOFSTOCK", value: "outofstock"},
       ],
+
+      documentTypeItem: null,
+      supplierTypeItem: null,
+      bankItem: null,
+
+      documentTypeItems: null,
+      supplierTypeItems: null,
+      bankItems: null,
     };
   },
   productService: null,
+  documentTypeService: null,
+  supplierTypeService: null,
+  bankService: null,
   created() {
     this.productService = new ProductService();
+    this.documentTypeService = new DocumentTypeServices();
+    this.supplierTypeService = new SupplierTypeServices();
+    this.bankService = new BankServices();
     this.initFilters();
   },
   mounted() {
     this.productService.getProducts().then((data) => (this.products = data));
+    this.documentTypeService.getAll().then((data) => (this.documentTypeItems = data));
+    this.supplierTypeService.getAll().then((data) => (this.supplierTypeItems = data));
+    this.bankService.getAll().then((data) => (this.bankItems = data));
   },
   methods: {
-    formatCurrency(value) {
-      if (value)
-        return value.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        });
-      return;
-    },
     openNew() {
       this.product = {};
       this.submitted = false;
