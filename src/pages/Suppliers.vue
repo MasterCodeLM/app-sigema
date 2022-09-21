@@ -17,7 +17,7 @@
                   icon="pi pi-trash"
                   class="p-button-danger"
                   @click="confirmDeleteSelected"
-                  :disabled="!selectedProducts || !selectedProducts.length"
+                  :disabled="!selectedSuppliers || !selectedSuppliers.length"
               />
             </div>
           </template>
@@ -35,7 +35,7 @@
         <DataTable
             ref="dt"
             :value="suppliers"
-            v-model:selection="selectedProducts"
+            v-model:selection="selectedSuppliers"
             dataKey="id"
             :paginator="true"
             :rows="10"
@@ -150,9 +150,9 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
+            v-model:visible="supplierDialog"
             :style="{ width: '700px' }"
-            header="Suppliers Details"
+            :header="!supplier.id?'New Supplier':'Edit Supplier'"
             :modal="true"
             class="p-fluid"
         >
@@ -435,7 +435,6 @@
 
 <script>
 import {FilterMatchMode} from "primevue/api";
-// import ProductService from "../service/ProductService";
 import SupplierTypeServices from "../service/SupplierTypeServices";
 import DocumentTypeServices from "../service/DocumentTypeServices";
 import BankServices from "../service/BankServices";
@@ -446,7 +445,7 @@ export default {
   data() {
     return {
       suppliers: null,
-      productDialog: false,
+      supplierDialog: false,
       deleteSupplierDialog: false,
       deleteProductsDialog: false,
       supplier: {
@@ -465,23 +464,16 @@ export default {
         account_number: null,
         interbank_account_number: null,
       },
-      selectedProducts: null,
+      selectedSuppliers: null,
       filters: {},
       submitted: false,
       submittedAddBank: false,
-      statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
-      ],
       columns: [
         {field: "name", header: "Bank Entity"},
         {field: "account_number", header: "Account Number"},
         {field: "interbank_account_number", header: "Interbank Code"},
       ],
 
-      documentTypeItem: null,
-      supplierTypeItem: null,
       bankItem: null,
 
       documentTypeItems: null,
@@ -489,15 +481,11 @@ export default {
       bankItems: null,
     };
   },
-  // productService: null,
-
-
   documentTypeService: null,
   supplierTypeService: null,
   bankService: null,
   supplierService: null,
   created() {
-    // this.productService = new SupplierService();
     this.documentTypeService = new DocumentTypeServices();
     this.supplierTypeService = new SupplierTypeServices();
     this.bankService = new BankServices();
@@ -512,13 +500,16 @@ export default {
   },
   methods: {
     openNew() {
-      this.default()
+      this.defaultObjects()
       this.submitted = false;
-      this.productDialog = true;
+      this.submittedAddBank = false;
+      this.supplierDialog = true;
     },
     hideDialog() {
-      this.productDialog = false;
+      this.defaultObjects()
       this.submitted = false;
+      this.submittedAddBank = false;
+      this.supplierDialog = false;
     },
     saveProduct() {
       this.submitted = true;
@@ -538,17 +529,14 @@ export default {
             this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
           })
         }
-        this.productDialog = false;
-        this.default()
+        this.supplierDialog = false;
+        this.defaultObjects()
       }
     },
     editSupplier(supplier) {
       this.supplierService.getOne(supplier.id).then(data => {
-        // console.log(data)
         this.supplier = {...data};
-        this.productDialog = true;
-        // this.suppliers.push(data.data);
-        // this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+        this.supplierDialog = true;
       })
     },
     confirmDelete(supplier) {
@@ -559,7 +547,7 @@ export default {
       this.deleteSupplierDialog = false;
       this.supplierService.delete(this.supplier.id).then((data) => {
         this.suppliers = this.suppliers.filter((val) => val.id !== this.supplier.id);
-        this.default()
+        this.defaultObjects()
         this.$toast.add({
           severity: "success",
           summary: "Successful",
@@ -597,10 +585,10 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+          (val) => !this.selectedSuppliers.includes(val)
       );
       this.deleteProductsDialog = false;
-      this.selectedProducts = null;
+      this.selectedSuppliers = null;
       this.$toast.add({
         severity: "success",
         summary: "Successful",
@@ -651,7 +639,7 @@ export default {
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
-    default() {
+    defaultObjects() {
       this.supplier = {
         document_type: null,
         document_number: null,
