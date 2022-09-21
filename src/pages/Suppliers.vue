@@ -34,7 +34,7 @@
 
         <DataTable
             ref="dt"
-            :value="products"
+            :value="suppliers"
             v-model:selection="selectedProducts"
             dataKey="id"
             :paginator="true"
@@ -65,25 +65,36 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-              field="ruc"
-              header="RUC"
+              field="document_type.name"
+              header="Document Type"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">RUC</span>
-              {{ slotProps.data.name }}
+              <span class="p-column-title">Document Type</span>
+              {{ slotProps.data.document_type.name }}
+            </template>
+          </Column>
+          <Column
+              field="document_number"
+              header="Document Number"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Document Number</span>
+              {{ slotProps.data.document_number }}
             </template>
           </Column>
 
           <Column
-              field="businessName"
-              header="Business Name"
+              field="name"
+              header="Name"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Business Name</span>
+              <span class="p-column-title">Name</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
@@ -95,18 +106,18 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.email }}
             </template>
           </Column>
           <Column
-              field="telephone"
+              field="phone"
               header="Telephone"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.phone }}
             </template>
           </Column>
           <Column
@@ -117,66 +128,9 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Address</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.address }}
             </template>
           </Column>
-
-          <Column
-              field="bankingEntity"
-              header="Banking Entity"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Banking Entity</span>
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column
-              field="accountNumber"
-              header="Account Number"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Account Number</span>
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column
-              field="interbankCode"
-              header="Interbank Code"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Interbank Code</span>
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column
-              field="inventoryStatus"
-              header="Status"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              <span
-                  :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-              >{{ slotProps.data.inventoryStatus }}</span
-              >
-            </template>
-          </Column>
-
           <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
@@ -481,7 +435,7 @@
 
 <script>
 import {FilterMatchMode} from "primevue/api";
-import ProductService from "../service/ProductService";
+// import ProductService from "../service/ProductService";
 import SupplierTypeServices from "../service/SupplierTypeServices";
 import DocumentTypeServices from "../service/DocumentTypeServices";
 import BankServices from "../service/BankServices";
@@ -491,7 +445,7 @@ import SupplierService from "../service/SupplierService";
 export default {
   data() {
     return {
-      products: null,
+      suppliers: null,
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -535,13 +489,15 @@ export default {
       bankItems: null,
     };
   },
-  productService: null,
+  // productService: null,
+
+
   documentTypeService: null,
   supplierTypeService: null,
   bankService: null,
   supplierService: null,
   created() {
-    this.productService = new ProductService();
+    // this.productService = new SupplierService();
     this.documentTypeService = new DocumentTypeServices();
     this.supplierTypeService = new SupplierTypeServices();
     this.bankService = new BankServices();
@@ -549,14 +505,14 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.supplierService.getAll().then((data) => (this.suppliers = data));
     this.documentTypeService.getAll().then((data) => (this.documentTypeItems = data));
     this.supplierTypeService.getAll().then((data) => (this.supplierTypeItems = data));
     this.bankService.getAll().then((data) => (this.bankItems = data));
   },
   methods: {
     openNew() {
-      this.product = {};
+      this.default()
       this.submitted = false;
       this.productDialog = true;
     },
@@ -578,11 +534,8 @@ export default {
         } else {
           // CREATE
           const payload = this.supplier;
-          console.log(payload)
           this.supplierService.create(payload).then(data => {
-            //TODO:INSERT DATA IN DATATABLE
-            // this.articleTypes.push(data.data);
-            // console.log(data)
+            this.suppliers.push(data.data);
             this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
           })
         }
@@ -679,18 +632,12 @@ export default {
           this.supplier.supplier_type
     },
     validateFormBank() {
-      return this.bankItem && this.bank.account_number && this.bank.interbank_account_number
+      return this.bankItem &&
+          this.bank.account_number &&
+          this.bank.interbank_account_number
     },
     removeBank(data) {
       this.supplier.banks = this.supplier.banks.filter((val) => val.id !== data.id);
-      // this.deleteProductDialog = false;
-      // this.product = {};
-      // this.$toast.add({
-      //   severity: "success",
-      //   summary: "Successful",
-      //   detail: "Product Deleted",
-      //   life: 3000,
-      // });
     },
     initFilters() {
       this.filters = {
@@ -699,15 +646,22 @@ export default {
     },
     default() {
       this.supplier = {
-        document_type: {},
+        document_type: null,
         document_number: null,
         name: null,
         phone: null,
         email: null,
         address: null,
-        supplier_type: {},
+        supplier_type: null,
         banks: []
       }
+      this.bank = {
+        id: null,
+        name: null,
+        account_number: null,
+        interbank_account_number: null,
+      }
+      this.bankItem = null
     }
   },
 };
