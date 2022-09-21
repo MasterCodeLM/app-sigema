@@ -142,7 +142,7 @@
                 <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-danger"
-                    @click="confirmDeleteProduct(slotProps.data)"
+                    @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -367,7 +367,7 @@
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductDialog"
+            v-model:visible="deleteSupplierDialog"
             :style="{ width: '450px' }"
             header="Confirm"
             :modal="true"
@@ -377,8 +377,8 @@
                 class="pi pi-exclamation-triangle mr-3"
                 style="font-size: 2rem"
             />
-            <span v-if="product"
-            >Are you sure you want to delete <b>{{ product.name }}</b
+            <span v-if="supplier"
+            >Are you sure you want to delete <b>{{ supplier.name }}</b
             >?</span
             >
           </div>
@@ -387,13 +387,13 @@
                 label="No"
                 icon="pi pi-times"
                 class="p-button-text"
-                @click="deleteProductDialog = false"
+                @click="deleteSupplierDialog = false"
             />
             <Button
                 label="Yes"
                 icon="pi pi-check"
                 class="p-button-text"
-                @click="deleteProduct"
+                @click="deleteSupplier"
             />
           </template>
         </Dialog>
@@ -447,7 +447,7 @@ export default {
     return {
       suppliers: null,
       productDialog: false,
-      deleteProductDialog: false,
+      deleteSupplierDialog: false,
       deleteProductsDialog: false,
       supplier: {
         document_type: null,
@@ -547,20 +547,23 @@ export default {
       this.product = {...product};
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    confirmDelete(supplier) {
+      this.supplier = supplier;
+      this.deleteSupplierDialog = true;
     },
-    deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
-      this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+    deleteSupplier() {
+      this.deleteSupplierDialog = false;
+      this.supplierService.delete(this.supplier.id).then((data) => {
+        this.suppliers = this.suppliers.filter((val) => val.id !== this.supplier.id);
+        this.default()
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
+
     },
     findIndexById(id) {
       let index = -1;
