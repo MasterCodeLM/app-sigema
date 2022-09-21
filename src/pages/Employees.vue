@@ -34,7 +34,7 @@
 
         <DataTable
           ref="dt"
-          :value="products"
+          :value="employees"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
@@ -78,14 +78,14 @@
           </Column>
 
           <Column
-            field="identificationDocument"
+            field="document_number"
             header="Identification Document"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Identification Document</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.document_number }}
             </template>
           </Column>
 
@@ -97,31 +97,31 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Age</span>
-              {{ slotProps.data.price }}
+              {{ slotProps.data.age }}
             </template>
           </Column>
 
           <Column
-            field="title"
+            field="position"
             header="Title"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Title</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.position.name }}
             </template>
           </Column>
 
           <Column
-            field="telephone"
+            field="phone"
             header="Telephone"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.phone }}
             </template>
           </Column>
 
@@ -133,19 +133,19 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Address</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.address }}
             </template>
           </Column>
 
           <Column
-            field="email"
+            field="personal_email"
             header="Email"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.personal_email }}
             </template>
           </Column>
 
@@ -180,7 +180,7 @@
                 <Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
-                  @click="confirmDeleteProduct(slotProps.data)"
+                  @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -302,18 +302,34 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="telephone">Telephone</label>
-            <InputText
-              id="telephone"
-              v-model.trim="product.telephone"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Telephone is required.</small
-            >
+          <div class="formgrid grid">
+            <div class="field col">
+              <label for="telephone">Telephone</label>
+              <InputText
+                id="telephone"
+                v-model.trim="product.telephone"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
+                >Telephone is required.</small
+              >
+            </div>
+
+            <div class="field col">
+              <label for="email">Email</label>
+              <InputText
+                id="email"
+                v-model.trim="product.email"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !product.name }"
+              />
+              <small class="p-invalid" v-if="submitted && !product.name"
+                >Email is required.</small
+              >
+            </div>
           </div>
 
           <div class="field">
@@ -332,17 +348,14 @@
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="email">Email</label>
-              <InputText
-                id="email"
-                v-model.trim="product.email"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
-              />
-              <small class="p-invalid" v-if="submitted && !product.name"
-                >Email is required.</small
-              >
+              <label for="state">Native Language</label>
+              <Dropdown
+                id="state"
+                v-model="dropdownItem"
+                :options="dropdownItems"
+                optionLabel="name"
+                placeholder="Select One"
+              ></Dropdown>
             </div>
 
             <div class="field col">
@@ -394,7 +407,7 @@
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductDialog"
+          v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
           header="Confirm"
           :modal="true"
@@ -404,8 +417,8 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
+            <span v-if="resource"
+              >Are you sure you want to delete <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -414,13 +427,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteProduct"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -445,13 +458,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductsDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteSelectedProducts"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -462,19 +475,27 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import ProductService from "../service/ProductService";
+import EmployeesService from "../service/EmployeesService";
 
 export default {
   data() {
     return {
-      products: null,
+      dropdownItems: [
+        { name: "English", code: "Option 1" },
+        { name: "Spanish", code: "Option 2" },
+      ],
+      dropdownItem: null,
+      employees: null,
       productDialog: false,
-      deleteProductDialog: false,
+      deleteDialog: false,
       deleteProductsDialog: false,
       product: {},
+      resource: {},
       selectedProducts: null,
       filters: {},
       submitted: false,
+      message: null,
+      loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -482,13 +503,15 @@ export default {
       ],
     };
   },
-  productService: null,
+  employeesService: null,
   created() {
-    this.productService = new ProductService();
+    this.employeesService = new EmployeesService();
     this.initFilters();
   },
   mounted() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.loading = true;
+    this.employeesService.getAll().then((data) => (this.employees = data));
+    this.loading = false;
   },
   methods: {
     formatCurrency(value) {
@@ -545,19 +568,23 @@ export default {
       this.product = { ...product };
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    confirmDelete(resource) {
+      this.resource = resource;
+      this.deleteDialog = true;
     },
-    deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
-      this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+    deleteResource() {
+      this.deleteDialog = false;
+      this.employeesService.delete(this.resource.id).then((data) => {
+        this.employees = this.employees.filter(
+          (val) => val.id !== this.resource.id
+        );
+        this.resource = {};
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
     },
     findIndexById(id) {

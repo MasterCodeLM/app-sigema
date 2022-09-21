@@ -47,6 +47,7 @@ export default {
             },
           ],
         },
+        /*
         {
           label: "UI Components",
           icon: "pi pi-fw pi-sitemap",
@@ -109,36 +110,49 @@ export default {
               target: "_blank",
             },
           ],
-        },
+        },*/
+
         {
           label: "Pages",
-          icon: "pi pi-fw pi-clone",
+          icon: "pi pi-fw pi-search",
           items: [
-            { label: "Crud", icon: "pi pi-fw pi-user-edit", to: "/crud" },
-            {
-              label: "Timeline",
-              icon: "pi pi-fw pi-calendar",
-              to: "/timeline",
-            },
-            { label: "Landing", icon: "pi pi-fw pi-globe", to: "/landing" },
-            { label: "Login", icon: "pi pi-fw pi-sign-in", to: "/login" },
-            { label: "Error", icon: "pi pi-fw pi-times-circle", to: "/error" },
-            {
-              label: "Not Found",
-              icon: "pi pi-fw pi-exclamation-circle",
-              to: "/notfound",
-            },
-            { label: "Access Denied", icon: "pi pi-fw pi-lock", to: "/access" },
-            { label: "Empty", icon: "pi pi-fw pi-circle-off", to: "/empty" },
             {
               label: "Machines",
               icon: "pi pi-fw pi-user-edit",
               to: "/machines",
             },
+
             {
-              label: "Employess",
-              icon: "pi pi-fw pi-user-edit",
-              to: "/employees",
+              label: "Employees",
+              icon: "pi pi-fw pi-bookmark",
+              items: [
+                {
+                  label: "Employess Form",
+                  icon: "pi pi-fw pi-user-edit",
+                  to: "/employees",
+                },
+                {
+                  label: "Attendance Control",
+                  icon: "pi pi-fw pi-user-edit",
+                  to: "/new-attendance-control",
+                },
+              ],
+            },
+            {
+              label: "Operations",
+              icon: "pi pi-fw pi-bookmark",
+              items: [
+                {
+                  label: "Maintenance",
+                  icon: "pi pi-fw pi-user-edit",
+                  to: "/list",
+                },
+                {
+                  label: "Worked",
+                  icon: "pi pi-fw pi-user-edit",
+                  to: "/list",
+                },
+              ],
             },
             {
               label: "Inventory",
@@ -156,137 +170,46 @@ export default {
               to: "/suppliers",
             },
             {
-              label: "Roles",
-              icon: "pi pi-fw pi-user-edit",
-              to: "/roles",
-            },
-          ],
-        },
-        {
-          label: "Menu Hierarchy",
-          icon: "pi pi-fw pi-search",
-          items: [
-            {
-              label: "Submenu 1",
+              label: "User Management",
               icon: "pi pi-fw pi-bookmark",
               items: [
                 {
-                  label: "Submenu 1.1",
-                  icon: "pi pi-fw pi-bookmark",
-                  items: [
-                    { label: "Submenu 1.1.1", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 1.1.2", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 1.1.3", icon: "pi pi-fw pi-bookmark" },
-                  ],
+                  label: "Roles",
+                  icon: "pi pi-fw pi-user-edit",
+                  to: "/roles",
                 },
                 {
-                  label: "Submenu 1.2",
-                  icon: "pi pi-fw pi-bookmark",
-                  items: [
-                    { label: "Submenu 1.2.1", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 1.2.2", icon: "pi pi-fw pi-bookmark" },
-                  ],
+                  label: "Users",
+                  icon: "pi pi-fw pi-user-edit",
+                  //to: "/roles",
                 },
               ],
             },
             {
-              label: "Submenu 2",
+              label: "Reports",
               icon: "pi pi-fw pi-bookmark",
               items: [
                 {
-                  label: "Submenu 2.1",
-                  icon: "pi pi-fw pi-bookmark",
-                  items: [
-                    { label: "Submenu 2.1.1", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 2.1.2", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 2.1.3", icon: "pi pi-fw pi-bookmark" },
-                  ],
-                },
-
-                {
-                  label: "Pages",
-                  icon: "pi pi-fw pi-clone",
-                  items: [
-                    {
-                      label: "Crud",
-                      icon: "pi pi-fw pi-user-edit",
-                      to: "/crud",
-                    },
-                    {
-                      label: "Timeline",
-                      icon: "pi pi-fw pi-calendar",
-                      to: "/timeline",
-                    },
-                    {
-                      label: "Landing",
-                      icon: "pi pi-fw pi-globe",
-                      to: "/landing",
-                    },
-                    {
-                      label: "Login",
-                      icon: "pi pi-fw pi-sign-in",
-                      to: "/login",
-                    },
-                    {
-                      label: "Error",
-                      icon: "pi pi-fw pi-times-circle",
-                      to: "/error",
-                    },
-                    {
-                      label: "Not Found",
-                      icon: "pi pi-fw pi-exclamation-circle",
-                      to: "/notfound",
-                    },
-                    {
-                      label: "Access Denied",
-                      icon: "pi pi-fw pi-lock",
-                      to: "/access",
-                    },
-                    {
-                      label: "Empty",
-                      icon: "pi pi-fw pi-circle-off",
-                      to: "/empty",
-                    },
-                    {
-                      label: "Article Types",
-                      icon: "pi pi-fw pi-user-edit",
-                      to: "/article-types",
-                    },
-                    {
-                      label: "Users",
-                      icon: "pi pi-fw pi-user-edit",
-                      to: "/users",
-                    },
-                  ],
+                  label: "Report 01",
+                  icon: "pi pi-fw pi-file",
+                  //to: "/roles",
                 },
                 {
-                  label: "Submenu 2.2",
-                  icon: "pi pi-fw pi-bookmark",
-                  items: [
-                    { label: "Submenu 2.2.1", icon: "pi pi-fw pi-bookmark" },
-                    { label: "Submenu 2.2.2", icon: "pi pi-fw pi-bookmark" },
-                  ],
+                  label: "Report 02",
+                  icon: "pi pi-fw pi-file",
+                  //to: "/roles",
+                },
+                {
+                  label: "Report 03",
+                  icon: "pi pi-fw pi-file",
+                  //to: "/roles",
+                },
+                {
+                  label: "Report 04",
+                  icon: "pi pi-fw pi-file",
+                  //to: "/roles",
                 },
               ],
-            },
-          ],
-        },
-        {
-          label: "Get Started",
-          items: [
-            {
-              label: "Documentation",
-              icon: "pi pi-fw pi-question",
-              command: () => {
-                window.location = "#/documentation";
-              },
-            },
-            {
-              label: "View Source",
-              icon: "pi pi-fw pi-search",
-              command: () => {
-                window.location = "https://github.com/primefaces/sakai-vue";
-              },
             },
           ],
         },

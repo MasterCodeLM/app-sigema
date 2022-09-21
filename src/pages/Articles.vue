@@ -1,6 +1,13 @@
 <template>
   <div class="grid">
     <div class="col-12">
+      <div class="card p-fluid">
+        <div class="flex flex-column align-items-center">
+          <h3 class="text-900 font-medium">INVENTORY</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
       <div class="card">
         <Toast />
         <Toolbar class="mb-4">
@@ -34,7 +41,7 @@
 
         <DataTable
           ref="dt"
-          :value="products"
+          :value="articles"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
@@ -52,7 +59,20 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Articles</h5>
+              <div class="field col-12 sm:col-6">
+                <h5 class="m-0">
+                  Filter by:
+                  <Dropdown
+                    id="state"
+                    v-model="dropdownItem"
+                    :options="dropdownItems"
+                    optionLabel="name"
+                    placeholder="Select One"
+                    :filter="true"
+                    :loading="false"
+                  ></Dropdown>
+                </h5>
+              </div>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -95,7 +115,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Model</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.model }}
             </template>
           </Column>
           <Column
@@ -106,7 +126,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Brand</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.brand }}
             </template>
           </Column>
           <Column header="Image" headerStyle="width:14%; min-width:10rem;">
@@ -128,7 +148,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Quantity</span>
-              {{ formatCurrency(slotProps.data.price) }}
+              {{ slotProps.data.quantity }}
             </template>
           </Column>
           <Column
@@ -174,7 +194,7 @@
                 <Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
-                  @click="confirmDeleteProduct(slotProps.data)"
+                  @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -348,7 +368,7 @@
                       />
                     </template>
                   </Column>
-
+                  <!--
                   <Column headerStyle="min-width:10rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
@@ -359,7 +379,7 @@
                         />
                       </div>
                     </template>
-                  </Column>
+                  </Column>-->
                 </DataTable>
               </div>
             </div>
@@ -414,7 +434,7 @@
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductsDialog"
+          v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
           header="Confirm"
           :modal="true"
@@ -424,8 +444,9 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="product"
-              >Are you sure you want to delete the selected suppliers?</span
+            <span v-if="resource"
+              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
@@ -433,13 +454,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductsDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteSelectedProducts"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -450,19 +471,22 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import ProductService from "../service/ProductService";
+import ArticlesService from "../service/ArticlesService";
 
 export default {
   data() {
     return {
-      products: null,
+      articles: null,
       productDialog: false,
-      deleteProductDialog: false,
+      deleteDialog: false,
       deleteProductsDialog: false,
       product: {},
+      resource: {}, // One Resource Articles
       selectedProducts: null,
       filters: {},
       submitted: false,
+      message: null,
+      loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -470,13 +494,15 @@ export default {
       ],
     };
   },
-  productService: null,
+  articlesService: null,
   created() {
-    this.productService = new ProductService();
+    this.articlesService = new ArticlesService();
     this.initFilters();
   },
   mounted() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.loading = true;
+    this.articlesService.getAll().then((data) => (this.articles = data));
+    this.loading = false;
   },
   methods: {
     formatCurrency(value) {
@@ -488,7 +514,7 @@ export default {
       return;
     },
     openNew() {
-      this.product = {};
+      this.resource = {};
       this.submitted = false;
       this.productDialog = true;
     },
@@ -526,26 +552,31 @@ export default {
           });
         }
         this.productDialog = false;
-        this.product = {};
+        this.resource = {};
       }
     },
     editProduct(product) {
       this.product = { ...product };
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    confirmDelete(resource) {
+      this.resource = resource;
+      this.deleteDialog = true;
     },
-    deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
-      this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+    deleteResource() {
+      this.deleteDialog = false;
+      this.articlesService.delete(this.resource.id).then((data) => {
+        this.articles = this.articles.filter(
+          (val) => val.id !== this.resource.id
+        );
+
+        this.resource = {};
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
     },
     findIndexById(id) {
