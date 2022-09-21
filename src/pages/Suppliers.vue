@@ -206,15 +206,20 @@
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="bankingEntity">Document Type</label>
+              <label for="documentType">Document Type</label>
               <Dropdown
+                  id="documentType"
                   v-model="supplier.document_type"
                   :options="documentTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
                   :filter="false"
                   :loading="false"
+                  :class="{ 'p-invalid': submitted && !supplier.document_type }"
               ></Dropdown>
+              <small class="p-invalid" v-if="submitted && !supplier.document_type"
+              >Document Type is required.</small
+              >
             </div>
             <div class="field col">
               <label for="ruc">Document Number</label>
@@ -292,15 +297,19 @@
               >
             </div>
             <div class="field col-4">
-              <label for="bankingEntity">Supplier Type</label>
+              <label for="supplierType">Supplier Type</label>
               <Dropdown
+                  id="supplierType"
                   v-model="supplier.supplier_type"
                   :options="supplierTypeItems"
                   optionLabel="name"
                   placeholder="Select One"
                   :filter="false"
                   :loading="false"
+                  :class="{ 'p-invalid': submitted && !supplier.supplier_type }"
               ></Dropdown>
+              <small class="p-invalid" v-if="submitted && !supplier.supplier_type"
+              >Supplier Type is required.</small>
             </div>
           </div>
 
@@ -487,13 +496,13 @@ export default {
       deleteProductDialog: false,
       deleteProductsDialog: false,
       supplier: {
-        document_type: {},
+        document_type: null,
         document_number: null,
         name: null,
         phone: null,
         email: null,
         address: null,
-        supplier_type: {},
+        supplier_type: null,
         banks: []
       },
       bank: {
@@ -556,30 +565,30 @@ export default {
       this.submitted = false;
     },
     saveProduct() {
-      // this.submitted = true;
-      // console.log(this.supplier)
-      //TODO:VALIDATE FIELDS
-      if (this.supplier.id) {
-        //UPDATE
-        // const id = this.resource.id;
-        // const payload = this.resource;
-        // this.articleTypesService.update(id, payload).then(data => {
-        //   this.articleTypes[this.findIndexById(id)] = data.data;
-        //   this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
-        // })
-      } else {
-        // CREATE
-        const payload = this.supplier;
-        console.log(payload)
-        this.supplierService.create(payload).then(data => {
-          //TODO:INSERT DATA IN DATATABLE
-          // this.articleTypes.push(data.data);
-          // console.log(data)
-          this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
-        })
+      this.submitted = true;
+      if (this.validateFormSupplier()) {
+        if (this.supplier.id) {
+          //UPDATE
+          // const id = this.resource.id;
+          // const payload = this.resource;
+          // this.articleTypesService.update(id, payload).then(data => {
+          //   this.articleTypes[this.findIndexById(id)] = data.data;
+          //   this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+          // })
+        } else {
+          // CREATE
+          const payload = this.supplier;
+          console.log(payload)
+          this.supplierService.create(payload).then(data => {
+            //TODO:INSERT DATA IN DATATABLE
+            // this.articleTypes.push(data.data);
+            // console.log(data)
+            this.$toast.add({severity: 'success', summary: 'Successful', detail: data.message, life: 3000});
+          })
+        }
+        this.productDialog = false;
+        this.default()
       }
-      this.productDialog = false;
-      this.default()
     },
     editProduct(product) {
       this.product = {...product};
@@ -659,6 +668,15 @@ export default {
         this.bankItem = null
         this.submittedAddBank = false;
       }
+    },
+    validateFormSupplier() {
+      return this.supplier.document_type &&
+          this.supplier.document_number &&
+          this.supplier.name &&
+          this.supplier.phone &&
+          this.supplier.email &&
+          this.supplier.address &&
+          this.supplier.supplier_type
     },
     validateFormBank() {
       return this.bankItem && this.bank.account_number && this.bank.interbank_account_number
