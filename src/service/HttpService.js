@@ -47,7 +47,8 @@ function updateOptions(options) {
     update.headers = {
         ...update.headers,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')?`Bearer ${localStorage.getItem('token')}`:null
     };
     if (localStorage.jwt) {
         update.headers = {

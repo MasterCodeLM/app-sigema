@@ -117,7 +117,8 @@ export default {
     logout() {
       //  ELIMINAR TOKEN
       this.authService.logout().then((data) => {
-        if (data) {
+        // console.log(data)
+        if (data.message) {
           //  ELIMINAR LOCAL
           localStorage.removeItem('userLogged')
           localStorage.removeItem('token')
