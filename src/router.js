@@ -1,10 +1,13 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import App from './App.vue';
 
 const routes = [
     {
         path: '/',
         name: 'app',
+        meta: {
+            requiresAuth: true,
+        },
         component: App,
         children: [
             {
@@ -196,7 +199,7 @@ const routes = [
                 name: 'new-work-start',
                 component: () => import('./pages/NewWorkStart.vue')
             }
-            
+
         ]
     },
     {
@@ -215,5 +218,77 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 });
+
+function hasAccess(name) {
+    const permissions = localStorage.getItem('permissions')
+
+    switch (name) {
+        case 'dashboard':
+            return true
+
+        case 'materiales':
+            return permissions.includes('view materials')
+
+        case 'categorias':
+            return permissions.includes('view categories')
+
+        case 'marcas':
+            return permissions.includes('view marks')
+
+        case 'unidades-medida':
+            return permissions.includes('view measure units')
+
+        case 'almacenes':
+            return permissions.includes('view warehouses')
+
+        case 'proveedores':
+            return permissions.includes('view suppliers')
+
+        case 'requerimientos':
+            return permissions.includes('view requests')
+
+        case 'cotizaciones':
+            return permissions.includes('view quotes')
+
+        case 'ordenes-compra':
+            return permissions.includes('view orders purchase')
+
+        case 'compras':
+            return permissions.includes('view purchases')
+
+        case 'notas-ingreso':
+            return permissions.includes('view entry notes')
+
+        case 'notas-salida':
+            return permissions.includes('view exit notes')
+
+        case 'reportes-requerimiento':
+            return permissions.includes('view reports')
+        case 'reportes-compra':
+            return permissions.includes('view reports')
+
+        default:
+            return false
+    }
+}
+
+router.beforeEach((to, from, next) => {
+    // A Logged-in user can't go to login page again
+    if (to.name === 'login' && localStorage.getItem('token')) {
+        next({name: 'Dashboard'})
+        return
+        // the route requires authentication
+    } else if (to.meta.requiresAuth) {
+        if (!localStorage.getItem('token')) {
+            // user not logged in, send them to login page
+            next({name: 'login'})
+            return
+        } else if (!hasAccess(to.name)) {
+            next('notfound')
+        }
+        return
+    }
+    next()
+})
 
 export default router;
