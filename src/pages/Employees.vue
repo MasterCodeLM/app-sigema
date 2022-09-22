@@ -613,7 +613,7 @@ export default {
     },
 
     default() {
-      this.supplier = {
+      this.employee = {
         document_type: {},
       };
     },
