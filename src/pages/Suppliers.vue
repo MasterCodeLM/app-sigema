@@ -44,6 +44,7 @@
             :rowsPerPageOptions="[5, 10, 25]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
             responsiveLayout="scroll"
+            :loading="loadingSuppliers"
         >
           <template #header>
             <div
@@ -479,6 +480,8 @@ export default {
       documentTypeItems: null,
       supplierTypeItems: null,
       bankItems: null,
+
+      loadingSuppliers:true,
     };
   },
   documentTypeService: null,
@@ -493,7 +496,10 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.supplierService.getAll().then((data) => (this.suppliers = data));
+    this.supplierService.getAll().then((data) => {
+      this.suppliers = data
+      this.loadingSuppliers = false
+    });
     this.documentTypeService.getAll().then((data) => (this.documentTypeItems = data));
     this.supplierTypeService.getAll().then((data) => (this.supplierTypeItems = data));
     this.bankService.getAll().then((data) => (this.bankItems = data));

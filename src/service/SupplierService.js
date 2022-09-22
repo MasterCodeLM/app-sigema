@@ -3,7 +3,7 @@ import HttpService from "./HttpService";
 const uri = 'suppliers'
 export default class SupplierService {
     async getAll() {
-        return HttpService.prototype.getAll(uri)
+        return await HttpService.prototype.getAll(uri)
     }
     async getOne(id) {
         return HttpService.prototype.getOne(uri,id)
