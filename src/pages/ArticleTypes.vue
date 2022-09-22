@@ -200,6 +200,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import ArticleTypesService from "../service/ArticleTypesService";
+// import ToastDoc from './ToastDoc';
 
 export default {
   data() {

@@ -275,18 +275,19 @@ function hasAccess(name) {
 router.beforeEach((to, from, next) => {
     // A Logged-in user can't go to login page again
     if (to.name === 'login' && localStorage.getItem('token')) {
-        next({name: 'Dashboard'})
+        next({name: 'dashboard'})
         return
         // the route requires authentication
     } else if (to.meta.requiresAuth) {
+        // console.log(localStorage.getItem('token'))
         if (!localStorage.getItem('token')) {
             // user not logged in, send them to login page
             next({name: 'login'})
             return
         } else if (!hasAccess(to.name)) {
             next('notfound')
+            return
         }
-        return
     }
     next()
 })
