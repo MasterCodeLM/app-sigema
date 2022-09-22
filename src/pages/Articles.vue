@@ -215,12 +215,16 @@
                   <label for="serialNumber">Serial Number</label>
                   <InputText
                     id="serialNumber"
-                    v-model.trim="product.serialNumber"
+                    v-model.trim="article.serial_number"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{
+                      'p-invalid': submitted && !article.serial_number,
+                    }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small
+                    class="p-invalid"
+                    v-if="submitted && !article.serial_number"
                     >Serial Number is required.</small
                   >
                 </div>
@@ -229,12 +233,12 @@
                   <label for="name">Name</label>
                   <InputText
                     id="name"
-                    v-model.trim="product.name"
+                    v-model.trim="article.name"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !article.name }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small class="p-invalid" v-if="submitted && !article.name"
                     >Name is required.</small
                   >
                 </div>
@@ -245,12 +249,12 @@
                   <label for="brand">Brand</label>
                   <InputText
                     id="brand"
-                    v-model.trim="product.telephone"
+                    v-model.trim="article.brand"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !article.brand }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small class="p-invalid" v-if="submitted && !article.brand"
                     >Brand is required.</small
                   >
                 </div>
@@ -259,12 +263,12 @@
                   <label for="model">Model</label>
                   <InputText
                     id="model"
-                    v-model.trim="product.email"
+                    v-model.trim="article.model"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !article.model }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small class="p-invalid" v-if="submitted && !article.model"
                     >Model is required.</small
                   >
                 </div>
@@ -276,7 +280,7 @@
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
                     id="quantity"
-                    v-model="inputNumberValue"
+                    v-model="article.quantity"
                     showButtons
                     mode="decimal"
                   />
@@ -326,35 +330,65 @@
             <div class="card col-6">
               <div class="formgrid grid">
                 <div class="field col">
-                  <label for="suppliers">Suppliers</label>
+                  <label for="supplierRef">Suppliers</label>
                   <Dropdown
-                    id="Suppliers"
-                    v-model="dropdownItem"
-                    :options="dropdownItems"
+                    id="supplierRef"
+                    v-model="supplierRefItem"
+                    :options="supplierRefItems"
                     optionLabel="name"
                     placeholder="Select One"
                     :filter="true"
                     :loading="false"
+                    :class="{
+                      'p-invalid': submittedAddSuppliersRef && !supplierRefItem,
+                    }"
                   ></Dropdown>
+                  <small
+                    class="p-invalid"
+                    v-if="submittedAddSuppliersRef && !supplierRefItem"
+                    >Supplier Ref is required.</small
+                  >
                 </div>
 
-                <div class="field col">
+                <div class="field col-3">
                   <label for="price">Price</label>
                   <InputNumber
                     id="price"
-                    v-model="product.price"
+                    v-model="supplier_ref.price"
                     mode="currency"
                     currency="USD"
                     locale="en-US"
+                    :class="{
+                      'p-invalid':
+                        submittedAddSuppliersRef && !supplier_ref.price,
+                    }"
                   />
+                  <small
+                    class="p-invalid"
+                    v-if="submittedAddSuppliersRef && !supplier_ref.price"
+                    >Account Number is required.</small
+                  >
+                </div>
+                <div
+                  class="
+                    field
+                    col-2
+                    flex
+                    justify-content-center
+                    align-items-center
+                  "
+                >
+                  <Button
+                    icon="pi pi-plus"
+                    class="p-button-secondary"
+                    style="margin-top: 1.85rem"
+                    @click="addSpullierRef"
+                  ></Button>
                 </div>
               </div>
               <div class="card">
                 <DataTable
-                  :value="products1"
-                  editMode="cell"
-                  @cell-edit-complete="onCellEditComplete"
-                  class="editable-cells-table"
+                  :value="article.suppliers_ref"
                   responsiveLayout="scroll"
                 >
                   <Column
@@ -374,18 +408,18 @@
                       />
                     </template>
                   </Column>
-                  <!--
+
                   <Column headerStyle="min-width:10rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
                         <Button
                           icon="pi pi-trash"
                           class="p-button-rounded p-button-danger"
-                          @click="confirmDeleteProduct(slotProps.data)"
+                          @click="removeSupplierRef(slotProps.data)"
                         />
                       </div>
                     </template>
-                  </Column>-->
+                  </Column>
                 </DataTable>
               </div>
             </div>
@@ -403,38 +437,6 @@
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
-            />
-          </template>
-        </Dialog>
-
-        <Dialog
-          v-model:visible="deleteProductDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
-        >
-          <div class="flex align-items-center justify-content-center">
-            <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
-            />
-            <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
-              >?</span
-            >
-          </div>
-          <template #footer>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteProductDialog = false"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteProduct"
             />
           </template>
         </Dialog>
@@ -470,6 +472,37 @@
             />
           </template>
         </Dialog>
+
+        <Dialog
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="product"
+              >Are you sure you want to delete the selected Articles?</span
+            >
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductsDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSelectedProducts"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </div>
@@ -479,6 +512,7 @@
 import { FilterMatchMode } from "primevue/api";
 import ArticlesService from "../service/ArticlesService";
 import ArticleTypesService from "../service/ArticleTypesService";
+import SupplierService from "../service/SupplierService";
 export default {
   data() {
     return {
@@ -487,12 +521,20 @@ export default {
       deleteDialog: false,
       deleteProductsDialog: false,
       article: {
-        serial_number: null,
+        // serial_number: null,
+        // image:null,
+        // technical_sheet:null,
         name: null,
         brand: null,
         model: null,
         quantity: null,
         article_type: null,
+        suppliers_ref: [],
+      },
+      supplier_ref: {
+        id: null,
+        name: null,
+        price: null,
       },
       product: {},
       resource: {}, // One Resource Articles
@@ -506,16 +548,26 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+      submittedAddSuppliersRef: false,
+      columns: [
+        { field: "name", header: "Supplier" },
+        { field: "price", header: "Price" },
+      ],
       articleTypeItem: null,
+      supplierRefItem: null,
+
       articleTypeItems: null,
+      supplierRefItems: null,
     };
   },
   articlesService: null,
   articleTypeService: null,
+  supplierRefService: null,
 
   created() {
     this.articlesService = new ArticlesService();
     this.articleTypeService = new ArticleTypesService();
+    this.supplierRefService = new SupplierService();
     this.initFilters();
   },
   mounted() {
@@ -524,6 +576,9 @@ export default {
     this.articleTypeService
       .getAll()
       .then((data) => (this.articleTypeItems = data));
+    this.supplierRefService
+      .getAll()
+      .then((data) => (this.supplierRefItems = data));
     this.loading = false;
   },
   methods: {
@@ -536,11 +591,13 @@ export default {
       return;
     },
     openNew() {
+      this.defaultObjects();
       this.resource = {};
       this.submitted = false;
       this.productDialog = true;
     },
     hideDialog() {
+      this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
     },
@@ -574,7 +631,7 @@ export default {
           });
         }
         this.productDialog = false;
-        this.default();
+        this.defaultObjects();
       }
     },
     editProduct(product) {
@@ -611,6 +668,16 @@ export default {
       }
       return index;
     },
+    findSupplierRefIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.article.suppliers_ref.length; i++) {
+        if (this.article.suppliers_ref[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      return index;
+    },
     createId() {
       let id = "";
       var chars =
@@ -639,8 +706,38 @@ export default {
         life: 3000,
       });
     },
+    addSpullierRef() {
+      this.submittedAddSuppliersRef = true;
+      if (this.validateFormSupplierRef()) {
+        if (this.findSupplierRefIndexById(this.supplierRefItem.id) === -1) {
+          // INSERT DATA
+          this.supplier_ref = { ...this.supplier_ref, ...this.supplierRefItem };
+          console.log(this.supplier_ref);
+          this.article.suppliers_ref.push(this.supplier_ref);
+        } else {
+          this.$toast.add({
+            severity: "error",
+            summary: "Ooops!",
+            detail: "supplier already exists in the list.",
+            life: 3000,
+          });
+        }
+        // RESERT DATA
+        this.supplier_ref = {};
+        this.supplierRefItem = null;
+        this.submittedAddSuppliersRef = false;
+      }
+    },
     validateFormArticle() {
-      return this.article.article_type;
+      return this.article.article_type && this.articles.suppliers_ref;
+    },
+    validateFormSupplierRef() {
+      return this.supplierRefItem && this.supplier_ref.price;
+    },
+    removeSupplierRef(data) {
+      this.article.suppliers_ref = this.article.suppliers_ref.filter(
+        (val) => val.id !== data.id
+      );
     },
 
     initFilters() {
@@ -648,9 +745,10 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
-    default() {
+    defaultObjects() {
       this.article = {
         article_type: {},
+        suppliers_ref: [],
       };
     },
   },

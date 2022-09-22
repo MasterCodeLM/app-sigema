@@ -501,11 +501,13 @@ export default {
       return;
     },
     openNew() {
+      this.defaultObjects();
       this.product = {};
       this.submitted = false;
       this.productDialog = true;
     },
     hideDialog() {
+      this.defaultObjcts();
       this.productDialog = false;
       this.submitted = false;
     },
@@ -539,7 +541,7 @@ export default {
           });
         }
         this.productDialog = false;
-        this.default();
+        this.defaultObjects();
       }
     },
     editProduct(product) {
@@ -612,7 +614,7 @@ export default {
       };
     },
 
-    default() {
+    defaultObjects() {
       this.employee = {
         document_type: {},
       };
