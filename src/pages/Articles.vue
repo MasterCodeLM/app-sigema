@@ -285,13 +285,19 @@
                   <label for="articleType">Article Type</label>
                   <Dropdown
                     id="articleType"
-                    v-model="dropdownItem"
-                    :options="dropdownItems"
+                    v-model="article.article_type"
+                    :options="articleTypeItems"
                     optionLabel="name"
                     placeholder="Select One"
                     :filter="true"
                     :loading="false"
+                    :class="{ 'p-invalid': submitted && !article.article_type }"
                   ></Dropdown>
+                  <small
+                    class="p-invalid"
+                    v-if="submitted && !article.article_type"
+                    >Article Type is required.</small
+                  >
                 </div>
               </div>
 
@@ -472,7 +478,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import ArticlesService from "../service/ArticlesService";
-
+import ArticleTypesService from "../service/ArticleTypesService";
 export default {
   data() {
     return {
@@ -480,6 +486,14 @@ export default {
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
+      article: {
+        serial_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        quantity: null,
+        article_type: null,
+      },
       product: {},
       resource: {}, // One Resource Articles
       selectedProducts: null,
@@ -492,16 +506,24 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+      articleTypeItem: null,
+      articleTypeItems: null,
     };
   },
   articlesService: null,
+  articleTypeService: null,
+
   created() {
     this.articlesService = new ArticlesService();
+    this.articleTypeService = new ArticleTypesService();
     this.initFilters();
   },
   mounted() {
     this.loading = true;
     this.articlesService.getAll().then((data) => (this.articles = data));
+    this.articleTypeService
+      .getAll()
+      .then((data) => (this.articleTypeItems = data));
     this.loading = false;
   },
   methods: {
@@ -524,7 +546,7 @@ export default {
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
+      if (this.validateFormArticle()) {
         if (this.product.id) {
           this.product.inventoryStatus = this.product.inventoryStatus.value
             ? this.product.inventoryStatus.value
@@ -552,7 +574,7 @@ export default {
           });
         }
         this.productDialog = false;
-        this.resource = {};
+        this.default();
       }
     },
     editProduct(product) {
@@ -617,9 +639,18 @@ export default {
         life: 3000,
       });
     },
+    validateFormArticle() {
+      return this.article.article_type;
+    },
+
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+    default() {
+      this.article = {
+        article_type: {},
       };
     },
   },

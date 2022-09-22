@@ -189,41 +189,30 @@
 
         <Dialog
           v-model:visible="productDialog"
-          :style="{ width: '450px' }"
+          :style="{ width: '550px' }"
           header="Employee Details"
           :modal="true"
           class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="field col">
-              <label for="inventoryStatus">Document Type</label>
+              <label for="doccumentType">Document Type</label>
               <Dropdown
-                id="inventoryStatus"
-                v-model="product.inventoryStatus"
-                :options="statuses"
-                optionLabel="label"
-                placeholder="Select Type"
+                id="doccumentType"
+                v-model="employee.document_type"
+                :options="documentTypeItems"
+                optionLabel="name"
+                placeholder="Select One"
+                :filter="false"
+                :loading="false"
+                :class="{ 'p-invalid': submitted && !employee.document_type }"
               >
-                <template #value="slotProps">
-                  <div v-if="slotProps.value && slotProps.value.value">
-                    <span
-                      :class="'product-badge status-' + slotProps.value.value"
-                      >{{ slotProps.value.label }}</span
-                    >
-                  </div>
-                  <div v-else-if="slotProps.value && !slotProps.value.value">
-                    <span
-                      :class="
-                        'product-badge status-' + slotProps.value.toLowerCase()
-                      "
-                      >{{ slotProps.value }}</span
-                    >
-                  </div>
-                  <span v-else>
-                    {{ slotProps.placeholder }}
-                  </span>
-                </template>
               </Dropdown>
+              <small
+                class="p-invalid"
+                v-if="submitted && !employee.document_type"
+                >Document Type is required.</small
+              >
             </div>
 
             <div class="field col">
@@ -276,7 +265,7 @@
           <!-- </div> -->
 
           <div class="formgrid grid">
-            <div class="field col">
+            <div class="field col-4">
               <label for="age">Age</label>
               <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
               <InputNumber
@@ -331,7 +320,6 @@
               >
             </div>
           </div>
-
           <div class="field">
             <label for="address">Address</label>
             <InputText
@@ -347,7 +335,7 @@
           </div>
 
           <div class="formgrid grid">
-            <div class="field col">
+            <div class="field col-5">
               <label for="state">Native Language</label>
               <Dropdown
                 id="state"
@@ -356,37 +344,6 @@
                 optionLabel="name"
                 placeholder="Select One"
               ></Dropdown>
-            </div>
-
-            <div class="field col">
-              <label for="inventoryStatus">Status</label>
-              <Dropdown
-                id="inventoryStatus"
-                v-model="product.inventoryStatus"
-                :options="statuses"
-                optionLabel="label"
-                placeholder="Select a Status"
-              >
-                <template #value="slotProps">
-                  <div v-if="slotProps.value && slotProps.value.value">
-                    <span
-                      :class="'product-badge status-' + slotProps.value.value"
-                      >{{ slotProps.value.label }}</span
-                    >
-                  </div>
-                  <div v-else-if="slotProps.value && !slotProps.value.value">
-                    <span
-                      :class="
-                        'product-badge status-' + slotProps.value.toLowerCase()
-                      "
-                      >{{ slotProps.value }}</span
-                    >
-                  </div>
-                  <span v-else>
-                    {{ slotProps.placeholder }}
-                  </span>
-                </template>
-              </Dropdown>
             </div>
           </div>
 
@@ -450,7 +407,7 @@
               style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete the selected products?</span
+              >Are you sure you want to delete the selected employees?</span
             >
           </div>
           <template #footer>
@@ -476,6 +433,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import EmployeesService from "../service/EmployeesService";
+import DocumentTypeServices from "../service/DocumentTypeServices";
 
 export default {
   data() {
@@ -486,6 +444,16 @@ export default {
       ],
       dropdownItem: null,
       employees: null,
+      employee: {
+        document_type: null,
+        document_number: null,
+        name: null,
+        age: null,
+        phone: null,
+        position: null,
+        email: null,
+        address: null,
+      },
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
@@ -501,16 +469,26 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+
+      documentTypeItem: null,
+
+      documentTypeItems: null,
     };
   },
   employeesService: null,
+  documentTypeService: null,
   created() {
     this.employeesService = new EmployeesService();
+    this.documentTypeService = new DocumentTypeServices();
     this.initFilters();
   },
   mounted() {
     this.loading = true;
     this.employeesService.getAll().then((data) => (this.employees = data));
+    this.documentTypeService
+      .getAll()
+      .then((data) => (this.documentTypeItems = data));
+
     this.loading = false;
   },
   methods: {
@@ -533,7 +511,7 @@ export default {
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
+      if (this.validateFormEmployee()) {
         if (this.product.id) {
           this.product.inventoryStatus = this.product.inventoryStatus.value
             ? this.product.inventoryStatus.value
@@ -561,7 +539,7 @@ export default {
           });
         }
         this.productDialog = false;
-        this.product = {};
+        this.default();
       }
     },
     editProduct(product) {
@@ -625,9 +603,18 @@ export default {
         life: 3000,
       });
     },
+    validateFormEmployee() {
+      return this.supplier.document_type;
+    },
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+
+    default() {
+      this.employee = {
+        document_type: {},
       };
     },
   },
