@@ -34,17 +34,20 @@
         <OverlayPanel ref="op" appendTo="body" :showCloseIcon="false" style="width:25rem">
           <ScrollPanel style="width: 100%; height: 300px">
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
+              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
+                error repudiandae
                 numquam deserunt</p>
               <span class="text-500">ago 12 Hours</span>
             </div>
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
+              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
+                error repudiandae
                 numquam deserunt</p>
               <span class="text-500">ago 12 Hours</span>
             </div>
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
+              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
+                error repudiandae
                 numquam deserunt</p>
               <span class="text-500">ago 12 Hours</span>
             </div>
@@ -66,6 +69,8 @@
 </template>
 
 <script>
+import AuthService from "@/service/AuthService";
+
 export default {
   data() {
     return {
@@ -81,7 +86,7 @@ export default {
           label: 'Logout',
           icon: 'pi pi-refresh',
           command: () => {
-            this.$toast.add({severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000});
+            this.logout();
           }
         },
         // {
@@ -104,7 +109,24 @@ export default {
       ]
     }
   },
+  authService: null,
+  created() {
+    this.authService = new AuthService();
+  },
   methods: {
+    logout() {
+      //  ELIMINAR TOKEN
+      this.authService.logout().then((data) => {
+        if (data) {
+          //  ELIMINAR LOCAL
+          localStorage.removeItem('userLogged')
+          localStorage.removeItem('token')
+          //  REDIRECIONAR
+          this.$router.push({name: 'login'})
+
+        }
+      })
+    },
     toggle(event) {
       this.$refs.menu.toggle(event);
     },
