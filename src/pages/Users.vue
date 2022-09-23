@@ -2,51 +2,91 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
-              <Button label="New" icon="pi pi-plus" class="p-button-success mr-2" @click="openNew"/>
+              <Button
+                label="New"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="openNew"
+              />
               <!--              <Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />-->
             </div>
           </template>
 
           <template v-slot:end>
-            <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"/>
+            <Button
+              label="Export"
+              icon="pi pi-upload"
+              class="p-button-help"
+              @click="exportCSV($event)"
+            />
           </template>
         </Toolbar>
 
-        <DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
-                   :rows="10" :filters="filters"
-                   paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                   :rowsPerPageOptions="[5,10,25]"
-                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                   responsiveLayout="scroll">
+        <DataTable
+          ref="dt"
+          :value="users"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+        >
           <template #header>
-            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div
+              class="
+                flex flex-column
+                md:flex-row md:justify-content-between md:align-items-center
+              "
+            >
               <h5 class="m-0">Users</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                                <i class="pi pi-search"/>
-                                <InputText v-model="filters['global'].value" placeholder="Search..."/>
-                            </span>
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
+                />
+              </span>
             </div>
           </template>
 
           <!--          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>-->
-          <Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+          <Column
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.employee ? slotProps.data.employee.name : "" }}
             </template>
           </Column>
-          <Column field="email" header="User" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+          <Column
+            field="email"
+            header="User"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">User</span>
               {{ slotProps.data.email }}
             </template>
           </Column>
-          <Column field="role" header="Role" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-<!--            TODO:COLOR ROLE WITH DINAMIC VALUE-->
+          <Column
+            field="role"
+            header="Role"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <!--            TODO:COLOR ROLE WITH DINAMIC VALUE-->
             <template #body="slotProps">
               <span class="p-column-title">Role</span>
               {{ slotProps.data.role }}
@@ -60,8 +100,8 @@
           <!--          </Column>-->
           <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
-              <div style="display:flex;justify-content:end">
-                <InputSwitch v-model="switchValue" @click="(slotProps.data)"/>
+              <div style="display: flex; justify-content: end">
+                <InputSwitch v-model="switchValue" @click="slotProps.data;" />
                 <!--                  <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" @click="editProduct(slotProps.data)" />-->
                 <!--                  <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="confirmDeleteProduct(slotProps.data)" />-->
               </div>
@@ -69,67 +109,118 @@
           </Column>
         </DataTable>
 
-        <Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="New User" :modal="true"
-                class="p-fluid">
+        <Dialog
+          v-model:visible="productDialog"
+          :style="{ width: '500px' }"
+          header="New User"
+          :modal="true"
+          class="p-fluid"
+        >
           <div class="field">
-            <label for="inventoryStatus" class="mb-3">Employee</label>
-            <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label"
-                      placeholder="Select a Employee">
-              <template #value="slotProps">
-                <div v-if="slotProps.value && slotProps.value.value">
-                  <span :class="'product-badge status-' +slotProps.value.value">{{ slotProps.value.label }}</span>
-                </div>
-                <div v-else-if="slotProps.value && !slotProps.value.value">
-                  <span :class="'product-badge status-' +slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
-                </div>
-                <span v-else>
-									{{ slotProps.placeholder }}
-								</span>
-              </template>
-            </Dropdown>
+            <label for="employee" class="mb-3">Employee</label>
+            <Dropdown
+              id="employee"
+              v-model="user.employee"
+              :options="employeeItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :filter="true"
+              :loading="false"
+              :class="{ 'p-invalid': submitted && !usser.employee }"
+            ></Dropdown>
+            <small class="p-invalid" v-if="submitted && !usser.employee"
+              >Employee is required.</small
+            >
           </div>
           <div class="field">
-            <label for="inventoryStatus" class="mb-3">Role</label>
-            <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label"
-                      placeholder="Select a Role">
-              <template #value="slotProps">
-                <div v-if="slotProps.value && slotProps.value.value">
-                  <span :class="'product-badge status-' +slotProps.value.value">{{ slotProps.value.label }}</span>
-                </div>
-                <div v-else-if="slotProps.value && !slotProps.value.value">
-                  <span :class="'product-badge status-' +slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
-                </div>
-                <span v-else>
-									{{ slotProps.placeholder }}
-								</span>
-              </template>
-            </Dropdown>
+            <label for="role" class="mb-3">Role</label>
+            <Dropdown
+              id="role"
+              v-model="user.role"
+              :options="roleItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :filter="false"
+              :loading="false"
+              :class="{ 'p-invalid': submitted && !usser.role }"
+            ></Dropdown>
+            <small class="p-invalid" v-if="submitted && !usser.role"
+              >Role is required.</small
+            >
           </div>
           <div class="formgrid grid">
             <div class="field col">
-              <label for="price">User</label>
-              <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US"/>
+              <label for="user">User</label>
+              <InputText
+                id="user"
+                v-model.trim="user.email"
+                required="true"
+                disabled
+                autofocus
+                :class="{
+                  'p-invalid': submittedAddBank && !user.email,
+                }"
+              />
             </div>
             <div class="field col">
-              <label for="quantity">Password</label>
-              <InputNumber id="quantity" v-model="product.quantity" integeronly/>
+              <label for="password">Password</label>
+              <InputText
+                id="password"
+                v-model.trim="user.password"
+                required="true"
+                disabled
+                autofocus
+                :class="{
+                  'p-invalid': submittedAddBank && !user.password,
+                }"
+              />
             </div>
           </div>
           <template #footer>
-            <Button label="Cancel" icon="pi pi-times" class="p-button-text p-button-danger" @click="hideDialog"/>
-            <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveProduct"/>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
+            />
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
+            />
           </template>
         </Dialog>
 
-
-        <Dialog v-model:visible="deleteProductDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+        <Dialog
+          v-model:visible="deleteProductDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+        >
           <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"/>
-            <span v-if="product">Are you sure you want to delete <b>{{ product.name }}</b>?</span>
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="product"
+              >Are you sure you want to delete <b>{{ product.name }}</b
+              >?</span
+            >
           </div>
           <template #footer>
-            <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteProductDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteProduct"/>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteProduct"
+            />
           </template>
         </Dialog>
 
@@ -146,17 +237,25 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import {FilterMatchMode} from 'primevue/api';
-import ProductService from '../service/ProductService';
+import { FilterMatchMode } from "primevue/api";
+//import ProductService from "../service/ProductService";
+import UserService from "../service/UserService";
+import EmployeesService from "../service/EmployeesService";
+import RolesService from "../service/RolesService";
 
 export default {
   data() {
     return {
-      products: null,
+      users: null,
+      user: {
+        email: null,
+        employee: null,
+        role: null,
+      },
+
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -166,24 +265,49 @@ export default {
       submitted: false,
       switchValue: false,
       statuses: [
-        {label: 'INSTOCK', value: 'instock'},
-        {label: 'LOWSTOCK', value: 'lowstock'},
-        {label: 'OUTOFSTOCK', value: 'outofstock'}
-      ]
-    }
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
+      ],
+
+      employeeItems: null,
+      roleItems: null,
+    };
   },
-  productService: null,
+  userService: null,
+  employeeService: null,
+  roleService: null,
+
   created() {
-    this.productService = new ProductService();
+    this.userService = new UserService();
+    this.employeeService = new EmployeesService();
+    this.roleService = new RolesService();
     this.initFilters();
   },
+  watch: {
+    "user.employee"(newValue) {
+      this.employeeService
+        .getGenerateSafeCredentials(newValue.id)
+        .then((data) => {
+          this.user.email = data.data.email;
+          this.user.password = data.data.password;
+        });
+    },
+  },
   mounted() {
-    this.productService.getProducts().then(data => this.products = data);
+    this.loading = true;
+    this.userService.getAll().then((data) => (this.users = data));
+    this.employeeService.getAll().then((data) => (this.employeeItems = data));
+    this.roleService.getAll().then((data) => (this.roleItems = data));
+    this.loading = false;
   },
   methods: {
     formatCurrency(value) {
       if (value)
-        return value.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+        return value.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        });
       return;
     },
     openNew() {
@@ -199,23 +323,37 @@ export default {
       this.submitted = true;
       if (this.product.name.trim()) {
         if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
+          this.product.inventoryStatus = this.product.inventoryStatus.value
+            ? this.product.inventoryStatus.value
+            : this.product.inventoryStatus;
           this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
+          this.$toast.add({
+            severity: "success",
+            summary: "Successful",
+            detail: "Product Updated",
+            life: 3000,
+          });
         } else {
           this.product.id = this.createId();
           this.product.code = this.createId();
-          this.product.image = 'product-placeholder.svg';
-          this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
+          this.product.image = "product-placeholder.svg";
+          this.product.inventoryStatus = this.product.inventoryStatus
+            ? this.product.inventoryStatus.value
+            : "INSTOCK";
           this.products.push(this.product);
-          this.$toast.add({severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+          this.$toast.add({
+            severity: "success",
+            summary: "Successful",
+            detail: "Product Created",
+            life: 3000,
+          });
         }
         this.productDialog = false;
         this.product = {};
       }
     },
     editProduct(product) {
-      this.product = {...product};
+      this.product = { ...product };
       this.productDialog = true;
     },
     confirmDeleteProduct(product) {
@@ -223,10 +361,15 @@ export default {
       this.deleteProductDialog = true;
     },
     deleteProduct() {
-      this.products = this.products.filter(val => val.id !== this.product.id);
+      this.products = this.products.filter((val) => val.id !== this.product.id);
       this.deleteProductDialog = false;
       this.product = {};
-      this.$toast.add({severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Product Deleted",
+        life: 3000,
+      });
     },
     findIndexById(id) {
       let index = -1;
@@ -239,8 +382,9 @@ export default {
       return index;
     },
     createId() {
-      let id = '';
-      var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let id = "";
+      var chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -253,20 +397,27 @@ export default {
       this.deleteProductsDialog = true;
     },
     deleteSelectedProducts() {
-      this.products = this.products.filter(val => !this.selectedProducts.includes(val));
+      this.products = this.products.filter(
+        (val) => !this.selectedProducts.includes(val)
+      );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
-      this.$toast.add({severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Products Deleted",
+        life: 3000,
+      });
     },
     initFilters() {
       this.filters = {
-        'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-      }
-    }
-  }
-}
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-@import '../assets/demo/badges.scss';
+@import "../assets/demo/badges.scss";
 </style>

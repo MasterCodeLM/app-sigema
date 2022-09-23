@@ -1,22 +1,22 @@
 <template>
   <div :class="containerClass" @click="onWrapperClick">
-    <AppTopBar @menu-toggle="onMenuToggle"/>
+    <AppTopBar @menu-toggle="onMenuToggle" />
     <div class="layout-sidebar" @click="onSidebarClick">
-      <AppMenu :model="menu" @menuitem-click="onMenuItemClick"/>
+      <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
     </div>
 
     <div class="layout-main-container">
       <div class="layout-main">
-        <router-view/>
+        <router-view />
       </div>
-      <AppFooter/>
+      <AppFooter />
     </div>
 
-    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange"/>
+    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
     <transition name="layout-mask">
       <div
-          class="layout-mask p-component-overlay"
-          v-if="mobileMenuActive"
+        class="layout-mask p-component-overlay"
+        v-if="mobileMenuActive"
       ></div>
     </transition>
   </div>
@@ -181,7 +181,7 @@ export default {
                 {
                   label: "Users",
                   icon: "pi pi-fw pi-user-edit",
-                  //to: "/roles",
+                  to: "/users",
                 },
               ],
             },
@@ -214,29 +214,30 @@ export default {
           ],
         },
       ],
-      permissions:[],
+      permissions: [],
     };
   },
   created() {
     let permissions = [];
-    const permissions_list = JSON.parse(localStorage.getItem("userLogged")).permissions;
-    permissions_list.map((permission) => permissions.push(permission.name))
-    this.permissions = permissions
+    const permissions_list = JSON.parse(
+      localStorage.getItem("userLogged")
+    ).permissions;
+    permissions_list.map((permission) => permissions.push(permission.name));
+    this.permissions = permissions;
   },
   mounted() {
-    this.menu =
-        [
+    this.menu = [
+      {
+        label: "Home",
+        items: [
           {
-            label: "Home",
-            items: [
-              {
-                label: "Dashboard",
-                icon: "pi pi-fw pi-home",
-                to: "/",
-              },
-            ],
+            label: "Dashboard",
+            icon: "pi pi-fw pi-home",
+            to: "/",
           },
-          /*
+        ],
+      },
+      /*
           {
             label: "UI Components",
             icon: "pi pi-fw pi-sitemap",
@@ -301,130 +302,127 @@ export default {
             ],
           },*/
 
+      {
+        label: "Pages",
+        icon: "pi pi-fw pi-search",
+        items: [
           {
-            label: "Pages",
-            icon: "pi pi-fw pi-search",
+            label: "Machines",
+            icon: "pi pi-fw pi-user-edit",
+            to: "/machines",
+            visible: this.permissions.includes("machines"),
+          },
+
+          {
+            label: "Employees",
+            icon: "pi pi-fw pi-bookmark",
+            visible:
+              this.permissions.includes("employees") ||
+              this.permissions.includes("attendance-sheets"),
             items: [
               {
-                label: "Machines",
+                label: "Employess Form",
                 icon: "pi pi-fw pi-user-edit",
-                to: "/machines",
-                visible: this.permissions.includes('machines')
-              },
-
-              {
-                label: "Employees",
-                icon: "pi pi-fw pi-bookmark",
-                visible: this.permissions.includes('employees') || this.permissions.includes('attendance-sheets'),
-                items: [
-                  {
-                    label: "Employess Form",
-                    icon: "pi pi-fw pi-user-edit",
-                    to: "/employees",
-                    visible: this.permissions.includes('employees')
-
-                  },
-                  {
-                    label: "Attendance Control",
-                    icon: "pi pi-fw pi-user-edit",
-                    to: "/new-attendance-control",
-                    visible: this.permissions.includes('attendance-sheets')
-
-                  },
-                ],
+                to: "/employees",
+                visible: this.permissions.includes("employees"),
               },
               {
-                label: "Operations",
-                icon: "pi pi-fw pi-bookmark",
-                visible: this.permissions.includes('maintenance-sheets') || this.permissions.includes('working-sheets'),
-                items: [
-                  {
-                    label: "Maintenance",
-                    icon: "pi pi-fw pi-user-edit",
-                    to: "/list",
-                    visible: this.permissions.includes('maintenance-sheets')
-
-                  },
-                  {
-                    label: "Worked",
-                    icon: "pi pi-fw pi-user-edit",
-                    to: "/list",
-                    visible: this.permissions.includes('working-sheets')
-
-                  },
-                ],
-              },
-              {
-                label: "Inventory",
+                label: "Attendance Control",
                 icon: "pi pi-fw pi-user-edit",
-                to: "/articles",
-                visible: this.permissions.includes('articles')
-
-              },
-              {
-                label: "Article Types",
-                icon: "pi pi-fw pi-user-edit",
-                to: "/article-types",
-                visible: this.permissions.includes('article-types')
-
-              },
-              {
-                label: "Suppliers",
-                icon: "pi pi-fw pi-user-edit",
-                to: "/suppliers",
-                visible: this.permissions.includes('suppliers')
-
-              },
-              {
-                label: "User Management",
-                icon: "pi pi-fw pi-bookmark",
-                visible: this.permissions.includes('roles') || this.permissions.includes('users'),
-                items: [
-                  {
-                    label: "Roles",
-                    icon: "pi pi-fw pi-user-edit",
-                    to: "/roles",
-                    visible: this.permissions.includes('roles')
-
-                  },
-                  {
-                    label: "Users",
-                    icon: "pi pi-fw pi-user-edit",
-                    //to: "/roles",
-                    visible: this.permissions.includes('users')
-
-                  },
-                ],
-              },
-              {
-                label: "Reports",
-                icon: "pi pi-fw pi-bookmark",
-                items: [
-                  {
-                    label: "Report 01",
-                    icon: "pi pi-fw pi-file",
-                    //to: "/roles",
-                  },
-                  {
-                    label: "Report 02",
-                    icon: "pi pi-fw pi-file",
-                    //to: "/roles",
-                  },
-                  {
-                    label: "Report 03",
-                    icon: "pi pi-fw pi-file",
-                    //to: "/roles",
-                  },
-                  {
-                    label: "Report 04",
-                    icon: "pi pi-fw pi-file",
-                    //to: "/roles",
-                  },
-                ],
+                to: "/new-attendance-control",
+                visible: this.permissions.includes("attendance-sheets"),
               },
             ],
           },
-        ]
+          {
+            label: "Operations",
+            icon: "pi pi-fw pi-bookmark",
+            visible:
+              this.permissions.includes("maintenance-sheets") ||
+              this.permissions.includes("working-sheets"),
+            items: [
+              {
+                label: "Maintenance",
+                icon: "pi pi-fw pi-user-edit",
+                to: "/list",
+                visible: this.permissions.includes("maintenance-sheets"),
+              },
+              {
+                label: "Worked",
+                icon: "pi pi-fw pi-user-edit",
+                to: "/list",
+                visible: this.permissions.includes("working-sheets"),
+              },
+            ],
+          },
+          {
+            label: "Inventory",
+            icon: "pi pi-fw pi-user-edit",
+            to: "/articles",
+            visible: this.permissions.includes("articles"),
+          },
+          {
+            label: "Article Types",
+            icon: "pi pi-fw pi-user-edit",
+            to: "/article-types",
+            visible: this.permissions.includes("article-types"),
+          },
+          {
+            label: "Suppliers",
+            icon: "pi pi-fw pi-user-edit",
+            to: "/suppliers",
+            visible: this.permissions.includes("suppliers"),
+          },
+          {
+            label: "User Management",
+            icon: "pi pi-fw pi-bookmark",
+            visible:
+              this.permissions.includes("roles") ||
+              this.permissions.includes("users"),
+            items: [
+              {
+                label: "Roles",
+                icon: "pi pi-fw pi-user-edit",
+                to: "/roles",
+                visible: this.permissions.includes("roles"),
+              },
+              {
+                label: "Users",
+                icon: "pi pi-fw pi-user-edit",
+                //to: "/roles",
+                visible: this.permissions.includes("users"),
+              },
+            ],
+          },
+          {
+            label: "Reports",
+            icon: "pi pi-fw pi-bookmark",
+            items: [
+              {
+                label: "Report 01",
+                icon: "pi pi-fw pi-file",
+                //to: "/roles",
+              },
+              {
+                label: "Report 02",
+                icon: "pi pi-fw pi-file",
+                //to: "/roles",
+              },
+              {
+                label: "Report 03",
+                icon: "pi pi-fw pi-file",
+                //to: "/roles",
+              },
+              {
+                label: "Report 04",
+                icon: "pi pi-fw pi-file",
+                //to: "/roles",
+              },
+            ],
+          },
+        ],
+      },
+    ];
   },
   watch: {
     $route() {
@@ -481,11 +479,11 @@ export default {
       if (element.classList) element.classList.remove(className);
       else
         element.className = element.className.replace(
-            new RegExp(
-                "(^|\\b)" + className.split(" ").join("|") + "(\\b|$)",
-                "gi"
-            ),
-            " "
+          new RegExp(
+            "(^|\\b)" + className.split(" ").join("|") + "(\\b|$)",
+            "gi"
+          ),
+          " "
         );
     },
     isDesktop() {
@@ -508,9 +506,9 @@ export default {
           "layout-overlay": this.layoutMode === "overlay",
           "layout-static": this.layoutMode === "static",
           "layout-static-sidebar-inactive":
-              this.staticMenuInactive && this.layoutMode === "static",
+            this.staticMenuInactive && this.layoutMode === "static",
           "layout-overlay-sidebar-active":
-              this.overlayMenuActive && this.layoutMode === "overlay",
+            this.overlayMenuActive && this.layoutMode === "overlay",
           "layout-mobile-sidebar-active": this.mobileMenuActive,
           "p-input-filled": this.$primevue.config.inputStyle === "filled",
           "p-ripple-disabled": this.$primevue.config.ripple === false,
@@ -519,8 +517,8 @@ export default {
     },
     logo() {
       return this.$appState.darkTheme
-          ? "images/logo-white.svg"
-          : "images/logo.svg";
+        ? "images/logo-white.svg"
+        : "images/logo.svg";
     },
   },
   beforeUpdate() {
