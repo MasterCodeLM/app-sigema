@@ -197,15 +197,17 @@
           <div class="formgrid grid">
             <div class="col-6">
               <div class="field">
-                <label for="serialNumber">Serial Number</label>
+                <label for="serie_number">Serial Number</label>
                 <InputText
-                  id="serialNumber"
-                  v-model.trim="product.serialNumber"
+                  id="serie_number"
+                  v-model.trim="machine.serie_number"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !machine.serie_number }"
                 />
-                <small class="p-invalid" v-if="submitted && !product.name"
+                <small
+                  class="p-invalid"
+                  v-if="submitted && !machine.serie_number"
                   >Serial Number is required.</small
                 >
               </div>
@@ -214,12 +216,12 @@
                 <label for="name">Name</label>
                 <InputText
                   id="name"
-                  v-model.trim="product.name"
+                  v-model.trim="machine.name"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !product.name }"
+                  :class="{ 'p-invalid': submitted && !machine.name }"
                 />
-                <small class="p-invalid" v-if="submitted && !product.name"
+                <small class="p-invalid" v-if="submitted && !machine.name"
                   >Name is required.</small
                 >
               </div>
@@ -229,12 +231,12 @@
                   <label for="model">Model</label>
                   <InputText
                     id="model"
-                    v-model.trim="product.model"
+                    v-model.trim="machine.model"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !machine.name }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small class="p-invalid" v-if="submitted && !machine.name"
                     >Model is required.</small
                   >
                 </div>
@@ -243,12 +245,12 @@
                   <label for="brand">Brand</label>
                   <InputText
                     id="barnd"
-                    v-model.trim="product.brand"
+                    v-model.trim="machine.brand"
                     required="true"
                     autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :class="{ 'p-invalid': submitted && !machine.name }"
                   />
-                  <small class="p-invalid" v-if="submitted && !product.name"
+                  <small class="p-invalid" v-if="submitted && !machine.name"
                     >Brand is required.</small
                   >
                 </div>
@@ -256,21 +258,29 @@
 
               <div class="formgrid grid">
                 <div class="field col">
-                  <label for="dailyWorkinghours">Daily Working Hours</label>
+                  <label for="maximum_working_time">Daily Working Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
-                    id="age"
-                    v-model="inputNumberValue"
+                    id="maximum_working_time"
+                    v-model="machine.maximum_working_time"
                     showButtons
                     mode="decimal"
+                    :class="{
+                      'p-invalid': submitted && !machine.maximum_working_time,
+                    }"
                   />
+                  <small
+                    class="p-invalid"
+                    v-if="submitted && !machine.maximum_working_time"
+                    >Brand is required.</small
+                  >
                 </div>
 
                 <div class="field col">
                   <label for="usefulLifehours">Useful Life Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
-                    id="age"
+                    id="usefulLifehours"
                     v-model="inputNumberValue"
                     showButtons
                     mode="decimal"
@@ -284,55 +294,73 @@
                 </div>
               </div>
 
-              <div class="field">
-                <h5>Spare Parts</h5>
-                <MultiSelect
-                  v-model="multiselectValue"
-                  :options="multiselectValues"
-                  optionLabel="name"
-                  placeholder="Select Countries"
-                  :filter="true"
-                >
-                  <template #value="slotProps">
-                    <div
-                      class="
-                        inline-flex
-                        align-items-center
-                        py-1
-                        px-2
-                        bg-primary
-                        text-primary
-                        border-round
-                        mr-2
-                      "
-                      v-for="option of slotProps.value"
-                      :key="option.code"
+              <div class="card">
+                <div class="formgrid grid">
+                  <div class="field col">
+                    <label for="sparePart">Spare Parts</label>
+                    <Dropdown
+                      id="sparePart"
+                      v-model="sparePartItem"
+                      :options="sparePartItems"
+                      optionLabel="name"
+                      placeholder="Select One"
+                      :filter="true"
+                      :loading="false"
+                      :class="{
+                        'p-invalid': submittedAddSparePart && !sparePartItem,
+                      }"
+                    ></Dropdown>
+                    <small
+                      class="p-invalid"
+                      v-if="submittedAddSparePart && !sparePartItem"
+                      >Spare Part is required.</small
                     >
-                      <span
-                        :class="'mr-2 flag flag-' + option.code.toLowerCase()"
-                        style="width: 18px; height: 12px"
-                      />
-                      <div>{{ option.name }}</div>
-                    </div>
-                    <template
-                      v-if="!slotProps.value || slotProps.value.length === 0"
+                  </div>
+
+                  <div
+                    class="
+                      field
+                      col-2
+                      flex
+                      justify-content-center
+                      align-items-center
+                    "
+                  >
+                    <Button
+                      icon="pi pi-plus"
+                      class="p-button-secondary"
+                      style="margin-top: 1.8rem"
+                      @click="addSparePart"
+                    ></Button>
+                  </div>
+                </div>
+                <div class="card">
+                  <DataTable
+                    :value="machine.articles"
+                    responsiveLayout="scroll"
+                  >
+                    <Column
+                      v-for="col of columns"
+                      :field="col.field"
+                      :header="col.header"
+                      :key="col.field"
+                      style="width: 25%"
                     >
-                      <div class="p-1">Select Spare Parts</div>
-                    </template>
-                  </template>
-                  <template #option="slotProps">
-                    <div class="flex align-items-center">
-                      <span
-                        :class="
-                          'mr-2 flag flag-' +
-                          slotProps.option.code.toLowerCase()
-                        "
-                        style="width: 18px; height: 12px"
-                      />
-                      <div>{{ slotProps.option.name }}</div>
-                    </div>
-                  </template>
-                </MultiSelect>
+                    </Column>
+
+                    <Column headerStyle="min-width:10rem;">
+                      <template #body="slotProps">
+                        <div style="display: flex; justify-content: end">
+                          <Button
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger"
+                            @click="removeSparePart(slotProps.data)"
+                          />
+                        </div>
+                      </template>
+                    </Column>
+                  </DataTable>
+                </div>
               </div>
             </div>
 
@@ -449,6 +477,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import MachinesService from "../service/MachinesService";
+import ArticlesService from "../service/ArticlesService";
 
 export default {
   data() {
@@ -457,6 +486,20 @@ export default {
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
+      machine: {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        maximum_working_time: null,
+        image: null,
+        articles: [],
+      },
+      spare_Part: {
+        id: null,
+        model: null,
+        name: null,
+      },
       product: {},
       resource: {},
       selectedProducts: null,
@@ -469,16 +512,29 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+
+      submittedAddSparePart: false,
+
+      columns: [
+        { field: "model", header: "Serial Number" },
+        { field: "name", header: "Nombre" },
+      ],
+
+      sparePartItem: null,
+      sparePartItems: null,
     };
   },
   machinesService: null,
+  sparePartService: null,
   created() {
     this.machinesService = new MachinesService();
+    this.sparePartService = new ArticlesService();
     this.initFilters();
   },
   mounted() {
     this.loading = true;
     this.machinesService.getAll().then((data) => (this.machines = data));
+    this.sparePartService.getAll().then((data) => (this.sparePartItems = data));
     this.loading = false;
   },
   methods: {
@@ -500,50 +556,61 @@ export default {
       return;
     },
     openNew() {
-      this.product = {};
+      this.defaultObjects();
+      //this.product = {};
       this.submitted = false;
       this.productDialog = true;
     },
     hideDialog() {
+      this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
+      if (this.validateFormMachine()) {
+        if (this.machine.id) {
+          const payload = this.machine;
+          //console.log(payload, this.article, this.article.id);
+          //UPDATE
+          this.machinesService.update(this.machine.id, payload).then((data) => {
+            this.machines[this.findIndexById(data.data.id)] = data.data;
+            console.log(data.data.id);
+            console.log(this.findIndexById(data.data.id));
+            //console.log(this.article.id);
+            //console.log(this.findIndexById(this.article.id));
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+
+          const payload = this.machine;
+          console.log(payload);
+          //payload.image="...";
+          this.machinesService.create(payload).then((data) => {
+            this.machines.push(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
         this.productDialog = false;
-        this.product = {};
+        this.defaultObjects();
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
-      this.productDialog = true;
+    editProduct(machine) {
+      this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });
     },
     confirmDelete(resource) {
       this.resource = resource;
@@ -566,8 +633,18 @@ export default {
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.machines.length; i++) {
+        if (this.machines[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      return index;
+    },
+    findSparePartsIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.machine.articles.length; i++) {
+        if (this.machine.articles[i].id === id) {
           index = i;
           break;
         }
@@ -602,9 +679,53 @@ export default {
         life: 3000,
       });
     },
+
+    addSparePart() {
+      this.submittedAddSparePart = true;
+      if (this.validateFormSparePart()) {
+        if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
+          // INSERT DATA
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
+          console.log(this.spare_Part);
+          this.machine.articles.push(this.spare_Part);
+        } else {
+          this.$toast.add({
+            severity: "error",
+            summary: "Ooops!",
+            detail: "spare part already exists in the list.",
+            life: 3000,
+          });
+        }
+        // RESERT DATA
+        this.spare_Part = {};
+        this.sparePartItem = null;
+        this.submittedAddSparePart = false;
+      }
+    },
+
+    validateFormMachine() {
+      return true;
+      //this.machine.serie_number && this.machine.name;
+    },
+    validateFormSparePart() {
+      return true;
+      //this.sparePartItem;
+    },
+    removeSparePart(data) {
+      this.machine.articles = this.machine.articles.filter(
+        (val) => val.id !== data.id
+      );
+    },
+
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+    defaultObjects() {
+      this.machine = {
+        articles: [],
+        serie_number: null,
       };
     },
   },

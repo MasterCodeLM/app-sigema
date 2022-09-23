@@ -151,17 +151,6 @@
               {{ slotProps.data.quantity }}
             </template>
           </Column>
-          <Column
-            field="price"
-            header="Price"
-            :sortable="true"
-            headerStyle="width:14%; min-width:8rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Price</span>
-              {{ formatCurrency(slotProps.data.price) }}
-            </template>
-          </Column>
 
           <Column
             field="inventoryStatus"
@@ -605,7 +594,7 @@ export default {
         if (this.article.id) {
           const payload = this.article;
           //console.log(payload, this.article, this.article.id);
-
+          //UPDATE
           this.articlesService.update(this.article.id, payload).then((data) => {
             this.articles[this.findIndexById(data.data.id)] = data.data;
             console.log(data.data.id);
