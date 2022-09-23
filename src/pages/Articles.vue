@@ -366,7 +366,7 @@
                   <small
                     class="p-invalid"
                     v-if="submittedAddSuppliersRef && !supplier_ref.price"
-                    >Account Number is required.</small
+                    >Price is required.</small
                   >
                 </div>
                 <div
@@ -381,16 +381,13 @@
                   <Button
                     icon="pi pi-plus"
                     class="p-button-secondary"
-                    style="margin-top: 1.85rem"
+                    style="margin-top: 1.8rem"
                     @click="addSpullierRef"
                   ></Button>
                 </div>
               </div>
               <div class="card">
-                <DataTable
-                  :value="article.suppliers_ref"
-                  responsiveLayout="scroll"
-                >
+                <DataTable :value="article.suppliers" responsiveLayout="scroll">
                   <Column
                     v-for="col of columns"
                     :field="col.field"
@@ -522,14 +519,14 @@ export default {
       deleteProductsDialog: false,
       article: {
         // serial_number: null,
-        // image:null,
+        image: null,
         // technical_sheet:null,
         name: null,
         brand: null,
         model: null,
         quantity: null,
         article_type: null,
-        suppliers_ref: [],
+        suppliers: [],
       },
       supplier_ref: {
         id: null,
@@ -603,40 +600,50 @@ export default {
     },
     saveProduct() {
       this.submitted = true;
+
       if (this.validateFormArticle()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
+        if (this.article.id) {
+          const payload = this.article;
+          //console.log(payload, this.article, this.article.id);
+
+          this.articlesService.update(this.article.id, payload).then((data) => {
+            this.articles[this.findIndexById(data.data.id)] = data.data;
+            console.log(data.data.id);
+            console.log(this.findIndexById(data.data.id));
+            //console.log(this.article.id);
+            //console.log(this.findIndexById(this.article.id));
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+
+          const payload = this.article;
+          console.log(payload);
+          //payload.image="...";
+          this.articlesService.create(payload).then((data) => {
+            this.articles.push(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
         this.productDialog = false;
         this.defaultObjects();
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
-      this.productDialog = true;
+    editProduct(article) {
+      this.articlesService.getOne(article.id).then((data) => {
+        this.article = { ...data };
+        this.productDialog = true;
+      });
     },
     confirmDelete(resource) {
       this.resource = resource;
@@ -660,8 +667,8 @@ export default {
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.articles.length; i++) {
+        if (this.articles[i].id === id) {
           index = i;
           break;
         }
@@ -670,8 +677,8 @@ export default {
     },
     findSupplierRefIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.article.suppliers_ref.length; i++) {
-        if (this.article.suppliers_ref[i].id === id) {
+      for (let i = 0; i < this.article.suppliers.length; i++) {
+        if (this.article.suppliers[i].id === id) {
           index = i;
           break;
         }
@@ -713,7 +720,7 @@ export default {
           // INSERT DATA
           this.supplier_ref = { ...this.supplier_ref, ...this.supplierRefItem };
           console.log(this.supplier_ref);
-          this.article.suppliers_ref.push(this.supplier_ref);
+          this.article.suppliers.push(this.supplier_ref);
         } else {
           this.$toast.add({
             severity: "error",
@@ -729,13 +736,14 @@ export default {
       }
     },
     validateFormArticle() {
-      return this.article.article_type && this.articles.suppliers_ref;
+      return true;
+      //this.article.article_type && this.articles.suppliers;
     },
     validateFormSupplierRef() {
       return this.supplierRefItem && this.supplier_ref.price;
     },
     removeSupplierRef(data) {
-      this.article.suppliers_ref = this.article.suppliers_ref.filter(
+      this.article.suppliers = this.article.suppliers.filter(
         (val) => val.id !== data.id
       );
     },
@@ -748,7 +756,7 @@ export default {
     defaultObjects() {
       this.article = {
         article_type: {},
-        suppliers_ref: [],
+        suppliers: [],
       };
     },
   },

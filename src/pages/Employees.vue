@@ -78,6 +78,18 @@
           </Column>
 
           <Column
+            field="document_type.name"
+            header="Document Type"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Document Type</span>
+              {{ slotProps.data.document_type.name }}
+            </template>
+          </Column>
+
+          <Column
             field="document_number"
             header="Identification Document"
             :sortable="true"
@@ -216,17 +228,17 @@
             </div>
 
             <div class="field col">
-              <label for="identificationDocument"
-                >Identification Document</label
-              >
+              <label for="document_number">Identification Document</label>
               <InputText
-                id="identificationDocument"
-                v-model.trim="product.identificationDocument"
+                id="document_number"
+                v-model.trim="employee.document_number"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                :class="{ 'p-invalid': submitted && !employee.document_number }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small
+                class="p-invalid"
+                v-if="submitted && !employee.document_number"
                 >Identification Document is required.</small
               >
             </div>
@@ -238,12 +250,12 @@
             <label for="name">Name</label>
             <InputText
               id="name"
-              v-model.trim="product.name"
+              v-model.trim="employee.name"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+              :class="{ 'p-invalid': submitted && !employee.name }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
+            <small class="p-invalid" v-if="submitted && !employee.name"
               >Name is required.</small
             >
           </div>
@@ -252,12 +264,12 @@
             <label for="lastname">Last Name</label>
             <InputText
               id="name"
-              v-model.trim="product.lastname"
+              v-model.trim="employee.lastname"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+              :class="{ 'p-invalid': submitted && !employee.lastname }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
+            <small class="p-invalid" v-if="submitted && !employee.lastname"
               >Last Name is required.</small
             >
           </div>
@@ -277,45 +289,51 @@
             </div>
 
             <div class="field col">
-              <label for="title">Title</label>
-              <InputText
-                id="title"
-                v-model.trim="product.title"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
-              />
-              <small class="p-invalid" v-if="submitted && !product.name"
-                >Title is required.</small
+              <label for="position">Title</label>
+              <Dropdown
+                id="position"
+                v-model="employee.position"
+                :options="positionItems"
+                optionLabel="name"
+                placeholder="Select One"
+                :filter="false"
+                :loading="false"
+                :class="{ 'p-invalid': submitted && !employee.position }"
+              >
+              </Dropdown>
+              <small class="p-invalid" v-if="submitted && !employee.position"
+                >Document Type is required.</small
               >
             </div>
           </div>
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="telephone">Telephone</label>
+              <label for="phone">Telephone</label>
               <InputText
-                id="telephone"
-                v-model.trim="product.telephone"
+                id="phone"
+                v-model.trim="employee.phone"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                :class="{ 'p-invalid': submitted && !employee.phone }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small class="p-invalid" v-if="submitted && !employee.phone"
                 >Telephone is required.</small
               >
             </div>
 
             <div class="field col">
-              <label for="email">Email</label>
+              <label for="personal_email">Email</label>
               <InputText
-                id="email"
-                v-model.trim="product.email"
+                id="personal_email"
+                v-model.trim="employee.personal_email"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+                :class="{ 'p-invalid': submitted && !employee.personal_email }"
               />
-              <small class="p-invalid" v-if="submitted && !product.name"
+              <small
+                class="p-invalid"
+                v-if="submitted && !employee.personal_email"
                 >Email is required.</small
               >
             </div>
@@ -324,12 +342,12 @@
             <label for="address">Address</label>
             <InputText
               id="address"
-              v-model.trim="product.address"
+              v-model.trim="employee.address"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+              :class="{ 'p-invalid': submitted && !employee.address }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
+            <small class="p-invalid" v-if="submitted && !employee.address"
               >Address is required.</small
             >
           </div>
@@ -434,6 +452,7 @@
 import { FilterMatchMode } from "primevue/api";
 import EmployeesService from "../service/EmployeesService";
 import DocumentTypeServices from "../service/DocumentTypeServices";
+import TitleService from "../service/TitleService";
 
 export default {
   data() {
@@ -451,7 +470,7 @@ export default {
         age: null,
         phone: null,
         position: null,
-        email: null,
+        personal_email: null,
         address: null,
       },
       productDialog: false,
@@ -472,14 +491,18 @@ export default {
 
       documentTypeItem: null,
 
+      positionItems: null,
+
       documentTypeItems: null,
     };
   },
   employeesService: null,
   documentTypeService: null,
+  positionService: null,
   created() {
     this.employeesService = new EmployeesService();
     this.documentTypeService = new DocumentTypeServices();
+    this.positionService = new TitleService();
     this.initFilters();
   },
   mounted() {
@@ -488,65 +511,65 @@ export default {
     this.documentTypeService
       .getAll()
       .then((data) => (this.documentTypeItems = data));
+    this.positionService.getAll().then((data) => (this.positionItems = data));
 
     this.loading = false;
   },
   methods: {
-    formatCurrency(value) {
-      if (value)
-        return value.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        });
-      return;
-    },
     openNew() {
       this.defaultObjects();
-      this.product = {};
+      //this.product = {};
+      this.resource = {};
       this.submitted = false;
       this.productDialog = true;
     },
     hideDialog() {
-      this.defaultObjcts();
+      this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
     },
     saveProduct() {
       this.submitted = true;
       if (this.validateFormEmployee()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
-          });
+        if (this.employee.id) {
+          //UPDATE
+          const payload = this.employee;
+          this.employeesService
+            .update(this.employee.id, payload)
+            .then((data) => {
+              this.employees[this.findIndexById(data.data.id)] = data.data;
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: data.message,
+                life: 3000,
+              });
+            });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+
+          const payload = this.employee;
+          //console.log(payload);
+          //payload.image="...";
+          this.employeesService.create(payload).then((data) => {
+            this.employees.push(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
         this.productDialog = false;
         this.defaultObjects();
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
-      this.productDialog = true;
+    editProduct(employee) {
+      this.employeesService.getOne(employee.id).then((data) => {
+        this.employee = { ...data };
+        this.productDialog = true;
+      });
     },
     confirmDelete(resource) {
       this.resource = resource;
@@ -569,8 +592,8 @@ export default {
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.employees.length; i++) {
+        if (this.employees[i].id === id) {
           index = i;
           break;
         }
@@ -606,7 +629,8 @@ export default {
       });
     },
     validateFormEmployee() {
-      return this.supplier.document_type;
+      return true;
+      //this.supplier.document_type;
     },
     initFilters() {
       this.filters = {
@@ -616,7 +640,7 @@ export default {
 
     defaultObjects() {
       this.employee = {
-        document_type: {},
+        document_type: null,
       };
     },
   },
