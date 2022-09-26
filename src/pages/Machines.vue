@@ -374,7 +374,7 @@
                     mode="basic"
                     accept="image/*"
                     :maxFileSize="5000000"
-                    @input = "onUploadImage"
+                    @input="onUploadImage"
                 />
                 <!--                <FileUpload mode="basic" name="demo[]" accept="image/*" :maxFileSize="5000000" @change="onUpload"/>-->
                 <br/><br/><br/><br/><br/><br/>
@@ -383,7 +383,7 @@
                     mode="basic"
                     accept="application/pdf"
                     :maxFileSize="5000000"
-                    @input = "onUploadFile"
+                    @input="onUploadFile"
                 />
               </div>
               <!-- </div> -->
@@ -477,6 +477,8 @@
 import {FilterMatchMode} from "primevue/api";
 import MachinesService from "../service/MachinesService";
 import ArticlesService from "../service/ArticlesService";
+import ImageService from "../service/ImageService";
+import FileService from "../service/FileService";
 
 export default {
   data() {
@@ -522,13 +524,18 @@ export default {
       sparePartItem: null,
       sparePartItems: null,
       image: 'https://via.placeholder.com/150x180?text=Machine+Image',
+      file: null,
     };
   },
   machinesService: null,
   sparePartService: null,
+  imageService: null,
+  fileService: null,
   created() {
     this.machinesService = new MachinesService();
     this.sparePartService = new ArticlesService();
+    this.imageService = new ImageService();
+    this.fileService = new FileService();
     this.initFilters();
   },
   mounted() {
@@ -541,15 +548,17 @@ export default {
     onUploadImage(event) {
       // console.log(event.target.files)
       const [file] = event.target.files
+      // console.log(file)
       if (file) {
-        this.image = URL.createObjectURL(file)
+        // this.image = URL.createObjectURL(file)
+        this.image = file
       }
     },
     onUploadFile(event) {
       // console.log(event.target.files)
       const [file] = event.target.files
       if (file) {
-        // this.image = URL.createObjectURL(file)
+        this.file = file
       }
     },
     formatCurrency(value) {
@@ -571,7 +580,7 @@ export default {
       this.productDialog = false;
       this.submitted = false;
     },
-    saveProduct() {
+    async saveProduct() {
       this.submitted = true;
       if (this.validateFormMachine()) {
         if (this.machine.id) {
@@ -594,18 +603,28 @@ export default {
         } else {
           // CREATE
 
-          const payload = this.machine;
-          console.log(payload);
-          //payload.image="...";
-          this.machinesService.create(payload).then((data) => {
-            this.machines.push(data.data);
-            this.$toast.add({
-              severity: "success",
-              summary: "Successful",
-              detail: data.message,
-              life: 3000,
-            });
-          });
+          //UPLOAD IMAGES
+          let formdataImage = new FormData();
+          let formdataFile = new FormData();
+          formdataImage.append("image", this.image, this.image.name);
+          formdataFile.append("file", this.file, this.file.name);
+          await this.imageService.upload(formdataImage).then((data) => {
+            this.machine.image = data
+          })
+          await this.fileService.upload(formdataFile).then((data) => {
+            this.machine.technical_sheet = data
+          })
+
+          // const payload = this.machine;
+          // this.machinesService.create(payload).then((data) => {
+          //   this.machines.push(data.data);
+          //   this.$toast.add({
+          //     severity: "success",
+          //     summary: "Successful",
+          //     detail: data.message,
+          //     life: 3000,
+          //   });
+          // });
         }
         this.productDialog = false;
         this.defaultObjects();
