@@ -117,7 +117,7 @@
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                  :src="slotProps.data.image?slotProps.data.image:image"
+                  :src="slotProps.data.image?getImage(slotProps.data.image):image"
                   :alt="'machine'"
                   class="shadow-2"
                   width="100"
@@ -483,6 +483,7 @@ import FileService from "../service/FileService";
 export default {
   data() {
     return {
+      apiHost:'https://stormy-tundra-82595.herokuapp.com/storage/',
       machines: null,
       productDialog: false,
       deleteDialog: false,
@@ -608,23 +609,23 @@ export default {
           let formdataFile = new FormData();
           formdataImage.append("image", this.image, this.image.name);
           formdataFile.append("file", this.file, this.file.name);
-          await this.imageService.upload(formdataImage).then((data) => {
-            this.machine.image = data
+          this.imageService.upload(formdataImage).then((data) => {
+            this.machine.image = data.path
           })
           await this.fileService.upload(formdataFile).then((data) => {
-            this.machine.technical_sheet = data
+            this.machine.technical_sheet = data.path
           })
 
-          // const payload = this.machine;
-          // this.machinesService.create(payload).then((data) => {
-          //   this.machines.push(data.data);
-          //   this.$toast.add({
-          //     severity: "success",
-          //     summary: "Successful",
-          //     detail: data.message,
-          //     life: 3000,
-          //   });
-          // });
+          const payload = this.machine;
+          await this.machinesService.create(payload).then((data) => {
+            this.machines.push(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+          });
         }
         this.productDialog = false;
         this.defaultObjects();
@@ -739,6 +740,9 @@ export default {
       this.machine.articles = this.machine.articles.filter(
           (val) => val.id !== data.id
       );
+    },
+    getImage(path) {
+      return this.apiHost + path;
     },
 
     initFilters() {
