@@ -6,6 +6,10 @@ export default class UserService {
         return HttpService.prototype.getAll(uri)
     }
 
+    async getOne(id) {
+        return HttpService.prototype.getOne(uri,id)
+    }
+
     async create(payload) {
         return HttpService.prototype.create(uri, payload)
     }

@@ -186,9 +186,14 @@ const routes = [
             },
             
             {
-                path: '/profile',
-                name: 'profile',
-                component: () => import('./pages/Profile.vue')
+                path: '/list-machine-maintenance',
+                name: 'list-machine-maintenance',
+                component: () => import('./pages/ListMachineMaintenance.vue')
+            },
+            {
+                path: '/new-maintenance-sheet',
+                name: 'new-maintenance-sheet',
+                component: () => import('./pages/NewMaintenanceSheet.vue')
             },
             {
                 path: '/new-maintenance-sheet',
@@ -246,7 +251,7 @@ function hasAccess(name) {
         case 'machines':
             return permissions.includes('machines')
 
-        case 'new-maintenance-sheet':
+        case 'list-machine-maintenance':
             return permissions.includes('maintenance-sheets')
 
         case 'new-work-start':

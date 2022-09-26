@@ -59,7 +59,7 @@
 
           <!--          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>-->
           <Column
-            field="name"
+            field="employee.name"
             header="Name"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
@@ -69,6 +69,7 @@
               {{ slotProps.data.employee ? slotProps.data.employee.name : "" }}
             </template>
           </Column>
+
           <Column
             field="email"
             header="User"
@@ -252,6 +253,7 @@ export default {
       users: null,
       user: {
         email: null,
+        password: null,
         employee: null,
         role: null,
       },
@@ -311,50 +313,60 @@ export default {
       return;
     },
     openNew() {
+      //this.defaultObjects();
       this.product = {};
       this.submitted = false;
       this.productDialog = true;
     },
     hideDialog() {
+      //this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
+      if (this.validateFormUser()) {
+        if (this.user.id) {
+          const payload = this.user;
+          //console.log(payload, this.article, this.article.id);
+          //UPDATE
+          this.userService.update(this.user.id, payload).then((data) => {
+            this.users[this.findIndexById(data.data.id)] = data.data;
+            console.log(data.data.id);
+            console.log(this.findIndexById(data.data.id));
+            //console.log(this.article.id);
+            //console.log(this.findIndexById(this.article.id));
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+          const payload = this.user;
+          console.log(payload);
+          //payload.image="...";
+          this.userService.create(payload).then((data) => {
+            this.users.push(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
         this.productDialog = false;
-        this.product = {};
+        //this.defaultObjects();
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
-      this.productDialog = true;
+    editProduct(user) {
+      this.userService.getOne(user.id).then((data) => {
+        this.user = { ...data };
+        this.productDialog = true;
+      });
     },
     confirmDeleteProduct(product) {
       this.product = product;
@@ -409,9 +421,21 @@ export default {
         life: 3000,
       });
     },
+    validateFormUser() {
+      return true;
+      //this.machine.serie_number && this.machine.name;
+    },
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+    defaultObjects() {
+      this.user = {
+        email: null,
+        password: null,
+        employee: null,
+        role: null,
       };
     },
   },
