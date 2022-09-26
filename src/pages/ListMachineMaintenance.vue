@@ -1,36 +1,36 @@
-	<template>
+<template>
   <div class="grid">
     <div class="col-12">
       <div class="card">
         <h5 style="text-align: center">LIST OF MACHINES - MAINTENANCE</h5>
         <DataView
-          :value="machines"
-          :layout="layout"
-          :paginator="true"
-          :rows="9"
-          :sortOrder="sortOrder"
-          :sortField="sortField"
+            :value="machines"
+            :layout="layout"
+            :paginator="true"
+            :rows="9"
+            :sortOrder="sortOrder"
+            :sortField="sortField"
         >
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
                 <Dropdown
-                  v-model="sortKey"
-                  :options="sortOptions"
-                  optionLabel="label"
-                  placeholder="Sort By Status"
-                  @change="onSortChange($event)"
+                    v-model="sortKey"
+                    :options="sortOptions"
+                    optionLabel="label"
+                    placeholder="Sort By Status"
+                    @change="onSortChange($event)"
                 />
               </div>
               <div class="col-6 text-right">
-                <DataViewLayoutOptions v-model="layout" />
+                <DataViewLayoutOptions v-model="layout"/>
               </div>
             </div>
           </template>
           <template #list="slotProps">
             <div class="col-12">
               <div
-                class="
+                  class="
                   flex flex-column
                   md:flex-row
                   align-items-center
@@ -39,9 +39,9 @@
                 "
               >
                 <img
-                  :src="slotProps.data.image"
-                  :alt="slotProps.data.name"
-                  class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
+                    :src="slotProps.data.image"
+                    :alt="slotProps.data.name"
+                    class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
                 />
                 <div class="flex-1 text-center md:text-left">
                   <div class="font-bold text-2xl">
@@ -49,20 +49,20 @@
                   </div>
                   <div class="mb-3">{{ slotProps.data.description }}</div>
                   <Rating
-                    :modelValue="slotProps.data.rating"
-                    :readonly="true"
-                    :cancel="false"
-                    class="mb-2"
+                      :modelValue="slotProps.data.rating"
+                      :readonly="true"
+                      :cancel="false"
+                      class="mb-2"
                   ></Rating>
                   <div class="flex align-items-center">
                     <i class="pi pi-tag mr-2"></i>
                     <span class="font-semibold">{{
-                      slotProps.data.category
-                    }}</span>
+                        slotProps.data.category
+                      }}</span>
                   </div>
                 </div>
                 <div
-                  class="
+                    class="
                     flex flex-row
                     md:flex-column
                     justify-content-between
@@ -75,20 +75,21 @@
                   "
                 >
                   <span
-                    class="
+                      class="
                       text-2xl
                       font-semibold
                       mb-2
                       align-self-center
                       md:align-self-end
                     "
-                    >${{ slotProps.data.price }}</span
+                  >${{ slotProps.data.price }}</span
                   >
                   <Button
-                    icon="pi pi-shopping-cart"
-                    label="Add to Cart"
-                    :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
-                    class="mb-2"
+                      icon="pi pi-cog"
+                      label="Add to Cart"
+                      :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
+                      class="mb-2"
+                      @click="redirect(slotProps.data)"
                   ></Button>
                   <!--
                   <span
@@ -123,27 +124,28 @@
                 </div>-->
                 <div class="text-center">
                   <img
-                    :src="slotProps.data.image"
-                    :alt="slotProps.data.name"
-                    class="w-9 shadow-2 my-3 mx-0"
+                      :src="slotProps.data.image"
+                      :alt="slotProps.data.name"
+                      class="w-9 shadow-2 my-3 mx-0"
                   />
                   <div class="text-2xl font-bold">
                     {{ slotProps.data.name }}
                   </div>
                   <div class="mb-3">{{ slotProps.data.description }}</div>
                   <Rating
-                    :modelValue="slotProps.data.rating"
-                    :readonly="true"
-                    :cancel="false"
+                      :modelValue="slotProps.data.rating"
+                      :readonly="true"
+                      :cancel="false"
                   ></Rating>
                 </div>
                 <div class="flex align-items-center justify-content-between">
                   <span class="text-2xl font-semibold"
-                    >${{ slotProps.data.price }}</span
+                  >${{ slotProps.data.price }}</span
                   >
                   <Button
-                    icon="pi pi-shopping-cart"
-                    :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
+                      icon="pi pi-cog"
+                      :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
+                      @click="redirect(slotProps.data)"
                   ></Button>
                 </div>
               </div>
@@ -155,7 +157,7 @@
   </div>
 </template>
 
-	<script>
+<script>
 import ProductService from "../service/ProductService";
 import MachinesService from "../service/MachinesService";
 
@@ -164,24 +166,24 @@ export default {
     return {
       picklistValue: [
         [
-          { name: "San Francisco", code: "SF" },
-          { name: "London", code: "LDN" },
-          { name: "Paris", code: "PRS" },
-          { name: "Istanbul", code: "IST" },
-          { name: "Berlin", code: "BRL" },
-          { name: "Barcelona", code: "BRC" },
-          { name: "Rome", code: "RM" },
+          {name: "San Francisco", code: "SF"},
+          {name: "London", code: "LDN"},
+          {name: "Paris", code: "PRS"},
+          {name: "Istanbul", code: "IST"},
+          {name: "Berlin", code: "BRL"},
+          {name: "Barcelona", code: "BRC"},
+          {name: "Rome", code: "RM"},
         ],
         [],
       ],
       orderlistValue: [
-        { name: "San Francisco", code: "SF" },
-        { name: "London", code: "LDN" },
-        { name: "Paris", code: "PRS" },
-        { name: "Istanbul", code: "IST" },
-        { name: "Berlin", code: "BRL" },
-        { name: "Barcelona", code: "BRC" },
-        { name: "Rome", code: "RM" },
+        {name: "San Francisco", code: "SF"},
+        {name: "London", code: "LDN"},
+        {name: "Paris", code: "PRS"},
+        {name: "Istanbul", code: "IST"},
+        {name: "Berlin", code: "BRL"},
+        {name: "Barcelona", code: "BRC"},
+        {name: "Rome", code: "RM"},
       ],
       dataviewValue: null,
       machines: null,
@@ -190,8 +192,8 @@ export default {
       sortOrder: null,
       sortField: null,
       sortOptions: [
-        { label: "Price High to Low", value: "!price" },
-        { label: "Price Low to High", value: "price" },
+        {label: "Price High to Low", value: "!price"},
+        {label: "Price Low to High", value: "price"},
       ],
     };
   },
@@ -203,10 +205,11 @@ export default {
   },
   mounted() {
     this.loading = true;
+    // TODO: GET ONLY MACHINES WITH PENDING MAINTENANCE
     this.machinesService.getAll().then((data) => (this.machines = data));
-    this.productService
-      .getProducts()
-      .then((data) => (this.dataviewValue = data));
+    // this.productService
+    //   .getProducts()
+    //   .then((data) => (this.dataviewValue = data));
     this.loading = false;
   },
   methods: {
@@ -224,10 +227,13 @@ export default {
         this.sortKey = sortValue;
       }
     },
+    redirect(data) {
+      this.$router.push(`new-maintenance-sheet/id=${data.id}`)
+    },
   },
 };
 </script>
 
-	<style scoped lang="scss">
+<style scoped lang="scss">
 @import "../assets/demo/badges.scss";
 </style>
