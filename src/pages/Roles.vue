@@ -34,7 +34,7 @@
 
         <DataTable
           ref="dt"
-          :value="products"
+          :value="roles"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
@@ -118,36 +118,20 @@
             <h5>Select Permissions</h5>
             <div class="grid">
               <div class="col-12 md:col-4">
-                <div class="field-checkbox mb-0">
+                <div
+                  class="field-checkbox mb-0"
+                  v-for="permission in permissionItems"
+                  :key="permission.id"
+                >
                   <Checkbox
-                    id="checkOption1"
+                    id="permission"
                     name="option"
-                    value="Chicago"
-                    v-model="checkboxValue"
+                    value="permission.id"
+                    v-model="permission.id"
                   />
-                  <label for="checkOption1">Machines</label>
-                </div>
-              </div>
-              <div class="col-12 md:col-4">
-                <div class="field-checkbox mb-0">
-                  <Checkbox
-                    id="checkOption2"
-                    name="option"
-                    value="Los Angeles"
-                    v-model="checkboxValue"
-                  />
-                  <label for="checkOption2">Employess</label>
-                </div>
-              </div>
-              <div class="col-12 md:col-4">
-                <div class="field-checkbox mb-0">
-                  <Checkbox
-                    id="checkOption3"
-                    name="option"
-                    value="New York"
-                    v-model="checkboxValue"
-                  />
-                  <label for="checkOption3">Users</label>
+                  <label for="permission" class="text-900">{{
+                    permission.name
+                  }}</label>
                 </div>
               </div>
             </div>
@@ -238,12 +222,22 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import ProductService from "../service/ProductService";
+import RolesService from "../service/RolesService";
+import PermissionsService from "../service/PermissionsService";
 
 export default {
   data() {
     return {
-      products: null,
+      roles: null,
+      //products: null,
+      rol: {
+        name: null,
+        permissions: [],
+      },
+      permission: {
+        id: null,
+        name: null,
+      },
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -257,15 +251,27 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+
+      permissionItem: null,
+      permissionItems: null,
     };
   },
-  productService: null,
+  //productService: null,
+  rolesService: null,
+  permissionsService: null,
   created() {
-    this.productService = new ProductService();
+    this.rolesService = new RolesService();
+    this.permissionsService = new PermissionsService();
     this.initFilters();
   },
   mounted() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.loading = true;
+    this.rolesService.getAll().then((data) => (this.roles = data));
+    this.permissionsService
+      .getAll()
+      .then((data) => (this.permissionItems = data));
+    console.log(this.permissionItems);
+    this.loading = false;
   },
   methods: {
     formatCurrency(value) {

@@ -184,6 +184,7 @@ const routes = [
                 name: 'roles',
                 component: () => import('./pages/Roles.vue')
             },
+            
             {
                 path: '/profile',
                 name: 'profile',

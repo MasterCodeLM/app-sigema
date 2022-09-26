@@ -1,16 +1,9 @@
 import HttpService from "./HttpService";
 
-const uri = 'employees'
-export default class EmployeesService {
+const uri = 'roles'
+export default class RolesService {
     async getAll() {
         return HttpService.prototype.getAll(uri)
-    }
-    async getGenerateSafeCredentials(id) {
-        let uril = uri+'/'+id+'/generate-safe-credentials';
-        return HttpService.prototype.create(uril)
-    }
-    async getOne(id) {
-        return HttpService.prototype.getOne(uri,id)
     }
 
     async create(payload) {
