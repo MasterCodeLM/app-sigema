@@ -176,7 +176,8 @@
                   :filter="false"
                   :loading="false"
                   :class="{ 'p-invalid': submitted && !supplier.document_type }"
-                  :disabled = "isView"
+                  :disabled="isView"
+                  autocomplete="off"
               ></Dropdown>
               <small
                   class="p-invalid"
@@ -191,13 +192,21 @@
                   v-model.trim="supplier.document_number"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !supplier.document_number }"
-                  :disabled = "isView"
+                  :class="{ 'p-invalid': (submitted && !supplier.document_number) || (submitted && supplier.document_number.length < 8)}"
+                  :disabled="isView"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
               />
               <small
                   class="p-invalid"
                   v-if="submitted && !supplier.document_number"
-              >RUC is required.</small
+              >Document Number is required.</small
+              >
+              <br>
+              <small
+                  class="p-invalid"
+                  v-if="submitted && supplier.document_number && supplier.document_number.length < 8"
+              >The document number must be at least 8 characters.</small
               >
             </div>
           </div>
@@ -209,7 +218,8 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': submitted && !supplier.name }"
-                :disabled = "isView"
+                :disabled="isView"
+                autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !supplier.name"
             >Business Name is required.</small
@@ -227,7 +237,9 @@
                   required="true"
                   autofocus
                   :class="{ 'p-invalid': submitted && !supplier.phone }"
-                  :disabled = "isView"
+                  :disabled="isView"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !supplier.phone"
               >Telephone is required.</small
@@ -241,11 +253,15 @@
                   v-model.trim="supplier.email"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !supplier.email }"
-                  :disabled = "isView"
+                  :class="{ 'p-invalid': (submitted && !supplier.email) || (submitted && !isEmail()) }"
+                  :disabled="isView"
+                  autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.email"
               >Email is required.</small
+              >
+              <small class="p-invalid" v-if="submitted && !isEmail()"
+              >The email must be a valid email address.</small
               >
             </div>
           </div>
@@ -259,7 +275,8 @@
                   required="true"
                   autofocus
                   :class="{ 'p-invalid': submitted && !supplier.address }"
-                  :disabled = "isView"
+                  :disabled="isView"
+                  autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.address"
               >Address is required.</small
@@ -276,7 +293,8 @@
                   :filter="false"
                   :loading="false"
                   :class="{ 'p-invalid': submitted && !supplier.supplier_type }"
-                  :disabled = "isView"
+                  :disabled="isView"
+                  autocomplete="off"
               ></Dropdown>
               <small
                   class="p-invalid"
@@ -287,7 +305,7 @@
           </div>
 
           <div class="card">
-            <div  v-if="!isView" class="formgrid grid">
+            <div v-if="!isView" class="formgrid grid">
               <div class="field col-4">
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
@@ -299,6 +317,7 @@
                     :filter="false"
                     :loading="false"
                     :class="{ 'p-invalid': submittedAddBank && !bankItem }"
+                    autocomplete="off"
                 ></Dropdown>
                 <small class="p-invalid" v-if="submittedAddBank && !bankItem"
                 >Banking Entity is required.</small
@@ -315,6 +334,8 @@
                     :class="{
                     'p-invalid': submittedAddBank && !bank.account_number,
                   }"
+                    autocomplete="off"
+                    @keypress="isNumber($event)"
                 />
                 <small
                     class="p-invalid"
@@ -334,6 +355,8 @@
                     'p-invalid':
                       submittedAddBank && !bank.interbank_account_number,
                   }"
+                    autocomplete="off"
+                    @keypress="isNumber($event)"
                 />
                 <small
                     class="p-invalid"
@@ -577,7 +600,7 @@ export default {
         } else {
           // CREATE
           const payload = this.supplier;
-          //payload.image="...";
+          console.log(payload)
           this.supplierService.create(payload).then((data) => {
             this.suppliers.push(data.data);
             this.$toast.add({
@@ -689,6 +712,7 @@ export default {
       return (
           this.supplier.document_type &&
           this.supplier.document_number &&
+          this.supplier.document_number.length >= 8 &&
           this.supplier.name &&
           this.supplier.phone &&
           this.supplier.email &&
@@ -707,6 +731,18 @@ export default {
       this.supplier.banks = this.supplier.banks.filter(
           (val) => val.id !== data.id
       );
+    },
+    isNumber(evt) {
+      evt = (evt) ? evt : window.event;
+      let charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();
+      } else {
+        return true;
+      }
+    },
+    isEmail() {
+      return (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(this.supplier.email))
     },
     initFilters() {
       this.filters = {
