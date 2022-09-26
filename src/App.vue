@@ -344,7 +344,7 @@ export default {
               {
                 label: "Maintenance",
                 icon: "pi pi-fw pi-user-edit",
-                to: "/list",
+                to: "/list-machine-maintenance",
                 visible: this.permissions.includes("maintenance-sheets"),
               },
               {
@@ -389,7 +389,7 @@ export default {
               {
                 label: "Users",
                 icon: "pi pi-fw pi-user-edit",
-                //to: "/roles",
+                to: "/users",
                 visible: this.permissions.includes("users"),
               },
             ],
