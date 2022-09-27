@@ -534,7 +534,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      loading: false,
+      //loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -564,7 +564,7 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
+    //this.loading = true;
     this.articlesService.getAll().then((data) => {
       this.articles = data;
       this.loadingArticles = false;
@@ -575,7 +575,7 @@ export default {
     this.supplierRefService
       .getAll()
       .then((data) => (this.supplierRefItems = data));
-    this.loading = false;
+    //this.loading = false;
   },
   methods: {
     formatCurrency(value) {

@@ -229,12 +229,12 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
+    //this.loading = true;
     this.articleTypesService.getAll().then((data) => {
       this.articleTypes = data;
       this.loadingArticlesTypes = false;
     });
-    this.loading = false;
+    //this.loading = false;
   },
   methods: {
     openNew() {

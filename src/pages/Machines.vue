@@ -529,7 +529,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      loading: false,
+      //loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },

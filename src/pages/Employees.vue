@@ -518,7 +518,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      loading: false,
+      //loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -543,7 +543,7 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
+    //this.loading = true;
     this.employeesService.getAll().then((data) => {
       this.employees = data;
       this.loadingEmployees = false;
@@ -553,7 +553,7 @@ export default {
       .then((data) => (this.documentTypeItems = data));
     this.positionService.getAll().then((data) => (this.positionItems = data));
 
-    this.loading = false;
+    //this.loading = false;
   },
   methods: {
     openNew() {
