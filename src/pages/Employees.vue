@@ -589,7 +589,7 @@ export default {
           // CREATE
 
           const payload = this.employee;
-          //console.log(payload);
+          console.log("hola");
           //payload.image="...";
           this.employeesService.create(payload).then((data) => {
             this.employees.push(data.data);
@@ -669,11 +669,12 @@ export default {
       });
     },
     validateFormEmployee() {
+      console.log(this.employee);
       return (
         this.employee.document_type &&
         this.employee.document_number &&
         this.employee.name &&
-        this.employee.age &&
+        //this.employee.age &&
         this.employee.phone &&
         this.employee.position &&
         this.employee.personal_email &&
