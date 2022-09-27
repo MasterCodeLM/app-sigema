@@ -44,6 +44,7 @@
           :rowsPerPageOptions="[5, 10, 25]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
           responsiveLayout="scroll"
+          :loading="loadingMachines"
         >
           <template #header>
             <div
@@ -546,6 +547,7 @@ export default {
       sparePartItems: null,
       image: "https://via.placeholder.com/150x180?text=Machine+Image",
       file: null,
+      loadingMachines: true,
     };
   },
   machinesService: null,
@@ -560,10 +562,11 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
-    this.machinesService.getAll().then((data) => (this.machines = data));
+    this.machinesService.getAll().then((data) => {
+      this.machines = data;
+      this.loadingMachines = false;
+    });
     this.sparePartService.getAll().then((data) => (this.sparePartItems = data));
-    this.loading = false;
   },
   methods: {
     onUploadImage(event) {

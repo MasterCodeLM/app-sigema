@@ -44,6 +44,7 @@
           :rowsPerPageOptions="[5, 10, 25]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
           responsiveLayout="scroll"
+          :loading="loadingEmployees"
         >
           <template #header>
             <div
@@ -529,6 +530,7 @@ export default {
       positionItems: null,
 
       documentTypeItems: null,
+      loadingEmployees: true,
     };
   },
   employeesService: null,
@@ -542,7 +544,10 @@ export default {
   },
   mounted() {
     this.loading = true;
-    this.employeesService.getAll().then((data) => (this.employees = data));
+    this.employeesService.getAll().then((data) => {
+      this.employees = data;
+      this.loadingEmployees = false;
+    });
     this.documentTypeService
       .getAll()
       .then((data) => (this.documentTypeItems = data));

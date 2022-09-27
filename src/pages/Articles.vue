@@ -51,6 +51,7 @@
           :rowsPerPageOptions="[5, 10, 25]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
           responsiveLayout="scroll"
+          :loading="loadingArticles"
         >
           <template #header>
             <div
@@ -549,6 +550,7 @@ export default {
 
       articleTypeItems: null,
       supplierRefItems: null,
+      loadingArticles: true,
     };
   },
   articlesService: null,
@@ -563,7 +565,10 @@ export default {
   },
   mounted() {
     this.loading = true;
-    this.articlesService.getAll().then((data) => (this.articles = data));
+    this.articlesService.getAll().then((data) => {
+      this.articles = data;
+      this.loadingArticles = false;
+    });
     this.articleTypeService
       .getAll()
       .then((data) => (this.articleTypeItems = data));
