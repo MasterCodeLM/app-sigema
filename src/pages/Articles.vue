@@ -40,17 +40,20 @@
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="articles"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
+
+          ref="dt"
+          :value="articles"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+          :loading="loadingArticles"
+
         >
           <template #header>
             <div
@@ -534,9 +537,11 @@ export default {
       filters: {},
       submitted: false,
       message: null,
+
       // loading: false,
       loadingArticleTypes: true,
       loadingSuppliers: true,
+
       statuses: [
         {label: "INSTOCK", value: "instock"},
         {label: "LOWSTOCK", value: "lowstock"},
@@ -552,6 +557,7 @@ export default {
 
       articleTypeItems: null,
       supplierRefItems: null,
+      loadingArticles: true,
     };
   },
   articlesService: null,
@@ -565,9 +571,20 @@ export default {
     this.initFilters();
   },
   mounted() {
-    // this.loading = true;
-    this.articlesService.getAll().then((data) => (this.articles = data));
-    // this.loading = false;
+
+    //this.loading = true;
+    this.articlesService.getAll().then((data) => {
+      this.articles = data;
+      this.loadingArticles = false;
+    });
+    this.articleTypeService
+      .getAll()
+      .then((data) => (this.articleTypeItems = data));
+    this.supplierRefService
+      .getAll()
+      .then((data) => (this.supplierRefItems = data));
+    //this.loading = false;
+
   },
   methods: {
     formatCurrency(value) {

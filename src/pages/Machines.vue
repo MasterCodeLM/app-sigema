@@ -33,17 +33,20 @@
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="machines"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
+
+          ref="dt"
+          :value="machines"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+          :loading="loadingMachines"
+
         >
           <template #header>
             <div
@@ -529,8 +532,9 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      // loading: false,
+
       loadingSpareParts: true,
+
       statuses: [
         {label: "INSTOCK", value: "instock"},
         {label: "LOWSTOCK", value: "lowstock"},
@@ -548,6 +552,7 @@ export default {
       sparePartItems: null,
       image: "https://via.placeholder.com/150x180?text=Machine+Image",
       file: null,
+      loadingMachines: true,
     };
   },
   machinesService: null,
@@ -562,9 +567,13 @@ export default {
     this.initFilters();
   },
   mounted() {
-    // this.loading = true;
-    this.machinesService.getAll().then((data) => (this.machines = data));
-    // this.loading = false;
+
+    this.machinesService.getAll().then((data) => {
+      this.machines = data;
+      this.loadingMachines = false;
+    });
+    this.sparePartService.getAll().then((data) => (this.sparePartItems = data));
+
   },
   methods: {
     onUploadImage(event) {

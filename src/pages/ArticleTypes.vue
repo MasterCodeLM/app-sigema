@@ -38,13 +38,13 @@
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
-          :loading="loading"
           :rows="10"
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
           responsiveLayout="scroll"
+          :loading="loadingArticlesTypes"
         >
           <template #header>
             <div
@@ -215,12 +215,12 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+      loadingArticlesTypes: true,
     };
   },
   articleTypesService: null,
@@ -229,11 +229,12 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
-    this.articleTypesService
-      .getAll()
-      .then((data) => (this.articleTypes = data));
-    this.loading = false;
+    //this.loading = true;
+    this.articleTypesService.getAll().then((data) => {
+      this.articleTypes = data;
+      this.loadingArticlesTypes = false;
+    });
+    //this.loading = false;
   },
   methods: {
     openNew() {

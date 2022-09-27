@@ -44,6 +44,7 @@
           :rowsPerPageOptions="[5, 10, 25]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
           responsiveLayout="scroll"
+          :loading="loadingEmployees"
         >
           <template #header>
             <div
@@ -517,7 +518,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
-      loading: false,
+      //loading: false,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -529,6 +530,7 @@ export default {
       positionItems: null,
 
       documentTypeItems: null,
+      loadingEmployees: true,
     };
   },
   employeesService: null,
@@ -541,14 +543,17 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.loading = true;
-    this.employeesService.getAll().then((data) => (this.employees = data));
+    //this.loading = true;
+    this.employeesService.getAll().then((data) => {
+      this.employees = data;
+      this.loadingEmployees = false;
+    });
     this.documentTypeService
       .getAll()
       .then((data) => (this.documentTypeItems = data));
     this.positionService.getAll().then((data) => (this.positionItems = data));
 
-    this.loading = false;
+    //this.loading = false;
   },
   methods: {
     openNew() {
