@@ -13,7 +13,7 @@ const routes = [
             {
                 path: '',
                 name: 'dashboard',
-                component: () => import('./components/Dashboard.vue')
+                component: () => import('./pages/CustomDashboard.vue')
             },
             {
                 path: '/formlayout',
