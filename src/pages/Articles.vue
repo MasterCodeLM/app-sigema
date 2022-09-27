@@ -266,14 +266,19 @@
               <div class="formgrid grid">
                 <div class="field col">
                   <label for="quantity">Quantity</label>
-                  <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
                     id="quantity"
                     v-model="article.quantity"
                     showButtons
-                    mode="decimal"
+                    :min="0"
+                    :useGrouping="false"
+                    :class="{ 'p-invalid': submitted && !article.quantity }"
                   />
+                  <small class="p-invalid" v-if="submitted && !article.quantity"
+                    >Quantity is required.</small
+                  >
                 </div>
+
                 <div class="field col">
                   <label for="articleType">Article Type</label>
                   <Dropdown
@@ -345,8 +350,8 @@
                     id="price"
                     v-model="supplier_ref.price"
                     mode="currency"
-                    currency="USD"
-                    locale="en-US"
+                    currency="PEN"
+                    locale="es-PE"
                     :class="{
                       'p-invalid':
                         submittedAddSuppliersRef && !supplier_ref.price,
@@ -388,8 +393,8 @@
                       <InputNumber
                         v-model="data[field]"
                         mode="currency"
-                        currency="USD"
-                        locale="en-US"
+                        currency="PEN"
+                        locale="es-PE"
                         autofocus
                       />
                     </template>
@@ -570,9 +575,9 @@ export default {
   methods: {
     formatCurrency(value) {
       if (value)
-        return value.toLocaleString("en-US", {
+        return value.toLocaleString("es-PE", {
           style: "currency",
-          currency: "USD",
+          currency: "PER",
         });
       return;
     },
@@ -725,8 +730,13 @@ export default {
       }
     },
     validateFormArticle() {
-      return true;
-      //this.article.article_type && this.articles.suppliers;
+      return (
+        this.article.article_type &&
+        this.articles.name &&
+        this.articles.brand &&
+        this.articles.model &&
+        this.articles.quantity
+      );
     },
     validateFormSupplierRef() {
       return this.supplierRefItem && this.supplier_ref.price;
@@ -744,7 +754,14 @@ export default {
     },
     defaultObjects() {
       this.article = {
-        article_type: {},
+        // serial_number: null,
+        image: null,
+        // technical_sheet:null,
+        name: null,
+        brand: null,
+        model: null,
+        quantity: null,
+        article_type: null,
         suppliers: [],
       };
     },
