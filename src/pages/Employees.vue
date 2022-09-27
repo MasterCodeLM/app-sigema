@@ -218,6 +218,8 @@
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !employee.document_type }"
+                :disabled="isView"
+                autocomplete="off"
               >
               </Dropdown>
               <small
@@ -228,18 +230,35 @@
             </div>
 
             <div class="field col">
-              <label for="document_number">Identification Document</label>
+              <label for="document_number">Document Number</label>
               <InputText
                 id="document_number"
                 v-model.trim="employee.document_number"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !employee.document_number }"
+                :class="{
+                  'p-invalid':
+                    (submitted && !employee.document_number) ||
+                    (submitted && employee.document_number.length < 8),
+                }"
+                :disabled="isView"
+                autocomplete="off"
+                @keypress="isNumber($event)"
               />
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.document_number"
-                >Identification Document is required.</small
+                >Document Number is required.</small
+              >
+              <br />
+              <small
+                class="p-invalid"
+                v-if="
+                  submitted &&
+                  employee.document_number &&
+                  employee.document_number.length < 8
+                "
+                >The document number must be at least 8 characters.</small
               >
             </div>
           </div>
@@ -254,6 +273,8 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': submitted && !employee.name }"
+              :disabled="isView"
+              autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !employee.name"
               >Name is required.</small
@@ -268,6 +289,8 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': submitted && !employee.lastname }"
+              :disabled="isView"
+              autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !employee.lastname"
               >Last Name is required.</small
@@ -284,7 +307,8 @@
                 id="age"
                 v-model="inputNumberValue"
                 showButtons
-                mode="decimal"
+                :min="0"
+                :useGrouping="false"
               />
             </div>
 
@@ -302,7 +326,7 @@
               >
               </Dropdown>
               <small class="p-invalid" v-if="submitted && !employee.position"
-                >Document Type is required.</small
+                >Title is required.</small
               >
             </div>
           </div>
@@ -316,6 +340,8 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': submitted && !employee.phone }"
+                autocomplete="off"
+                @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !employee.phone"
                 >Telephone is required.</small
@@ -329,12 +355,21 @@
                 v-model.trim="employee.personal_email"
                 required="true"
                 autofocus
-                :class="{ 'p-invalid': submitted && !employee.personal_email }"
+                :class="{
+                  'p-invalid':
+                    (submitted && !employee.personal_email) ||
+                    (submitted && !isEmail()),
+                }"
+                :disabled="isView"
+                autocomplete="off"
               />
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.personal_email"
                 >Email is required.</small
+              >
+              <small class="p-invalid" v-if="submitted && !isEmail()"
+                >The email must be a valid email address.</small
               >
             </div>
           </div>
@@ -629,9 +664,37 @@ export default {
       });
     },
     validateFormEmployee() {
-      return true;
-      //this.supplier.document_type;
+      return (
+        this.employee.document_type &&
+        this.employee.document_number &&
+        this.employee.name &&
+        this.employee.age &&
+        this.employee.phone &&
+        this.employee.position &&
+        this.employee.personal_email &&
+        this.employee.address
+      );
     },
+
+    isNumber(evt) {
+      evt = evt ? evt : window.event;
+      let charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        return true;
+      }
+    },
+    isEmail() {
+      return /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(
+        this.employee.personal_email
+      );
+    },
+
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -641,6 +704,13 @@ export default {
     defaultObjects() {
       this.employee = {
         document_type: null,
+        document_number: null,
+        name: null,
+        age: null,
+        phone: null,
+        position: null,
+        personal_email: null,
+        address: null,
       };
     },
   },
