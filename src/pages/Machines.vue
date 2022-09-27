@@ -504,7 +504,7 @@ import FileService from "../service/FileService";
 export default {
   data() {
     return {
-      apiHost: "https://stormy-tundra-82595.herokuapp.com/storage/",
+      // apiHost: "https://stormy-tundra-82595.herokuapp.com/storage/",
       machines: null,
       productDialog: false,
       deleteDialog: false,
@@ -615,8 +615,8 @@ export default {
           //UPDATE
           this.machinesService.update(this.machine.id, payload).then((data) => {
             this.machines[this.findIndexById(data.data.id)] = data.data;
-            console.log(data.data.id);
-            console.log(this.findIndexById(data.data.id));
+            // console.log(data.data.id);
+            // console.log(this.findIndexById(data.data.id));
             //console.log(this.article.id);
             //console.log(this.findIndexById(this.article.id));
             this.$toast.add({
@@ -634,7 +634,7 @@ export default {
           let formdataFile = new FormData();
           formdataImage.append("image", this.image, this.image.name);
           formdataFile.append("file", this.file, this.file.name);
-          this.imageService.upload(formdataImage).then((data) => {
+          await this.imageService.upload(formdataImage).then((data) => {
             this.machine.image = data.path;
           });
           await this.fileService.upload(formdataFile).then((data) => {
@@ -736,7 +736,7 @@ export default {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
           this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
-          console.log(this.spare_Part);
+          // console.log(this.spare_Part);
           this.machine.articles.push(this.spare_Part);
         } else {
           this.$toast.add({
@@ -754,15 +754,16 @@ export default {
     },
 
     validateFormMachine() {
-      return (
-          this.machine.serie_number &&
-          this.machine.name &&
-          this.machine.brand &&
-          this.machine.model &&
-          this.machine.maximum_working_time &&
-          this.machine.image &&
-          this.machine.articles
-      );
+      return true;
+      // return (
+      //     this.machine.serie_number &&
+      //     this.machine.name &&
+      //     this.machine.brand &&
+      //     this.machine.model &&
+      //     this.machine.maximum_working_time &&
+      //     this.machine.image &&
+      //     this.machine.articles
+      // );
     },
     validateFormSparePart() {
       return true;
@@ -774,7 +775,8 @@ export default {
       );
     },
     getImage(path) {
-      return this.apiHost + path;
+      // console.log(path)
+      return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
 
     initFilters() {
