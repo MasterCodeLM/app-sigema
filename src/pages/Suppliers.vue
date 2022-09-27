@@ -66,7 +66,7 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-              field="document_type.name"
+              field=""
               header="Document Type"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
@@ -100,7 +100,7 @@
             </template>
           </Column>
           <Column
-              field="email"
+              field=""
               header="Email"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
@@ -111,7 +111,7 @@
             </template>
           </Column>
           <Column
-              field="phone"
+              field=""
               header="Telephone"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
@@ -122,7 +122,7 @@
             </template>
           </Column>
           <Column
-              field="address"
+              field=""
               header="Address"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
@@ -158,7 +158,7 @@
         <Dialog
             v-model:visible="supplierDialog"
             :style="{ width: '700px' }"
-            :header="!supplier.id ? 'New Supplier' : 'Edit Supplier'"
+            :header="!supplier.id ? 'New Supplier' : !isView?'Edit Supplier':'Info Supplier'"
             :modal="true"
             class="p-fluid"
         >
@@ -236,13 +236,19 @@
                   v-model.trim="supplier.phone"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': submitted && !supplier.phone }"
+                  :class="{ 'p-invalid': (submitted && !supplier.phone) || (submitted && !supplier.phone < 9)  }"
                   :disabled="isView"
                   autocomplete="off"
                   @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !supplier.phone"
               >Telephone is required.</small
+              >
+              <br>
+              <small
+                  class="p-invalid"
+                  v-if="submitted && supplier.phone && !supplier.phone < 9"
+              >The document number must be at least 8 characters.</small
               >
             </div>
 
@@ -260,7 +266,7 @@
               <small class="p-invalid" v-if="submitted && !supplier.email"
               >Email is required.</small
               >
-              <small class="p-invalid" v-if="submitted && !isEmail()"
+              <small class="p-invalid" v-if="submitted && supplier.email && !isEmail()"
               >The email must be a valid email address.</small
               >
             </div>
@@ -569,6 +575,7 @@ export default {
   },
   methods: {
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       this.submitted = false;
       this.submittedAddBank = false;
@@ -600,9 +607,9 @@ export default {
         } else {
           // CREATE
           const payload = this.supplier;
-          console.log(payload)
           this.supplierService.create(payload).then((data) => {
-            this.suppliers.push(data.data);
+            console.log(data)
+            this.suppliers.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -715,6 +722,7 @@ export default {
           this.supplier.document_number.length >= 8 &&
           this.supplier.name &&
           this.supplier.phone &&
+          this.supplier.phone.length >= 9 &&
           this.supplier.email &&
           this.supplier.address &&
           this.supplier.supplier_type

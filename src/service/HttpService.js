@@ -2,7 +2,6 @@ const apiHost = `${process.env.VUE_APP_API_HOST}/api/v1`
 export default class HttpService {
 
     async getAll(uri) {
-        console.log(apiHost)
         return await httpService(`${apiHost}/${uri}`, {
             method: 'GET',
         }).then(res => res.json())

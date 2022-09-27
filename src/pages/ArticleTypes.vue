@@ -266,7 +266,7 @@ export default {
           // CREATE
           const payload = this.resource;
           this.articleTypesService.create(payload).then((data) => {
-            this.articleTypes.push(data.data);
+            this.articleTypes.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
