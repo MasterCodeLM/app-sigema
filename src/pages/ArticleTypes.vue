@@ -42,7 +42,7 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Article Types"
           responsiveLayout="scroll"
           :loading="loadingArticlesTypes"
         >
@@ -80,6 +80,11 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewArticleTypes(slotProps.data)"
+                />
+                <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
@@ -97,7 +102,13 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '450px' }"
-          header="New Article Type"
+          :header="
+            !resource.id
+              ? 'New Article Type'
+              : !isView
+              ? 'Edit Article Type'
+              : 'Info Article Type'
+          "
           :modal="true"
           class="p-fluid"
         >
@@ -108,6 +119,7 @@
               v-model.trim="resource.name"
               required="true"
               autofocus
+              :disabled="isView"
               :class="{ 'p-invalid': submitted && !resource.name }"
             />
             <small class="p-invalid" v-if="submitted && !resource.name"
@@ -122,6 +134,7 @@
               @click="hideDialog"
             />
             <Button
+              v-if="!isView"
               label="Save"
               icon="pi pi-check"
               class="p-button-text"
@@ -221,6 +234,7 @@ export default {
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
       loadingArticlesTypes: true,
+      isView: false,
     };
   },
   articleTypesService: null,
@@ -238,6 +252,7 @@ export default {
   },
   methods: {
     openNew() {
+      this.isView = false;
       this.resource = {};
       this.submitted = false;
       this.productDialog = true;
@@ -279,7 +294,13 @@ export default {
         this.resource = {};
       }
     },
+    viewArticleTypes(resource) {
+      this.isView = true;
+      this.resource = { ...resource };
+      this.productDialog = true;
+    },
     editProduct(resource) {
+      this.isView = false;
       this.resource = { ...resource };
       this.productDialog = true;
     },

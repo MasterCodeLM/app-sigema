@@ -177,9 +177,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewMachine(slotProps.data)"
+                />
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
                     icon="pi pi-trash"
@@ -192,11 +197,17 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '900px' }"
-            header="Machine Details"
-            :modal="true"
-            class="p-fluid"
+          v-model:visible="productDialog"
+          :style="{ width: '900px' }"
+          :header="
+            !machine.id
+              ? 'New Machine'
+              : !isView
+              ? 'Edit Machine'
+              : 'Info Machine'
+          "
+          :modal="true"
+          class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="col-6">
@@ -273,11 +284,12 @@
                   <label for="maximum_working_time">Daily Working Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
-                      id="maximum_working_time"
-                      v-model="machine.maximum_working_time"
-                      showButtons
-                      mode="decimal"
-                      :class="{
+                    id="maximum_working_time"
+                    v-model="machine.maximum_working_time"
+                    showButtons
+                    mode="decimal"
+                    :disabled="isView"
+                    :class="{
                       'p-invalid': submitted && !machine.maximum_working_time,
                     }"
                       :min="0"
@@ -293,25 +305,26 @@
                 <div class="field col">
                   <label for="usefulLifehours">Useful Life Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-<!--                  <InputNumber-->
-<!--                      id="usefulLifehours"-->
-<!--                      v-model="inputNumberValue"-->
-<!--                      showButtons-->
-<!--                      mode="decimal"-->
-<!--                      required="true"-->
-<!--                      autofocus-->
-<!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
-<!--                      :min="0"-->
-<!--                      :useGrouping="false"-->
-<!--                  />-->
-<!--                  <small class="p-invalid" v-if="submitted && !product.name"-->
-<!--                  >Useful Life Hours is required.</small-->
-<!--                  >-->
+                  <InputNumber
+                    id="usefulLifehours"
+                    v-model="inputNumberValue"
+                    showButtons
+                    mode="decimal"
+                    required="true"
+                    autofocus
+                    :disabled="isView"
+                    :class="{ 'p-invalid': submitted && !product.name }"
+                    :min="0"
+                    :useGrouping="false"
+                  />
+                  <!--<small class="p-invalid" v-if="submitted && !product.name"
+                    >Useful Life Hours is required.</small
+                  >-->
                 </div>
               </div>
 
               <div class="card">
-                <div class="formgrid grid">
+                <div v-if="!isView" class="formgrid grid">
                   <div class="field col">
                     <label for="sparePart">Spare Parts</label>
                     <Dropdown
@@ -365,7 +378,7 @@
                     >
                     </Column>
 
-                    <Column headerStyle="min-width:10rem;">
+                    <Column v-if="!isView" headerStyle="min-width:10rem;">
                       <template #body="slotProps">
                         <div style="display: flex; justify-content: end">
                           <Button
@@ -386,26 +399,29 @@
               <div class="card">
                 <h5>Imagen</h5>
                 <img
-                    id="blah"
-                    :src="image"
-                    alt="your image"
-                    width="150"
-                    height="180"
+                  id="blah"
+                  :disabled="isView"
+                  :src="image"
+                  alt="your image"
+                  width="150"
+                  height="180"
                 />
                 <FileUpload
-                    mode="basic"
-                    accept="image/*"
-                    :maxFileSize="5000000"
-                    @input="onUploadImage"
+                  mode="basic"
+                  accept="image/*"
+                  :disabled="isView"
+                  :maxFileSize="5000000"
+                  @input="onUploadImage"
                 />
                 <!--                <FileUpload mode="basic" name="demo[]" accept="image/*" :maxFileSize="5000000" @change="onUpload"/>-->
                 <br/><br/><br/><br/><br/><br/>
                 <h5>Technical Sheet</h5>
                 <FileUpload
-                    mode="basic"
-                    accept="application/pdf"
-                    :maxFileSize="5000000"
-                    @input="onUploadFile"
+                  mode="basic"
+                  accept="application/pdf"
+                  :disabled="isView"
+                  :maxFileSize="5000000"
+                  @input="onUploadFile"
                 />
               </div>
               <!-- </div> -->
@@ -420,10 +436,11 @@
                 @click="hideDialog"
             />
             <Button
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
@@ -551,6 +568,7 @@ export default {
       image: "https://via.placeholder.com/150x180?text=Machine+Image",
       file: null,
       loadingMachines: true,
+      isView: false,
     };
   },
   machinesService: null,
@@ -597,6 +615,7 @@ export default {
       return;
     },
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       this.sparePartService.getAll().then((data) => {
         this.sparePartItems = data;
@@ -661,7 +680,15 @@ export default {
         this.defaultObjects();
       }
     },
+    viewMachine(machine) {
+      this.isView = true;
+      this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });
+    },
     editProduct(machine) {
+      this.isView = false;
       this.machinesService.getOne(machine.id).then((data) => {
         this.machine = {...data};
         this.productDialog = true;
@@ -740,7 +767,7 @@ export default {
       if (this.validateFormSparePart()) {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
-          this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
           // console.log(this.spare_Part);
           this.machine.articles.unshift(this.spare_Part);
         } else {

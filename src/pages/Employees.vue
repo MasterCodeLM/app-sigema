@@ -186,9 +186,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewEmployee(slotProps.data)"
+                />
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
                     icon="pi pi-trash"
@@ -201,11 +206,17 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '550px' }"
-            header="Employee Details"
-            :modal="true"
-            class="p-fluid"
+          v-model:visible="productDialog"
+          :style="{ width: '550px' }"
+          :header="
+            !employee.id
+              ? 'New Employee'
+              : !isView
+              ? 'Edit Employee'
+              : 'Info Employee'
+          "
+          :modal="true"
+          class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="field col">
@@ -305,25 +316,27 @@
               <label for="age">Age</label>
               <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
               <InputNumber
-                  id="age"
-                  v-model="inputNumberValue"
-                  showButtons
-                  :min="0"
-                  :useGrouping="false"
+                id="age"
+                v-model="inputNumberValue"
+                showButtons
+                :disabled="isView"
+                :min="0"
+                :useGrouping="false"
               />
             </div>
 
             <div class="field col">
               <label for="position">Title</label>
               <Dropdown
-                  id="position"
-                  v-model="employee.position"
-                  :options="positionItems"
-                  optionLabel="name"
-                  placeholder="Select One"
-                  :filter="false"
-                  :loading="false"
-                  :class="{ 'p-invalid': submitted && !employee.position }"
+                id="position"
+                v-model="employee.position"
+                :options="positionItems"
+                optionLabel="name"
+                placeholder="Select One"
+                :disabled="isView"
+                :filter="false"
+                :loading="false"
+                :class="{ 'p-invalid': submitted && !employee.position }"
               >
               </Dropdown>
               <small class="p-invalid" v-if="submitted && !employee.position"
@@ -336,13 +349,14 @@
             <div class="field col">
               <label for="phone">Telephone</label>
               <InputText
-                  id="phone"
-                  v-model.trim="employee.phone"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': (submitted && !employee.phone) || (submitted && employee.phone.length < 9)}"
-                  autocomplete="off"
-                  @keypress="isNumber($event)"
+                id="phone"
+                v-model.trim="employee.phone"
+                required="true"
+                autofocus
+                :disabled="isView"
+                :class="{ 'p-invalid': submitted && !employee.phone }"
+                autocomplete="off"
+                @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !employee.phone"
               >Telephone is required.</small
@@ -382,11 +396,12 @@
           <div class="field">
             <label for="address">Address</label>
             <InputText
-                id="address"
-                v-model.trim="employee.address"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !employee.address }"
+              id="address"
+              v-model.trim="employee.address"
+              required="true"
+              autofocus
+              :disabled="isView"
+              :class="{ 'p-invalid': submitted && !employee.address }"
             />
             <small class="p-invalid" v-if="submitted && !employee.address"
             >Address is required.</small
@@ -397,11 +412,12 @@
             <div class="field col-5">
               <label for="state">Native Language</label>
               <Dropdown
-                  id="state"
-                  v-model="dropdownItem"
-                  :options="dropdownItems"
-                  optionLabel="name"
-                  placeholder="Select One"
+                id="state"
+                v-model="dropdownItem"
+                :disabled="isView"
+                :options="dropdownItems"
+                optionLabel="name"
+                placeholder="Select One"
               ></Dropdown>
             </div>
           </div>
@@ -414,10 +430,11 @@
                 @click="hideDialog"
             />
             <Button
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
@@ -536,6 +553,7 @@ export default {
 
       documentTypeItems: null,
       loadingEmployees: true,
+      isView: false,
     };
   },
   employeesService: null,
@@ -562,6 +580,7 @@ export default {
   },
   methods: {
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       //this.product = {};
       this.resource = {};
@@ -610,7 +629,15 @@ export default {
         this.defaultObjects();
       }
     },
+    viewEmployee(employee) {
+      this.isView = true;
+      this.employeesService.getOne(employee.id).then((data) => {
+        this.employee = { ...data };
+        this.productDialog = true;
+      });
+    },
     editProduct(employee) {
+      this.isView = false;
       this.employeesService.getOne(employee.id).then((data) => {
         this.employee = {...data};
         this.productDialog = true;
