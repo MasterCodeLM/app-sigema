@@ -177,6 +177,11 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewArticles(slotProps.data)"
+                />
+                <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
@@ -194,7 +199,13 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '1000px' }"
-          header="Article Details"
+          :header="
+            !article.id
+              ? 'New Article'
+              : !isView
+              ? 'Edit Article'
+              : 'Info Article'
+          "
           :modal="true"
           class="p-fluid"
         >
@@ -207,6 +218,7 @@
                     id="serialNumber"
                     v-model.trim="article.serial_number"
                     required="true"
+                    :disabled="isView"
                     autofocus
                     :class="{
                       'p-invalid': submitted && !article.serial_number,
@@ -226,6 +238,7 @@
                     v-model.trim="article.name"
                     required="true"
                     autofocus
+                    :disabled="isView"
                     :class="{ 'p-invalid': submitted && !article.name }"
                   />
                   <small class="p-invalid" v-if="submitted && !article.name"
@@ -242,6 +255,7 @@
                     v-model.trim="article.brand"
                     required="true"
                     autofocus
+                    :disabled="isView"
                     :class="{ 'p-invalid': submitted && !article.brand }"
                   />
                   <small class="p-invalid" v-if="submitted && !article.brand"
@@ -256,6 +270,7 @@
                     v-model.trim="article.model"
                     required="true"
                     autofocus
+                    :disabled="isView"
                     :class="{ 'p-invalid': submitted && !article.model }"
                   />
                   <small class="p-invalid" v-if="submitted && !article.model"
@@ -271,6 +286,7 @@
                     id="quantity"
                     v-model="article.quantity"
                     showButtons
+                    :disabled="isView"
                     :min="0"
                     :useGrouping="false"
                     :class="{ 'p-invalid': submitted && !article.quantity }"
@@ -288,6 +304,7 @@
                     :options="articleTypeItems"
                     optionLabel="name"
                     placeholder="Select One"
+                    :disabled="isView"
                     :filter="true"
                     :loading="loadingArticleTypes"
                     :class="{ 'p-invalid': submitted && !article.article_type }"
@@ -307,6 +324,7 @@
                   name="demo[]"
                   url="./upload.php"
                   accept="image/*"
+                  :disabled="isView"
                   :maxFileSize="1000000"
                   @upload="onUpload"
                 />
@@ -315,6 +333,7 @@
                   name="demo[]"
                   url="./upload.php"
                   @upload="onUpload"
+                  :disabled="isView"
                   :multiple="true"
                   accept="image/*"
                   :maxFileSize="1000000"
@@ -322,8 +341,8 @@
               </div>
             </div>
 
-            <div class="card col-6">
-              <div class="formgrid grid">
+            <div class="card">
+              <div v-if="!isView" class="formgrid grid">
                 <div class="field col">
                   <label for="supplierRef">Suppliers</label>
                   <Dropdown
@@ -401,7 +420,7 @@
                     </template>
                   </Column>
 
-                  <Column headerStyle="min-width:10rem;">
+                  <Column v-if="!isView" headerStyle="min-width:10rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
                         <Button
@@ -425,6 +444,7 @@
               @click="hideDialog"
             />
             <Button
+              v-if="!isView"
               label="Save"
               icon="pi pi-check"
               class="p-button-text"
@@ -556,6 +576,7 @@ export default {
       articleTypeItems: null,
       supplierRefItems: null,
       loadingArticles: true,
+      isView: false,
     };
   },
   articlesService: null,
@@ -592,6 +613,7 @@ export default {
       return;
     },
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       this.articleTypeService.getAll().then((data) => {
         this.articleTypeItems = data;
@@ -651,7 +673,15 @@ export default {
         this.defaultObjects();
       }
     },
+    viewArticles(article) {
+      this.isView = true;
+      this.articlesService.getOne(article.id).then((data) => {
+        this.article = { ...data };
+        this.productDialog = true;
+      });
+    },
     editProduct(article) {
+      this.isView = false;
       this.articlesService.getOne(article.id).then((data) => {
         this.article = { ...data };
         this.productDialog = true;

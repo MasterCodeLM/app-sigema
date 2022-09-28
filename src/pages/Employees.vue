@@ -186,6 +186,11 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewEmployee(slotProps.data)"
+                />
+                <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
@@ -203,7 +208,13 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '550px' }"
-          header="Employee Details"
+          :header="
+            !employee.id
+              ? 'New Employee'
+              : !isView
+              ? 'Edit Employee'
+              : 'Info Employee'
+          "
           :modal="true"
           class="p-fluid"
         >
@@ -308,6 +319,7 @@
                 id="age"
                 v-model="inputNumberValue"
                 showButtons
+                :disabled="isView"
                 :min="0"
                 :useGrouping="false"
               />
@@ -321,6 +333,7 @@
                 :options="positionItems"
                 optionLabel="name"
                 placeholder="Select One"
+                :disabled="isView"
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !employee.position }"
@@ -340,6 +353,7 @@
                 v-model.trim="employee.phone"
                 required="true"
                 autofocus
+                :disabled="isView"
                 :class="{ 'p-invalid': submitted && !employee.phone }"
                 autocomplete="off"
                 @keypress="isNumber($event)"
@@ -381,6 +395,7 @@
               v-model.trim="employee.address"
               required="true"
               autofocus
+              :disabled="isView"
               :class="{ 'p-invalid': submitted && !employee.address }"
             />
             <small class="p-invalid" v-if="submitted && !employee.address"
@@ -394,6 +409,7 @@
               <Dropdown
                 id="state"
                 v-model="dropdownItem"
+                :disabled="isView"
                 :options="dropdownItems"
                 optionLabel="name"
                 placeholder="Select One"
@@ -409,6 +425,7 @@
               @click="hideDialog"
             />
             <Button
+              v-if="!isView"
               label="Save"
               icon="pi pi-check"
               class="p-button-text"
@@ -531,6 +548,7 @@ export default {
 
       documentTypeItems: null,
       loadingEmployees: true,
+      isView: false,
     };
   },
   employeesService: null,
@@ -557,6 +575,7 @@ export default {
   },
   methods: {
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       //this.product = {};
       this.resource = {};
@@ -605,7 +624,15 @@ export default {
         this.defaultObjects();
       }
     },
+    viewEmployee(employee) {
+      this.isView = true;
+      this.employeesService.getOne(employee.id).then((data) => {
+        this.employee = { ...data };
+        this.productDialog = true;
+      });
+    },
     editProduct(employee) {
+      this.isView = false;
       this.employeesService.getOne(employee.id).then((data) => {
         this.employee = { ...data };
         this.productDialog = true;

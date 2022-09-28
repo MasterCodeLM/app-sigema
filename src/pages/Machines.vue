@@ -177,6 +177,11 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewMachine(slotProps.data)"
+                />
+                <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
@@ -194,7 +199,13 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '900px' }"
-          header="Machine Details"
+          :header="
+            !machine.id
+              ? 'New Machine'
+              : !isView
+              ? 'Edit Machine'
+              : 'Info Machine'
+          "
           :modal="true"
           class="p-fluid"
         >
@@ -277,6 +288,7 @@
                     v-model="machine.maximum_working_time"
                     showButtons
                     mode="decimal"
+                    :disabled="isView"
                     :class="{
                       'p-invalid': submitted && !machine.maximum_working_time,
                     }"
@@ -300,6 +312,7 @@
                     mode="decimal"
                     required="true"
                     autofocus
+                    :disabled="isView"
                     :class="{ 'p-invalid': submitted && !product.name }"
                     :min="0"
                     :useGrouping="false"
@@ -311,7 +324,7 @@
               </div>
 
               <div class="card">
-                <div class="formgrid grid">
+                <div v-if="!isView" class="formgrid grid">
                   <div class="field col">
                     <label for="sparePart">Spare Parts</label>
                     <Dropdown
@@ -365,7 +378,7 @@
                     >
                     </Column>
 
-                    <Column headerStyle="min-width:10rem;">
+                    <Column v-if="!isView" headerStyle="min-width:10rem;">
                       <template #body="slotProps">
                         <div style="display: flex; justify-content: end">
                           <Button
@@ -387,6 +400,7 @@
                 <h5>Imagen</h5>
                 <img
                   id="blah"
+                  :disabled="isView"
                   :src="image"
                   alt="your image"
                   width="150"
@@ -395,6 +409,7 @@
                 <FileUpload
                   mode="basic"
                   accept="image/*"
+                  :disabled="isView"
                   :maxFileSize="5000000"
                   @input="onUploadImage"
                 />
@@ -404,6 +419,7 @@
                 <FileUpload
                   mode="basic"
                   accept="application/pdf"
+                  :disabled="isView"
                   :maxFileSize="5000000"
                   @input="onUploadFile"
                 />
@@ -420,6 +436,7 @@
               @click="hideDialog"
             />
             <Button
+              v-if="!isView"
               label="Save"
               icon="pi pi-check"
               class="p-button-text"
@@ -551,6 +568,7 @@ export default {
       image: "https://via.placeholder.com/150x180?text=Machine+Image",
       file: null,
       loadingMachines: true,
+      isView: false,
     };
   },
   machinesService: null,
@@ -597,6 +615,7 @@ export default {
       return;
     },
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       this.sparePartService.getAll().then((data) => {
         this.sparePartItems = data;
@@ -661,7 +680,15 @@ export default {
         this.defaultObjects();
       }
     },
+    viewMachine(machine) {
+      this.isView = true;
+      this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });
+    },
     editProduct(machine) {
+      this.isView = false;
       this.machinesService.getOne(machine.id).then((data) => {
         this.machine = { ...data };
         this.productDialog = true;
@@ -740,7 +767,7 @@ export default {
       if (this.validateFormSparePart()) {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
-          this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
           // console.log(this.spare_Part);
           this.machine.articles.push(this.spare_Part);
         } else {
