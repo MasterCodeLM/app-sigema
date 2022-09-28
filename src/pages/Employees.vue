@@ -2,63 +2,63 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast />
+        <Toast/>
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="openNew"
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success mr-2"
+                  @click="openNew"
               />
               <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
+                  label="Delete"
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  @click="confirmDeleteSelected"
+                  :disabled="!selectedProducts || !selectedProducts.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-              label="Export"
-              icon="pi pi-upload"
-              class="p-button-help"
-              @click="exportCSV($event)"
+                label="Export"
+                icon="pi pi-upload"
+                class="p-button-help"
+                @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-          ref="dt"
-          :value="employees"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="10"
-          :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-          responsiveLayout="scroll"
-          :loading="loadingEmployees"
+            ref="dt"
+            :value="employees"
+            v-model:selection="selectedProducts"
+            dataKey="id"
+            :paginator="true"
+            :rows="10"
+            :filters="filters"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rowsPerPageOptions="[5, 10, 25]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+            responsiveLayout="scroll"
+            :loading="loadingEmployees"
         >
           <template #header>
             <div
-              class="
+                class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Employees</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="pi pi-search"/>
                 <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
                 />
               </span>
             </div>
@@ -67,10 +67,10 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="name"
+              header="Name"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -79,10 +79,10 @@
           </Column>
 
           <Column
-            field="document_type.name"
-            header="Document Type"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="document_type.name"
+              header="Document Type"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Document Type</span>
@@ -91,10 +91,10 @@
           </Column>
 
           <Column
-            field="document_number"
-            header="Identification Document"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="document_number"
+              header="Identification Document"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Identification Document</span>
@@ -103,10 +103,10 @@
           </Column>
 
           <Column
-            field="age"
-            header="Age"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="age"
+              header="Age"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Age</span>
@@ -115,10 +115,10 @@
           </Column>
 
           <Column
-            field="position"
-            header="Title"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="position"
+              header="Title"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Title</span>
@@ -127,10 +127,10 @@
           </Column>
 
           <Column
-            field="phone"
-            header="Telephone"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="phone"
+              header="Telephone"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
@@ -139,10 +139,10 @@
           </Column>
 
           <Column
-            field="address"
-            header="Address"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="address"
+              header="Address"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Address</span>
@@ -151,10 +151,10 @@
           </Column>
 
           <Column
-            field="personal_email"
-            header="Email"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="personal_email"
+              header="Email"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
@@ -163,21 +163,21 @@
           </Column>
 
           <Column
-            field="inventoryStatus"
-            header="Status"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="inventoryStatus"
+              header="Status"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span
-                :class="
+                  :class="
                   'product-badge status-' +
                   (slotProps.data.inventoryStatus
                     ? slotProps.data.inventoryStatus.toLowerCase()
                     : '')
                 "
-                >{{ slotProps.data.inventoryStatus }}</span
+              >{{ slotProps.data.inventoryStatus }}</span
               >
             </template>
           </Column>
@@ -186,14 +186,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger"
-                  @click="confirmDelete(slotProps.data)"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -201,65 +201,65 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '550px' }"
-          header="Employee Details"
-          :modal="true"
-          class="p-fluid"
+            v-model:visible="productDialog"
+            :style="{ width: '550px' }"
+            header="Employee Details"
+            :modal="true"
+            class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="field col">
               <label for="doccumentType">Document Type</label>
               <Dropdown
-                id="doccumentType"
-                v-model="employee.document_type"
-                :options="documentTypeItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :filter="false"
-                :loading="false"
-                :class="{ 'p-invalid': submitted && !employee.document_type }"
-                :disabled="isView"
-                autocomplete="off"
+                  id="doccumentType"
+                  v-model="employee.document_type"
+                  :options="documentTypeItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :filter="false"
+                  :loading="false"
+                  :class="{ 'p-invalid': submitted && !employee.document_type }"
+                  :disabled="isView"
+                  autocomplete="off"
               >
               </Dropdown>
               <small
-                class="p-invalid"
-                v-if="submitted && !employee.document_type"
-                >Document Type is required.</small
+                  class="p-invalid"
+                  v-if="submitted && !employee.document_type"
+              >Document Type is required.</small
               >
             </div>
 
             <div class="field col">
               <label for="document_number">Document Number</label>
               <InputText
-                id="document_number"
-                v-model.trim="employee.document_number"
-                required="true"
-                autofocus
-                :class="{
+                  id="document_number"
+                  v-model.trim="employee.document_number"
+                  required="true"
+                  autofocus
+                  :class="{
                   'p-invalid':
                     (submitted && !employee.document_number) ||
                     (submitted && employee.document_number.length < 8),
                 }"
-                :disabled="isView"
-                autocomplete="off"
-                @keypress="isNumber($event)"
+                  :disabled="isView"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
               />
               <small
-                class="p-invalid"
-                v-if="submitted && !employee.document_number"
-                >Document Number is required.</small
+                  class="p-invalid"
+                  v-if="submitted && !employee.document_number"
+              >Document Number is required.</small
               >
-              <br />
+              <br/>
               <small
-                class="p-invalid"
-                v-if="
+                  class="p-invalid"
+                  v-if="
                   submitted &&
                   employee.document_number &&
                   employee.document_number.length < 8
                 "
-                >The document number must be at least 8 characters.</small
+              >The document number must be at least 8 characters.</small
               >
             </div>
           </div>
@@ -269,32 +269,32 @@
           <div class="field">
             <label for="name">Name</label>
             <InputText
-              id="name"
-              v-model.trim="employee.name"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !employee.name }"
-              :disabled="isView"
-              autocomplete="off"
+                id="name"
+                v-model.trim="employee.name"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !employee.name }"
+                :disabled="isView"
+                autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !employee.name"
-              >Name is required.</small
+            >Name is required.</small
             >
           </div>
 
           <div class="field">
             <label for="lastname">Last Name</label>
             <InputText
-              id="name"
-              v-model.trim="employee.lastname"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !employee.lastname }"
-              :disabled="isView"
-              autocomplete="off"
+                id="name"
+                v-model.trim="employee.lastname"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !employee.lastname }"
+                :disabled="isView"
+                autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !employee.lastname"
-              >Last Name is required.</small
+            >Last Name is required.</small
             >
           </div>
 
@@ -305,29 +305,29 @@
               <label for="age">Age</label>
               <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
               <InputNumber
-                id="age"
-                v-model="inputNumberValue"
-                showButtons
-                :min="0"
-                :useGrouping="false"
+                  id="age"
+                  v-model="inputNumberValue"
+                  showButtons
+                  :min="0"
+                  :useGrouping="false"
               />
             </div>
 
             <div class="field col">
               <label for="position">Title</label>
               <Dropdown
-                id="position"
-                v-model="employee.position"
-                :options="positionItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :filter="false"
-                :loading="false"
-                :class="{ 'p-invalid': submitted && !employee.position }"
+                  id="position"
+                  v-model="employee.position"
+                  :options="positionItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :filter="false"
+                  :loading="false"
+                  :class="{ 'p-invalid': submitted && !employee.position }"
               >
               </Dropdown>
               <small class="p-invalid" v-if="submitted && !employee.position"
-                >Title is required.</small
+              >Title is required.</small
               >
             </div>
           </div>
@@ -336,55 +336,60 @@
             <div class="field col">
               <label for="phone">Telephone</label>
               <InputText
-                id="phone"
-                v-model.trim="employee.phone"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !employee.phone }"
-                autocomplete="off"
-                @keypress="isNumber($event)"
+                  id="phone"
+                  v-model.trim="employee.phone"
+                  required="true"
+                  autofocus
+                  :class="{ 'p-invalid': (submitted && !employee.phone) || (submitted && employee.phone.length < 9)}"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !employee.phone"
-                >Telephone is required.</small
+              >Telephone is required.</small
+              >
+              <small
+                  class="p-invalid"
+                  v-if="submitted && employee.phone && employee.phone.length < 9"
+              >The Telephone must be at least 9 characters.</small
               >
             </div>
 
             <div class="field col">
               <label for="personal_email">Email</label>
               <InputText
-                id="personal_email"
-                v-model.trim="employee.personal_email"
-                required="true"
-                autofocus
-                :class="{
+                  id="personal_email"
+                  v-model.trim="employee.personal_email"
+                  required="true"
+                  autofocus
+                  :class="{
                   'p-invalid':
                     (submitted && !employee.personal_email) ||
                     (submitted && !isEmail()),
                 }"
-                :disabled="isView"
-                autocomplete="off"
+                  :disabled="isView"
+                  autocomplete="off"
               />
               <small
-                class="p-invalid"
-                v-if="submitted && !employee.personal_email"
-                >Email is required.</small
+                  class="p-invalid"
+                  v-if="submitted && !employee.personal_email"
+              >Email is required.</small
               >
-              <small class="p-invalid" v-if="submitted && !isEmail()"
-                >The email must be a valid email address.</small
+              <small class="p-invalid" v-if="submitted && employee.personal_email && !isEmail()"
+              >The email must be a valid email address.</small
               >
             </div>
           </div>
           <div class="field">
             <label for="address">Address</label>
             <InputText
-              id="address"
-              v-model.trim="employee.address"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !employee.address }"
+                id="address"
+                v-model.trim="employee.address"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !employee.address }"
             />
             <small class="p-invalid" v-if="submitted && !employee.address"
-              >Address is required.</small
+            >Address is required.</small
             >
           </div>
 
@@ -392,90 +397,90 @@
             <div class="field col-5">
               <label for="state">Native Language</label>
               <Dropdown
-                id="state"
-                v-model="dropdownItem"
-                :options="dropdownItems"
-                optionLabel="name"
-                placeholder="Select One"
+                  id="state"
+                  v-model="dropdownItem"
+                  :options="dropdownItems"
+                  optionLabel="name"
+                  placeholder="Select One"
               ></Dropdown>
             </div>
           </div>
 
           <template #footer>
             <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-text p-button-danger"
+                @click="hideDialog"
             />
             <Button
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
-              >?</span
+            >Are you sure you want to delete <b>{{ resource.name }}</b
+            >?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteResource"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteResource"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductsDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductsDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete the selected employees?</span
+            >Are you sure you want to delete the selected employees?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteResource"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -485,7 +490,7 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode} from "primevue/api";
 import EmployeesService from "../service/EmployeesService";
 import DocumentTypeServices from "../service/DocumentTypeServices";
 import TitleService from "../service/TitleService";
@@ -494,8 +499,8 @@ export default {
   data() {
     return {
       dropdownItems: [
-        { name: "English", code: "Option 1" },
-        { name: "Spanish", code: "Option 2" },
+        {name: "English", code: "Option 1"},
+        {name: "Spanish", code: "Option 2"},
       ],
       dropdownItem: null,
       employees: null,
@@ -520,9 +525,9 @@ export default {
       message: null,
       //loading: false,
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
 
       documentTypeItem: null,
@@ -549,8 +554,8 @@ export default {
       this.loadingEmployees = false;
     });
     this.documentTypeService
-      .getAll()
-      .then((data) => (this.documentTypeItems = data));
+        .getAll()
+        .then((data) => (this.documentTypeItems = data));
     this.positionService.getAll().then((data) => (this.positionItems = data));
 
     //this.loading = false;
@@ -575,16 +580,16 @@ export default {
           //UPDATE
           const payload = this.employee;
           this.employeesService
-            .update(this.employee.id, payload)
-            .then((data) => {
-              this.employees[this.findIndexById(data.data.id)] = data.data;
-              this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: data.message,
-                life: 3000,
+              .update(this.employee.id, payload)
+              .then((data) => {
+                this.employees[this.findIndexById(data.data.id)] = data.data;
+                this.$toast.add({
+                  severity: "success",
+                  summary: "Successful",
+                  detail: data.message,
+                  life: 3000,
+                });
               });
-            });
         } else {
           // CREATE
 
@@ -592,7 +597,7 @@ export default {
           console.log("hola");
           //payload.image="...";
           this.employeesService.create(payload).then((data) => {
-            this.employees.push(data.data);
+            this.employees.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -607,7 +612,7 @@ export default {
     },
     editProduct(employee) {
       this.employeesService.getOne(employee.id).then((data) => {
-        this.employee = { ...data };
+        this.employee = {...data};
         this.productDialog = true;
       });
     },
@@ -619,7 +624,7 @@ export default {
       this.deleteDialog = false;
       this.employeesService.delete(this.resource.id).then((data) => {
         this.employees = this.employees.filter(
-          (val) => val.id !== this.resource.id
+            (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
@@ -643,7 +648,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -657,7 +662,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-        (val) => !this.selectedProducts.includes(val)
+          (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -671,14 +676,16 @@ export default {
     validateFormEmployee() {
       console.log(this.employee);
       return (
-        this.employee.document_type &&
-        this.employee.document_number &&
-        this.employee.name &&
-        //this.employee.age &&
-        this.employee.phone &&
-        this.employee.position &&
-        this.employee.personal_email &&
-        this.employee.address
+          this.employee.document_type &&
+          this.employee.document_number &&
+          this.employee.document_number.length >= 8 &&
+          this.employee.name &&
+          //this.employee.age &&
+          this.employee.phone &&
+          this.employee.phone.length >= 9 &&
+          this.employee.position &&
+          this.employee.personal_email &&
+          this.employee.address
       );
     },
 
@@ -686,9 +693,9 @@ export default {
       evt = evt ? evt : window.event;
       let charCode = evt.which ? evt.which : evt.keyCode;
       if (
-        charCode > 31 &&
-        (charCode < 48 || charCode > 57) &&
-        charCode !== 46
+          charCode > 31 &&
+          (charCode < 48 || charCode > 57) &&
+          charCode !== 46
       ) {
         evt.preventDefault();
       } else {
@@ -697,13 +704,13 @@ export default {
     },
     isEmail() {
       return /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(
-        this.employee.personal_email
+          this.employee.personal_email
       );
     },
 
     initFilters() {
       this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
 
