@@ -236,7 +236,7 @@
                   v-model.trim="supplier.phone"
                   required="true"
                   autofocus
-                  :class="{ 'p-invalid': (submitted && !supplier.phone) || (submitted && !supplier.phone < 9)  }"
+                  :class="{ 'p-invalid': (submitted && !supplier.phone) || (submitted && supplier.phone.length < 9)  }"
                   :disabled="isView"
                   autocomplete="off"
                   @keypress="isNumber($event)"
@@ -247,8 +247,8 @@
               <br>
               <small
                   class="p-invalid"
-                  v-if="submitted && supplier.phone && !supplier.phone < 9"
-              >The document number must be at least 8 characters.</small
+                  v-if="submitted && supplier.phone && supplier.phone.length < 9"
+              >The Telephone must be at least 9 characters.</small
               >
             </div>
 
