@@ -2,63 +2,63 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast />
+        <Toast/>
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="openNew"
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success mr-2"
+                  @click="openNew"
               />
               <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
+                  label="Delete"
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  @click="confirmDeleteSelected"
+                  :disabled="!selectedProducts || !selectedProducts.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-              label="Export"
-              icon="pi pi-upload"
-              class="p-button-help"
-              @click="exportCSV($event)"
+                label="Export"
+                icon="pi pi-upload"
+                class="p-button-help"
+                @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-          ref="dt"
-          :value="machines"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="10"
-          :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-          responsiveLayout="scroll"
-          :loading="loadingMachines"
+            ref="dt"
+            :value="machines"
+            v-model:selection="selectedProducts"
+            dataKey="id"
+            :paginator="true"
+            :rows="10"
+            :filters="filters"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rowsPerPageOptions="[5, 10, 25]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+            responsiveLayout="scroll"
+            :loading="loadingMachines"
         >
           <template #header>
             <div
-              class="
+                class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Machines</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="pi pi-search"/>
                 <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
                 />
               </span>
             </div>
@@ -67,10 +67,10 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="name"
+              header="Name"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -79,10 +79,10 @@
           </Column>
 
           <Column
-            field="serie_number"
-            header="Serial Number"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="serie_number"
+              header="Serial Number"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
@@ -91,10 +91,10 @@
           </Column>
 
           <Column
-            field="model"
-            header="Model"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="model"
+              header="Model"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Model</span>
@@ -103,10 +103,10 @@
           </Column>
 
           <Column
-            field="brand"
-            header="Brand"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="brand"
+              header="Brand"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Brand</span>
@@ -118,22 +118,22 @@
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                :src="
+                  :src="
                   slotProps.data.image ? getImage(slotProps.data.image) : image
                 "
-                :alt="'machine'"
-                class="shadow-2"
-                width="100"
-                height="100"
+                  :alt="'machine'"
+                  class="shadow-2"
+                  width="100"
+                  height="100"
               />
             </template>
           </Column>
 
           <Column
-            field="maximum_working_time"
-            header="Daily Working Hours"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="maximum_working_time"
+              header="Daily Working Hours"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Daily Working Hours</span>
@@ -142,10 +142,10 @@
           </Column>
 
           <Column
-            field="usefulLifehours"
-            header="Useful Life Hours"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="usefulLifehours"
+              header="Useful Life Hours"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Useful Life Hours</span>
@@ -154,21 +154,21 @@
           </Column>
 
           <Column
-            field="inventoryStatus"
-            header="Status"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="inventoryStatus"
+              header="Status"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span
-                :class="
+                  :class="
                   'product-badge status-' +
                   (slotProps.data.inventoryStatus
                     ? slotProps.data.inventoryStatus.toLowerCase()
                     : '')
                 "
-                >{{ slotProps.data.inventoryStatus }}</span
+              >{{ slotProps.data.inventoryStatus }}</span
               >
             </template>
           </Column>
@@ -177,14 +177,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger"
-                  @click="confirmDelete(slotProps.data)"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -192,45 +192,45 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '900px' }"
-          header="Machine Details"
-          :modal="true"
-          class="p-fluid"
+            v-model:visible="productDialog"
+            :style="{ width: '900px' }"
+            header="Machine Details"
+            :modal="true"
+            class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="col-6">
               <div class="field">
                 <label for="serie_number">Serial Number</label>
                 <InputText
-                  id="serie_number"
-                  v-model.trim="machine.serie_number"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !machine.serie_number }"
-                  :disabled="isView"
-                  autocomplete="off"
+                    id="serie_number"
+                    v-model.trim="machine.serie_number"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.serie_number }"
+                    :disabled="isView"
+                    autocomplete="off"
                 />
                 <small
-                  class="p-invalid"
-                  v-if="submitted && !machine.serie_number"
-                  >Serial Number is required.</small
+                    class="p-invalid"
+                    v-if="submitted && !machine.serie_number"
+                >Serial Number is required.</small
                 >
               </div>
 
               <div class="field">
                 <label for="name">Name</label>
                 <InputText
-                  id="name"
-                  v-model.trim="machine.name"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !machine.name }"
-                  :disabled="isView"
-                  autocomplete="off"
+                    id="name"
+                    v-model.trim="machine.name"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.name }"
+                    :disabled="isView"
+                    autocomplete="off"
                 />
                 <small class="p-invalid" v-if="submitted && !machine.name"
-                  >Name is required.</small
+                >Name is required.</small
                 >
               </div>
 
@@ -238,32 +238,32 @@
                 <div class="field col">
                   <label for="model">Model</label>
                   <InputText
-                    id="model"
-                    v-model.trim="machine.model"
-                    required="true"
-                    autofocus
-                    :class="{ 'p-invalid': submitted && !machine.name }"
-                    :disabled="isView"
-                    autocomplete="off"
+                      id="model"
+                      v-model.trim="machine.model"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
                   />
                   <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Model is required.</small
+                  >Model is required.</small
                   >
                 </div>
 
                 <div class="field col">
                   <label for="brand">Brand</label>
                   <InputText
-                    id="barnd"
-                    v-model.trim="machine.brand"
-                    required="true"
-                    autofocus
-                    :class="{ 'p-invalid': submitted && !machine.name }"
-                    :disabled="isView"
-                    autocomplete="off"
+                      id="barnd"
+                      v-model.trim="machine.brand"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
                   />
                   <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Brand is required.</small
+                  >Brand is required.</small
                   >
                 </div>
               </div>
@@ -273,40 +273,40 @@
                   <label for="maximum_working_time">Daily Working Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
-                    id="maximum_working_time"
-                    v-model="machine.maximum_working_time"
-                    showButtons
-                    mode="decimal"
-                    :class="{
+                      id="maximum_working_time"
+                      v-model="machine.maximum_working_time"
+                      showButtons
+                      mode="decimal"
+                      :class="{
                       'p-invalid': submitted && !machine.maximum_working_time,
                     }"
-                    :min="0"
-                    :useGrouping="false"
+                      :min="0"
+                      :useGrouping="false"
                   />
                   <small
-                    class="p-invalid"
-                    v-if="submitted && !machine.maximum_working_time"
-                    >Daily working hours is required.</small
+                      class="p-invalid"
+                      v-if="submitted && !machine.maximum_working_time"
+                  >Daily working hours is required.</small
                   >
                 </div>
 
                 <div class="field col">
                   <label for="usefulLifehours">Useful Life Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-                  <InputNumber
-                    id="usefulLifehours"
-                    v-model="inputNumberValue"
-                    showButtons
-                    mode="decimal"
-                    required="true"
-                    autofocus
-                    :class="{ 'p-invalid': submitted && !product.name }"
-                    :min="0"
-                    :useGrouping="false"
-                  />
-                  <!--<small class="p-invalid" v-if="submitted && !product.name"
-                    >Useful Life Hours is required.</small
-                  >-->
+<!--                  <InputNumber-->
+<!--                      id="usefulLifehours"-->
+<!--                      v-model="inputNumberValue"-->
+<!--                      showButtons-->
+<!--                      mode="decimal"-->
+<!--                      required="true"-->
+<!--                      autofocus-->
+<!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
+<!--                      :min="0"-->
+<!--                      :useGrouping="false"-->
+<!--                  />-->
+<!--                  <small class="p-invalid" v-if="submitted && !product.name"-->
+<!--                  >Useful Life Hours is required.</small-->
+<!--                  >-->
                 </div>
               </div>
 
@@ -315,27 +315,27 @@
                   <div class="field col">
                     <label for="sparePart">Spare Parts</label>
                     <Dropdown
-                      id="sparePart"
-                      v-model="sparePartItem"
-                      :options="sparePartItems"
-                      optionLabel="name"
-                      placeholder="Select One"
-                      :filter="true"
-                      :loading="loadingSpareParts"
-                      :class="{
+                        id="sparePart"
+                        v-model="sparePartItem"
+                        :options="sparePartItems"
+                        optionLabel="name"
+                        placeholder="Select One"
+                        :filter="true"
+                        :loading="loadingSpareParts"
+                        :class="{
                         'p-invalid': submittedAddSparePart && !sparePartItem,
                       }"
                     >
                     </Dropdown>
                     <small
-                      class="p-invalid"
-                      v-if="submittedAddSparePart && !sparePartItem"
-                      >Spare Part is required.</small
+                        class="p-invalid"
+                        v-if="submittedAddSparePart && !sparePartItem"
+                    >Spare Part is required.</small
                     >
                   </div>
 
                   <div
-                    class="
+                      class="
                       field
                       col-2
                       flex
@@ -344,24 +344,24 @@
                     "
                   >
                     <Button
-                      icon="pi pi-plus"
-                      class="p-button-secondary"
-                      style="margin-top: 1.8rem"
-                      @click="addSparePart"
+                        icon="pi pi-plus"
+                        class="p-button-secondary"
+                        style="margin-top: 1.8rem"
+                        @click="addSparePart"
                     ></Button>
                   </div>
                 </div>
                 <div class="card">
                   <DataTable
-                    :value="machine.articles"
-                    responsiveLayout="scroll"
+                      :value="machine.articles"
+                      responsiveLayout="scroll"
                   >
                     <Column
-                      v-for="col of columns"
-                      :field="col.field"
-                      :header="col.header"
-                      :key="col.field"
-                      style="width: 25%"
+                        v-for="col of columns"
+                        :field="col.field"
+                        :header="col.header"
+                        :key="col.field"
+                        style="width: 25%"
                     >
                     </Column>
 
@@ -369,9 +369,9 @@
                       <template #body="slotProps">
                         <div style="display: flex; justify-content: end">
                           <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            @click="removeSparePart(slotProps.data)"
+                              icon="pi pi-trash"
+                              class="p-button-rounded p-button-danger"
+                              @click="removeSparePart(slotProps.data)"
                           />
                         </div>
                       </template>
@@ -386,26 +386,26 @@
               <div class="card">
                 <h5>Imagen</h5>
                 <img
-                  id="blah"
-                  :src="image"
-                  alt="your image"
-                  width="150"
-                  height="180"
+                    id="blah"
+                    :src="image"
+                    alt="your image"
+                    width="150"
+                    height="180"
                 />
                 <FileUpload
-                  mode="basic"
-                  accept="image/*"
-                  :maxFileSize="5000000"
-                  @input="onUploadImage"
+                    mode="basic"
+                    accept="image/*"
+                    :maxFileSize="5000000"
+                    @input="onUploadImage"
                 />
                 <!--                <FileUpload mode="basic" name="demo[]" accept="image/*" :maxFileSize="5000000" @change="onUpload"/>-->
-                <br /><br /><br /><br /><br /><br />
+                <br/><br/><br/><br/><br/><br/>
                 <h5>Technical Sheet</h5>
                 <FileUpload
-                  mode="basic"
-                  accept="application/pdf"
-                  :maxFileSize="5000000"
-                  @input="onUploadFile"
+                    mode="basic"
+                    accept="application/pdf"
+                    :maxFileSize="5000000"
+                    @input="onUploadFile"
                 />
               </div>
               <!-- </div> -->
@@ -414,79 +414,79 @@
 
           <template #footer>
             <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-text p-button-danger"
+                @click="hideDialog"
             />
             <Button
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
-              >?</span
+            >Are you sure you want to delete <b>{{ resource.name }}</b
+            >?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deletetDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deletetDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteResource"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteResource"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductsDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductsDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete the selected products?</span
+            >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteResource"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -496,7 +496,7 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode} from "primevue/api";
 import MachinesService from "../service/MachinesService";
 import ArticlesService from "../service/ArticlesService";
 import ImageService from "../service/ImageService";
@@ -534,16 +534,16 @@ export default {
       loadingSpareParts: true,
 
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
 
       submittedAddSparePart: false,
 
       columns: [
-        { field: "model", header: "Serial Number" },
-        { field: "name", header: "Nombre" },
+        {field: "model", header: "Serial Number"},
+        {field: "name", header: "Nombre"},
       ],
 
       sparePartItem: null,
@@ -648,7 +648,7 @@ export default {
 
           const payload = this.machine;
           await this.machinesService.create(payload).then((data) => {
-            this.machines.push(data.data);
+            this.machines.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -663,7 +663,7 @@ export default {
     },
     editProduct(machine) {
       this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = { ...data };
+        this.machine = {...data};
         this.productDialog = true;
       });
     },
@@ -675,7 +675,7 @@ export default {
       this.deleteDialog = false;
       this.machinesService.delete(this.resource.id).then((data) => {
         this.machines = this.machines.filter(
-          (val) => val.id !== this.resource.id
+            (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
@@ -709,7 +709,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -723,7 +723,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-        (val) => !this.selectedProducts.includes(val)
+          (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -742,7 +742,7 @@ export default {
           // INSERT DATA
           this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
           // console.log(this.spare_Part);
-          this.machine.articles.push(this.spare_Part);
+          this.machine.articles.unshift(this.spare_Part);
         } else {
           this.$toast.add({
             severity: "error",
@@ -759,16 +759,14 @@ export default {
     },
 
     validateFormMachine() {
-      return true;
-      // return (
-      //     this.machine.serie_number &&
-      //     this.machine.name &&
-      //     this.machine.brand &&
-      //     this.machine.model &&
-      //     this.machine.maximum_working_time &&
-      //     this.machine.image &&
-      //     this.machine.articles
-      // );
+      // return true;
+      return (
+          this.machine.serie_number &&
+          this.machine.name &&
+          this.machine.brand &&
+          this.machine.model &&
+          this.machine.maximum_working_time
+      );
     },
     validateFormSparePart() {
       return true;
@@ -776,7 +774,7 @@ export default {
     },
     removeSparePart(data) {
       this.machine.articles = this.machine.articles.filter(
-        (val) => val.id !== data.id
+          (val) => val.id !== data.id
       );
     },
     getImage(path) {
@@ -786,7 +784,7 @@ export default {
 
     initFilters() {
       this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
     defaultObjects() {
