@@ -119,7 +119,7 @@
               <span class="p-column-title">Image</span>
               <img
                   :src="
-                  slotProps.data.image ? getImage(slotProps.data.image) : image
+                  slotProps.data.image ? getImage(slotProps.data.image) : imageDefault
                 "
                   :alt="'machine'"
                   class="shadow-2"
@@ -177,14 +177,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-eye"
-                  class="p-button-rounded p-button-info mr-2"
-                  @click="viewMachine(slotProps.data)"
+                    icon="pi pi-eye"
+                    class="p-button-rounded p-button-info mr-2"
+                    @click="viewMachine(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
                     icon="pi pi-trash"
@@ -197,17 +197,17 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '900px' }"
-          :header="
+            v-model:visible="productDialog"
+            :style="{ width: '900px' }"
+            :header="
             !machine.id
               ? 'New Machine'
               : !isView
               ? 'Edit Machine'
               : 'Info Machine'
           "
-          :modal="true"
-          class="p-fluid"
+            :modal="true"
+            class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="col-6">
@@ -284,12 +284,12 @@
                   <label for="maximum_working_time">Daily Working Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                   <InputNumber
-                    id="maximum_working_time"
-                    v-model="machine.maximum_working_time"
-                    showButtons
-                    mode="decimal"
-                    :disabled="isView"
-                    :class="{
+                      id="maximum_working_time"
+                      v-model="machine.maximum_working_time"
+                      showButtons
+                      mode="decimal"
+                      :disabled="isView"
+                      :class="{
                       'p-invalid': submitted && !machine.maximum_working_time,
                     }"
                       :min="0"
@@ -305,18 +305,18 @@
                 <div class="field col">
                   <label for="usefulLifehours">Useful Life Hours</label>
                   <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-                  <InputNumber
-                    id="usefulLifehours"
-                    v-model="inputNumberValue"
-                    showButtons
-                    mode="decimal"
-                    required="true"
-                    autofocus
-                    :disabled="isView"
-                    :class="{ 'p-invalid': submitted && !product.name }"
-                    :min="0"
-                    :useGrouping="false"
-                  />
+                  <!--                  <InputNumber-->
+                  <!--                      id="usefulLifehours"-->
+                  <!--                      v-model="inputNumberValue"-->
+                  <!--                      showButtons-->
+                  <!--                      mode="decimal"-->
+                  <!--                      required="true"-->
+                  <!--                      autofocus-->
+                  <!--                      :disabled="isView"-->
+                  <!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
+                  <!--                      :min="0"-->
+                  <!--                      :useGrouping="false"-->
+                  <!--                  />-->
                   <!--<small class="p-invalid" v-if="submitted && !product.name"
                     >Useful Life Hours is required.</small
                   >-->
@@ -399,29 +399,36 @@
               <div class="card">
                 <h5>Imagen</h5>
                 <img
-                  id="blah"
-                  :disabled="isView"
-                  :src="image"
-                  alt="your image"
-                  width="150"
-                  height="180"
+                    id="blah"
+                    :disabled="isView"
+                    :src="
+                    !this.machine.image?
+                      imageDefault
+                      :
+                      isFile(this.machine.image)?
+                        getImageObjectUrl(this.machine.image)
+                        :
+                        getImage(this.machine.image)"
+                    alt="your image"
+                    width="150"
+                    height="180"
                 />
                 <FileUpload
-                  mode="basic"
-                  accept="image/*"
-                  :disabled="isView"
-                  :maxFileSize="5000000"
-                  @input="onUploadImage"
+                    mode="basic"
+                    accept="image/*"
+                    :disabled="isView"
+                    :maxFileSize="5000000"
+                    @input="onUploadImage"
                 />
                 <!--                <FileUpload mode="basic" name="demo[]" accept="image/*" :maxFileSize="5000000" @change="onUpload"/>-->
                 <br/><br/><br/><br/><br/><br/>
                 <h5>Technical Sheet</h5>
                 <FileUpload
-                  mode="basic"
-                  accept="application/pdf"
-                  :disabled="isView"
-                  :maxFileSize="5000000"
-                  @input="onUploadFile"
+                    mode="basic"
+                    accept="application/pdf"
+                    :disabled="isView"
+                    :maxFileSize="5000000"
+                    @input="onUploadFile"
                 />
               </div>
               <!-- </div> -->
@@ -436,11 +443,11 @@
                 @click="hideDialog"
             />
             <Button
-              v-if="!isView"
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                v-if="!isView"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
@@ -565,8 +572,9 @@ export default {
 
       sparePartItem: null,
       sparePartItems: null,
-      image: "https://via.placeholder.com/150x180?text=Machine+Image",
+      image: null,
       file: null,
+      imageDefault: 'https://via.placeholder.com/150x180',
       loadingMachines: true,
       isView: false,
     };
@@ -591,19 +599,26 @@ export default {
   },
   methods: {
     onUploadImage(event) {
-      // console.log(event.target.files)
       const [file] = event.target.files;
-      // console.log(file)
       if (file) {
-        // this.image = URL.createObjectURL(file)
-        this.image = file;
+        // this.machine.image = URL.createObjectURL(file)
+        this.machine.image = file;
       }
+    },
+    getImageObjectUrl(file) {
+      return URL.createObjectURL(file)
+    },
+    isFile(value) {
+      if (value) {
+        return typeof value === "object"
+      }
+      return false;
     },
     onUploadFile(event) {
       // console.log(event.target.files)
       const [file] = event.target.files;
       if (file) {
-        this.file = file;
+        this.machine.technical_sheet = file;
       }
     },
     formatCurrency(value) {
@@ -634,6 +649,22 @@ export default {
       this.submitted = true;
       if (this.validateFormMachine()) {
         if (this.machine.id) {
+          //UPLOAD IMAGES
+          console.log(this.machine)
+          if (this.isFile(this.machine.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append("image", this.machine.image, this.machine.image);
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.machine.image = data.path;
+            });
+          }
+          if (this.isFile(this.machine.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append("file", this.machine.technical_sheet, this.machine.technical_sheet);
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.machine.technical_sheet = data.path;
+            });
+          }
           const payload = this.machine;
           //console.log(payload, this.article, this.article.id);
           //UPDATE
@@ -654,17 +685,20 @@ export default {
           // CREATE
 
           //UPLOAD IMAGES
-          /*let formdataImage = new FormData();
-          let formdataFile = new FormData();
-          formdataImage.append("image", this.image, this.image.name);
-          formdataFile.append("file", this.file, this.file.name);
-          await this.imageService.upload(formdataImage).then((data) => {
-            this.machine.image = data.path;
-          });
-          await this.fileService.upload(formdataFile).then((data) => {
-            this.machine.technical_sheet = data.path;
-          });*/
-
+          if (this.isFile(this.machine.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append("image", this.machine.image, this.machine.image);
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.machine.image = data.path;
+            });
+          }
+          if (this.isFile(this.machine.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append("file", this.machine.technical_sheet, this.machine.technical_sheet);
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.machine.technical_sheet = data.path;
+            });
+          }
           const payload = this.machine;
           await this.machinesService.create(payload).then((data) => {
             this.machines.unshift(data.data);
@@ -683,7 +717,7 @@ export default {
     viewMachine(machine) {
       this.isView = true;
       this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = { ...data };
+        this.machine = {...data};
         this.productDialog = true;
       });
     },
@@ -767,7 +801,7 @@ export default {
       if (this.validateFormSparePart()) {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
-          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
+          this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
           // console.log(this.spare_Part);
           this.machine.articles.unshift(this.spare_Part);
         } else {
