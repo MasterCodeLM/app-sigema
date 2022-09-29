@@ -650,7 +650,7 @@ export default {
       if (this.validateFormMachine()) {
         if (this.machine.id) {
           //UPLOAD IMAGES
-          console.log(this.machine)
+          // console.log(this.machine)
           if (this.isFile(this.machine.image)) {
             let formdataImage = new FormData();
             formdataImage.append("image", this.machine.image, this.machine.image);

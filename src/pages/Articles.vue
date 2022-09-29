@@ -322,24 +322,37 @@
 
               <div class="card">
                 <h5>Imagen</h5>
+                <img
+                    id="blah"
+                    :disabled="isView"
+                    :src="
+                    !this.article.image?
+                      imageDefault
+                      :
+                      isFile(this.article.image)?
+                        getImageObjectUrl(this.article.image)
+                        :
+                        getImage(this.article.image)"
+                    alt="your image"
+                    width="150"
+                    height="180"
+                />
                 <FileUpload
                     mode="basic"
                     name="demo[]"
                     url="./upload.php"
                     accept="image/*"
                     :disabled="isView"
-                    :maxFileSize="1000000"
-                    @upload="onUpload"
+                    :maxFileSize="5000000"
+                    @input="onUploadImage"
                 />
-                <h5>Hoja Ténica</h5>
+                <h5>Technical Sheet</h5>
                 <FileUpload
-                    name="demo[]"
-                    url="./upload.php"
-                    @upload="onUpload"
+                    mode="basic"
+                    accept="application/pdf"
                     :disabled="isView"
-                    :multiple="true"
-                    accept="image/*"
-                    :maxFileSize="1000000"
+                    :maxFileSize="5000000"
+                    @input="onUploadFile"
                 />
               </div>
             </div>
@@ -528,6 +541,8 @@ import {FilterMatchMode} from "primevue/api";
 import ArticlesService from "../service/ArticlesService";
 import ArticleTypesService from "../service/ArticleTypesService";
 import SupplierService from "../service/SupplierService";
+import ImageService from "@/service/ImageService";
+import FileService from "@/service/FileService";
 
 export default {
   data() {
@@ -587,11 +602,14 @@ export default {
   articlesService: null,
   articleTypeService: null,
   supplierRefService: null,
-
+  imageService: null,
+  fileService: null,
   created() {
     this.articlesService = new ArticlesService();
     this.articleTypeService = new ArticleTypesService();
     this.supplierRefService = new SupplierService();
+    this.imageService = new ImageService();
+    this.fileService = new FileService();
     this.initFilters();
   },
   mounted() {
@@ -637,20 +655,29 @@ export default {
       this.productDialog = false;
       this.submitted = false;
     },
-    saveProduct() {
+    async saveProduct() {
       this.submitted = true;
 
       if (this.validateFormArticle()) {
         if (this.article.id) {
+          if (this.isFile(this.article.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append("image", this.article.image, this.article.image);
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.article.image = data.path;
+            });
+          }
+          if (this.isFile(this.article.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append("file", this.article.technical_sheet, this.article.technical_sheet);
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.article.technical_sheet = data.path;
+            });
+          }
           const payload = this.article;
-          //console.log(payload, this.article, this.article.id);
           //UPDATE
           this.articlesService.update(this.article.id, payload).then((data) => {
             this.articles[this.findIndexById(data.data.id)] = data.data;
-            console.log(data.data.id);
-            console.log(this.findIndexById(data.data.id));
-            //console.log(this.article.id);
-            //console.log(this.findIndexById(this.article.id));
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -661,11 +688,25 @@ export default {
         } else {
           // CREATE
 
+          if (this.isFile(this.article.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append("image", this.article.image, this.article.image);
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.article.image = data.path;
+            });
+          }
+          if (this.isFile(this.article.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append("file", this.article.technical_sheet, this.article.technical_sheet);
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.article.technical_sheet = data.path;
+            });
+          }
           const payload = this.article;
-          console.log(payload);
+          // console.log(payload);
           //payload.image="...";
           this.articlesService.create(payload).then((data) => {
-            this.articles.push(data.data);
+            this.articles.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -802,7 +843,27 @@ export default {
     getImage(path) {
       return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
-
+    isFile(value) {
+      if (value) {
+        return typeof value === "object"
+      }
+      return false;
+    },
+    getImageObjectUrl(file) {
+      return URL.createObjectURL(file)
+    },
+    onUploadImage(event) {
+      const [file] = event.target.files;
+      if (file) {
+        this.article.image = file;
+      }
+    },
+    onUploadFile(event) {
+      const [file] = event.target.files;
+      if (file) {
+        this.article.technical_sheet = file;
+      }
+    },
     initFilters() {
       this.filters = {
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
