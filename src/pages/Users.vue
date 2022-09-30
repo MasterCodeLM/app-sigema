@@ -2,15 +2,15 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                  label="New"
-                  icon="pi pi-plus"
-                  class="p-button-success mr-2"
-                  @click="openNew"
+                label="New"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="openNew"
               />
               <!--              <Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />-->
             </div>
@@ -18,40 +18,40 @@
 
           <template v-slot:end>
             <Button
-                label="Export"
-                icon="pi pi-upload"
-                class="p-button-help"
-                @click="exportCSV($event)"
+              label="Export"
+              icon="pi pi-upload"
+              class="p-button-help"
+              @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="users"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
+          ref="dt"
+          :value="users"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Users</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -59,10 +59,10 @@
 
           <!--          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>-->
           <Column
-              field="employee.name"
-              header="Name"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="employee.name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -71,10 +71,10 @@
           </Column>
 
           <Column
-              field="email"
-              header="User"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="email"
+            header="User"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">User</span>
@@ -82,15 +82,19 @@
             </template>
           </Column>
           <Column
-              field="role"
-              header="Role"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="role"
+            header="Role"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <!--            TODO:COLOR ROLE WITH DINAMIC VALUE-->
             <template #body="slotProps">
               <span class="p-column-title">Role</span>
-              {{ slotProps.data.roles.length > 0 ? slotProps.data.roles[0].name : 'Without role' }}
+              {{
+                slotProps.data.roles.length > 0
+                  ? slotProps.data.roles[0].name
+                  : "Without role"
+              }}
             </template>
           </Column>
           <!--          <Column field="status" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">-->
@@ -102,8 +106,16 @@
           <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
-                <InputSwitch v-model="slotProps.data.isActive" @click="toggleLocked(slotProps.data)"/>
-                <!--                  <Button icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" @click="editProduct(slotProps.data)" />-->
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
+                />
+                <InputSwitch
+                  v-model="slotProps.data.isActive"
+                  @click="toggleLocked(slotProps.data)"
+                />
+
                 <!--                  <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="confirmDeleteProduct(slotProps.data)" />-->
               </div>
             </template>
@@ -111,116 +123,116 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '500px' }"
-            header="New User"
-            :modal="true"
-            class="p-fluid"
+          v-model:visible="productDialog"
+          :style="{ width: '500px' }"
+          header="New User"
+          :modal="true"
+          class="p-fluid"
         >
           <div class="field">
             <label for="employee" class="mb-3">Employee</label>
             <Dropdown
-                id="employee"
-                v-model="user.employee"
-                :options="employeeItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :filter="true"
-                :loading="loadingEmployee"
-                :class="{ 'p-invalid': submitted && !usser.employee }"
+              id="employee"
+              v-model="user.employee"
+              :options="employeeItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :filter="true"
+              :loading="loadingEmployee"
+              :class="{ 'p-invalid': submitted && !user.employee }"
             ></Dropdown>
-            <small class="p-invalid" v-if="submitted && !usser.employee"
-            >Employee is required.</small
+            <small class="p-invalid" v-if="submitted && !user.employee"
+              >Employee is required.</small
             >
           </div>
           <div class="field">
             <label for="role" class="mb-3">Role</label>
             <Dropdown
-                id="role"
-                v-model="user.role"
-                :options="roleItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :filter="false"
-                :loading="loadingRole"
-                :class="{ 'p-invalid': submitted && !usser.role }"
+              id="role"
+              v-model="user.role"
+              :options="roleItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :filter="false"
+              :loading="loadingRole"
+              :class="{ 'p-invalid': submitted && !user.role }"
             ></Dropdown>
-            <small class="p-invalid" v-if="submitted && !usser.role"
-            >Role is required.</small
+            <small class="p-invalid" v-if="submitted && !user.role"
+              >Role is required.</small
             >
           </div>
           <div class="formgrid grid">
             <div class="field col">
               <label for="user">User</label>
               <InputText
-                  id="user"
-                  v-model.trim="user.email"
-                  required="true"
-                  disabled
-                  autofocus
-                  :class="{
-                  'p-invalid': submittedAddBank && !user.email,
+                id="user"
+                v-model.trim="user.email"
+                required="true"
+                disabled
+                autofocus
+                :class="{
+                  'p-invalid': submitted && !user.email,
                 }"
               />
             </div>
             <div class="field col">
               <label for="password">Password</label>
               <InputText
-                  id="password"
-                  v-model.trim="user.password"
-                  required="true"
-                  disabled
-                  autofocus
-                  :class="{
-                  'p-invalid': submittedAddBank && !user.password,
+                id="password"
+                v-model.trim="user.password"
+                required="true"
+                disabled
+                autofocus
+                :class="{
+                  'p-invalid': submitted && !user.password,
                 }"
               />
             </div>
           </div>
           <template #footer>
             <Button
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-text p-button-danger"
-                @click="hideDialog"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
             />
             <Button
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete <b>{{ product.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ product.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteProduct"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteProduct"
             />
           </template>
         </Dialog>
@@ -241,7 +253,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 //import ProductService from "../service/ProductService";
 import UserService from "../service/UserService";
 import EmployeesService from "../service/EmployeesService";
@@ -255,6 +267,7 @@ export default {
         email: null,
         password: null,
         employee: null,
+        role: null,
         roles: [],
       },
 
@@ -267,9 +280,9 @@ export default {
       submitted: false,
       switchValue: false,
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
 
       employeeItems: null,
@@ -277,6 +290,7 @@ export default {
 
       loadingEmployee: true,
       loadingRole: true,
+      edituser: false,
     };
   },
   userService: null,
@@ -292,12 +306,14 @@ export default {
   watch: {
     "user.employee"(newValue) {
       if (newValue) {
-        this.employeeService
+        if (!this.user.id) {
+          this.employeeService
             .getGenerateSafeCredentials(newValue.id)
             .then((data) => {
               this.user.email = data.data.email;
               this.user.password = data.data.password;
             });
+        }
       }
     },
   },
@@ -317,11 +333,11 @@ export default {
     },
     openNew() {
       this.employeeService.getAllWithoutUser().then((data) => {
-        this.employeeItems = data
+        this.employeeItems = data;
         this.loadingEmployee = false;
       });
       this.roleService.getAll().then((data) => {
-        this.roleItems = data
+        this.roleItems = data;
         this.loadingRole = false;
       });
 
@@ -331,7 +347,7 @@ export default {
       this.productDialog = true;
     },
     hideDialog() {
-      //this.defaultObjects();
+      this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
     },
@@ -340,14 +356,10 @@ export default {
       if (this.validateFormUser()) {
         if (this.user.id) {
           const payload = this.user;
-          //console.log(payload, this.article, this.article.id);
           //UPDATE
           this.userService.update(this.user.id, payload).then((data) => {
             this.users[this.findIndexById(data.data.id)] = data.data;
-            console.log(data.data.id);
-            console.log(this.findIndexById(data.data.id));
-            //console.log(this.article.id);
-            //console.log(this.findIndexById(this.article.id));
+
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -374,13 +386,24 @@ export default {
         }
         this.hideDialog();
         // this.productDialog = false;
-        //this.defaultObjects();
+        this.defaultObjects();
       }
     },
     editProduct(user) {
+      this.employeeService.getAll().then((data) => {
+        this.employeeItems = data;
+        this.loadingEmployee = false;
+      });
       this.userService.getOne(user.id).then((data) => {
-        this.user = {...data};
+        this.user = { ...data };
+        this.user.role = {
+          id: this.user.roles[0].id,
+          name: this.user.roles[0].name,
+        };
+        console.log(this.user);
         this.productDialog = true;
+        this.loadingEmployee = false;
+        this.loadingRole = false;
       });
     },
     confirmDeleteProduct(product) {
@@ -400,8 +423,8 @@ export default {
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i].id === id) {
           index = i;
           break;
         }
@@ -411,7 +434,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -425,7 +448,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -438,13 +461,11 @@ export default {
     },
     validateFormUser() {
       return true;
-      // return this.user.employee &&
-      // this.user.email &&
-      // this.user.password;
+      //return this.user.employee && this.user.email && this.user.password;
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
     toggleLocked(data) {
@@ -462,7 +483,7 @@ export default {
         email: null,
         password: null,
         employee: null,
-        roles: []
+        roles: [],
       };
     },
   },
