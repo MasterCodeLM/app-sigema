@@ -632,7 +632,7 @@ export default {
     openNew() {
       this.isView = false;
       this.defaultObjects();
-      this.sparePartService.getAll().then((data) => {
+      this.sparePartService.getAllSparePart().then((data) => {
         this.sparePartItems = data;
         this.loadingSpareParts = false;
       });

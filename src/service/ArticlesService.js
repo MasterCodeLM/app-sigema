@@ -5,6 +5,10 @@ export default class ArticleService {
     async getAll() {
         return HttpService.prototype.getAll(uri)
     }
+    async getAllSparePart() {
+        let customUri = uri+'?article_type=Spare Part'
+        return HttpService.prototype.getAll(customUri)
+    }
     async getOne(id) {
         return HttpService.prototype.getOne(uri,id)
     }
