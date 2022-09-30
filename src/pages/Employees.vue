@@ -102,17 +102,17 @@
             </template>
           </Column>
 
-          <Column
-              field="age"
-              header="Age"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Age</span>
-              {{ slotProps.data.age }}
-            </template>
-          </Column>
+          <!--          <Column-->
+          <!--              field="age"-->
+          <!--              header="Age"-->
+          <!--              :sortable="true"-->
+          <!--              headerStyle="width:14%; min-width:10rem;"-->
+          <!--          >-->
+          <!--            <template #body="slotProps">-->
+          <!--              <span class="p-column-title">Age</span>-->
+          <!--              {{ slotProps.data.age }}-->
+          <!--            </template>-->
+          <!--          </Column>-->
 
           <Column
               field="position"
@@ -161,39 +161,50 @@
               {{ slotProps.data.personal_email }}
             </template>
           </Column>
-
           <Column
-              field="inventoryStatus"
-              header="Status"
+              field=""
+              header="Native Languague"
               :sortable="true"
               headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              <span
-                  :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-              >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <span class="p-column-title">Native Languague</span>
+              {{ slotProps.data.native_language }}
             </template>
           </Column>
+
+          <!--          <Column-->
+          <!--              field="inventoryStatus"-->
+          <!--              header="Status"-->
+          <!--              :sortable="true"-->
+          <!--              headerStyle="width:14%; min-width:10rem;"-->
+          <!--          >-->
+          <!--            <template #body="slotProps">-->
+          <!--              <span class="p-column-title">Status</span>-->
+          <!--              <span-->
+          <!--                  :class="-->
+          <!--                  'product-badge status-' +-->
+          <!--                  (slotProps.data.inventoryStatus-->
+          <!--                    ? slotProps.data.inventoryStatus.toLowerCase()-->
+          <!--                    : '')-->
+          <!--                "-->
+          <!--              >{{ slotProps.data.inventoryStatus }}</span-->
+          <!--              >-->
+          <!--            </template>-->
+          <!--          </Column>-->
 
           <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-eye"
-                  class="p-button-rounded p-button-info mr-2"
-                  @click="viewEmployee(slotProps.data)"
+                    icon="pi pi-eye"
+                    class="p-button-rounded p-button-info mr-2"
+                    @click="viewEmployee(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
                     icon="pi pi-trash"
@@ -206,17 +217,17 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '550px' }"
-          :header="
+            v-model:visible="productDialog"
+            :style="{ width: '550px' }"
+            :header="
             !employee.id
               ? 'New Employee'
               : !isView
               ? 'Edit Employee'
               : 'Info Employee'
           "
-          :modal="true"
-          class="p-fluid"
+            :modal="true"
+            class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="field col">
@@ -312,31 +323,31 @@
           <!-- </div> -->
 
           <div class="formgrid grid">
-            <div class="field col-4">
-              <label for="age">Age</label>
-              <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-              <InputNumber
-                id="age"
-                v-model="inputNumberValue"
-                showButtons
-                :disabled="isView"
-                :min="0"
-                :useGrouping="false"
-              />
-            </div>
+            <!--            <div class="field col-4">-->
+            <!--              <label for="age">Age</label>-->
+            <!--              &lt;!&ndash; <InputNumber id="age" v-model="product.quantity" integeronly />&ndash;&gt;-->
+            <!--              <InputNumber-->
+            <!--                id="age"-->
+            <!--                v-model="inputNumberValue"-->
+            <!--                showButtons-->
+            <!--                :disabled="isView"-->
+            <!--                :min="0"-->
+            <!--                :useGrouping="false"-->
+            <!--              />-->
+            <!--            </div>-->
 
             <div class="field col">
               <label for="position">Title</label>
               <Dropdown
-                id="position"
-                v-model="employee.position"
-                :options="positionItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :disabled="isView"
-                :filter="false"
-                :loading="false"
-                :class="{ 'p-invalid': submitted && !employee.position }"
+                  id="position"
+                  v-model="employee.position"
+                  :options="positionItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :disabled="isView"
+                  :filter="false"
+                  :loading="false"
+                  :class="{ 'p-invalid': submitted && !employee.position }"
               >
               </Dropdown>
               <small class="p-invalid" v-if="submitted && !employee.position"
@@ -349,14 +360,14 @@
             <div class="field col">
               <label for="phone">Telephone</label>
               <InputText
-                id="phone"
-                v-model.trim="employee.phone"
-                required="true"
-                autofocus
-                :disabled="isView"
-                :class="{ 'p-invalid': submitted && !employee.phone }"
-                autocomplete="off"
-                @keypress="isNumber($event)"
+                  id="phone"
+                  v-model.trim="employee.phone"
+                  required="true"
+                  autofocus
+                  :disabled="isView"
+                  :class="{ 'p-invalid': submitted && !employee.phone || submitted && employee.phone.length < 9 }"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !employee.phone"
               >Telephone is required.</small
@@ -396,12 +407,12 @@
           <div class="field">
             <label for="address">Address</label>
             <InputText
-              id="address"
-              v-model.trim="employee.address"
-              required="true"
-              autofocus
-              :disabled="isView"
-              :class="{ 'p-invalid': submitted && !employee.address }"
+                id="address"
+                v-model.trim="employee.address"
+                required="true"
+                autofocus
+                :disabled="isView"
+                :class="{ 'p-invalid': submitted && !employee.address }"
             />
             <small class="p-invalid" v-if="submitted && !employee.address"
             >Address is required.</small
@@ -412,13 +423,18 @@
             <div class="field col-5">
               <label for="state">Native Language</label>
               <Dropdown
-                id="state"
-                v-model="dropdownItem"
-                :disabled="isView"
-                :options="dropdownItems"
-                optionLabel="name"
-                placeholder="Select One"
+                  id="state"
+                  v-model="employee.native_language"
+                  :disabled="isView"
+                  :options="dropdownItems"
+                  optionLabel="name"
+                  optionValue="name"
+                  placeholder="Select One"
+                  :class="{ 'p-invalid': submitted && !employee.native_language}"
               ></Dropdown>
+              <small class="p-invalid" v-if="submitted && !employee.native_language"
+              >Native Language is required.</small
+              >
             </div>
           </div>
 
@@ -430,11 +446,11 @@
                 @click="hideDialog"
             />
             <Button
-              v-if="!isView"
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                v-if="!isView"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
@@ -525,11 +541,11 @@ export default {
         document_type: null,
         document_number: null,
         name: null,
-        age: null,
         phone: null,
         position: null,
         personal_email: null,
         address: null,
+        native_language: null,
       },
       productDialog: false,
       deleteDialog: false,
@@ -613,7 +629,7 @@ export default {
           // CREATE
 
           const payload = this.employee;
-          console.log("hola");
+          console.log(payload);
           //payload.image="...";
           this.employeesService.create(payload).then((data) => {
             this.employees.unshift(data.data);
@@ -632,7 +648,7 @@ export default {
     viewEmployee(employee) {
       this.isView = true;
       this.employeesService.getOne(employee.id).then((data) => {
-        this.employee = { ...data };
+        this.employee = {...data};
         this.productDialog = true;
       });
     },
@@ -712,7 +728,8 @@ export default {
           this.employee.phone.length >= 9 &&
           this.employee.position &&
           this.employee.personal_email &&
-          this.employee.address
+          this.employee.address &&
+          this.employee.native_language
       );
     },
 
