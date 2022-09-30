@@ -460,7 +460,11 @@ export default {
       });
     },
     validateFormUser() {
-      return true;
+      return this.user.employee &&
+          this.user.employee &&
+          this.user.email &&
+          this.user.password
+      // return true;
       //return this.user.employee && this.user.email && this.user.password;
     },
     initFilters() {
