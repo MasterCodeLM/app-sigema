@@ -90,7 +90,7 @@
             <!--            TODO:COLOR ROLE WITH DINAMIC VALUE-->
             <template #body="slotProps">
               <span class="p-column-title">Role</span>
-              {{ slotProps.data.role }}
+              {{ slotProps.data.roles.length > 0 ? slotProps.data.roles[0].name : 'Without role' }}
             </template>
           </Column>
           <!--          <Column field="status" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">-->
@@ -126,7 +126,7 @@
                 optionLabel="name"
                 placeholder="Select One"
                 :filter="true"
-                :loading="false"
+                :loading="loadingEmployee"
                 :class="{ 'p-invalid': submitted && !usser.employee }"
             ></Dropdown>
             <small class="p-invalid" v-if="submitted && !usser.employee"
@@ -142,7 +142,7 @@
                 optionLabel="name"
                 placeholder="Select One"
                 :filter="false"
-                :loading="false"
+                :loading="loadingRole"
                 :class="{ 'p-invalid': submitted && !usser.role }"
             ></Dropdown>
             <small class="p-invalid" v-if="submitted && !usser.role"
@@ -255,7 +255,7 @@ export default {
         email: null,
         password: null,
         employee: null,
-        role: null,
+        roles: [],
       },
 
       productDialog: false,
@@ -274,6 +274,9 @@ export default {
 
       employeeItems: null,
       roleItems: null,
+
+      loadingEmployee: true,
+      loadingRole: true,
     };
   },
   userService: null,
@@ -288,19 +291,19 @@ export default {
   },
   watch: {
     "user.employee"(newValue) {
-      this.employeeService
-          .getGenerateSafeCredentials(newValue.id)
-          .then((data) => {
-            this.user.email = data.data.email;
-            this.user.password = data.data.password;
-          });
+      if (newValue) {
+        this.employeeService
+            .getGenerateSafeCredentials(newValue.id)
+            .then((data) => {
+              this.user.email = data.data.email;
+              this.user.password = data.data.password;
+            });
+      }
     },
   },
   mounted() {
     this.loading = true;
     this.userService.getAll().then((data) => (this.users = data));
-    this.employeeService.getAll().then((data) => (this.employeeItems = data));
-    this.roleService.getAll().then((data) => (this.roleItems = data));
     this.loading = false;
   },
   methods: {
@@ -313,7 +316,16 @@ export default {
       return;
     },
     openNew() {
-      //this.defaultObjects();
+      this.employeeService.getAllWithoutUser().then((data) => {
+        this.employeeItems = data
+        this.loadingEmployee = false;
+      });
+      this.roleService.getAll().then((data) => {
+        this.roleItems = data
+        this.loadingRole = false;
+      });
+
+      this.defaultObjects();
       this.product = {};
       this.submitted = false;
       this.productDialog = true;
@@ -345,11 +357,13 @@ export default {
           });
         } else {
           // CREATE
+          this.user.roles.push(this.user.role);
           const payload = this.user;
-          console.log(payload);
+          // payload.roles.push(this.user.role);
+          // console.log(payload);
           //payload.image="...";
           this.userService.create(payload).then((data) => {
-            this.users.push(data.data);
+            this.users.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -358,7 +372,8 @@ export default {
             });
           });
         }
-        this.productDialog = false;
+        this.hideDialog();
+        // this.productDialog = false;
         //this.defaultObjects();
       }
     },
@@ -423,7 +438,9 @@ export default {
     },
     validateFormUser() {
       return true;
-      //this.machine.serie_number && this.machine.name;
+      // return this.user.employee &&
+      // this.user.email &&
+      // this.user.password;
     },
     initFilters() {
       this.filters = {
@@ -445,7 +462,7 @@ export default {
         email: null,
         password: null,
         employee: null,
-        role: null,
+        roles: []
       };
     },
   },

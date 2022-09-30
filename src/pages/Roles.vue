@@ -2,62 +2,62 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast />
+        <Toast/>
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="openNew"
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success mr-2"
+                  @click="openNew"
               />
               <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
+                  label="Delete"
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  @click="confirmDeleteSelected"
+                  :disabled="!selectedProducts || !selectedProducts.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-              label="Export"
-              icon="pi pi-upload"
-              class="p-button-help"
-              @click="exportCSV($event)"
+                label="Export"
+                icon="pi pi-upload"
+                class="p-button-help"
+                @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-          ref="dt"
-          :value="roles"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="10"
-          :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-          responsiveLayout="scroll"
+            ref="dt"
+            :value="roles"
+            v-model:selection="selectedProducts"
+            dataKey="id"
+            :paginator="true"
+            :rows="10"
+            :filters="filters"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rowsPerPageOptions="[5, 10, 25]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+            responsiveLayout="scroll"
         >
           <template #header>
             <div
-              class="
+                class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Roles</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="pi pi-search"/>
                 <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
                 />
               </span>
             </div>
@@ -65,10 +65,10 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+              field="name"
+              header="Name"
+              :sortable="true"
+              headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -79,14 +79,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                  icon="pi pi-pencil"
-                  class="p-button-rounded p-button-warning mr-2"
-                  @click="editProduct(slotProps.data)"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning mr-2"
+                    @click="editProduct(slotProps.data)"
                 />
                 <Button
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger"
-                  @click="confirmDeleteProduct(slotProps.data)"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    @click="confirmDeleteProduct(slotProps.data)"
                 />
               </div>
             </template>
@@ -94,44 +94,37 @@
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '450px' }"
-          header="Role details"
-          :modal="true"
-          class="p-fluid"
+            v-model:visible="productDialog"
+            :style="{ width: '450px' }"
+            header="Role details"
+            :modal="true"
+            class="p-fluid"
         >
           <div class="field">
             <label for="name">Name</label>
             <InputText
-              id="name"
-              v-model.trim="product.name"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+                id="name"
+                v-model.trim="role.name"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !role.name }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Name is required.</small
+            <small class="p-invalid" v-if="submitted && !role.name"
+            >Name is required.</small
             >
           </div>
 
           <div class="card">
             <h5>Select Permissions</h5>
             <div class="grid">
-              <div class="col-12 md:col-4">
-                <div
-                  class="field-checkbox mb-0"
-                  v-for="permission in permissionItems"
-                  :key="permission.id"
-                >
-                  <Checkbox
-                    id="permission"
-                    name="option"
-                    value="permission.id"
-                    v-model="permission.id"
-                  />
-                  <label for="permission" class="text-900">{{
-                    permission.name
-                  }}</label>
+            <div class="col-12" v-show="submitted && !role.permissions.length > 0">
+              <InlineMessage severity="error">you must select at least 1 permission
+              </InlineMessage>
+            </div>
+              <div class="col-12">
+                <div v-for="permission of permissionItems" :key="permission.id" class="field-checkbox">
+                  <Checkbox v-model="role.permissions" name="permission" :value="permission"/>
+                  <label :for="permission.id">{{ permission.name }}</label>
                 </div>
               </div>
             </div>
@@ -139,79 +132,79 @@
 
           <template #footer>
             <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-text p-button-danger"
+                @click="hideDialog"
             />
             <Button
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
+                label="Save"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
-              >?</span
+            >Are you sure you want to delete <b>{{ role.name }}</b
+            >?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteProductDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteProductDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteProduct"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductsDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
+            v-model:visible="deleteProductsDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+                class="pi pi-exclamation-triangle mr-3"
+                style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete the selected products?</span
+            >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteProductsDialog = false"
+                label="No"
+                icon="pi pi-times"
+                class="p-button-text"
+                @click="deleteProductsDialog = false"
             />
             <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteSelectedProducts"
+                label="Yes"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -221,7 +214,7 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode} from "primevue/api";
 import RolesService from "../service/RolesService";
 import PermissionsService from "../service/PermissionsService";
 
@@ -230,7 +223,7 @@ export default {
     return {
       roles: null,
       //products: null,
-      rol: {
+      role: {
         name: null,
         permissions: [],
       },
@@ -247,29 +240,31 @@ export default {
       checkboxValue: [],
       submitted: false,
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
 
       permissionItem: null,
       permissionItems: null,
+
+      selectedPermissions: []
     };
   },
   //productService: null,
-  rolesService: null,
+  roleService: null,
   permissionsService: null,
   created() {
-    this.rolesService = new RolesService();
+    this.roleService = new RolesService();
     this.permissionsService = new PermissionsService();
     this.initFilters();
   },
   mounted() {
     this.loading = true;
-    this.rolesService.getAll().then((data) => (this.roles = data));
+    this.roleService.getAll().then((data) => (this.roles = data));
     this.permissionsService
-      .getAll()
-      .then((data) => (this.permissionItems = data));
+        .getAll()
+        .then((data) => (this.permissionItems = data));
     console.log(this.permissionItems);
     this.loading = false;
   },
@@ -283,7 +278,7 @@ export default {
       return;
     },
     openNew() {
-      this.product = {};
+      this.defaultObjects();
       this.submitted = false;
       this.productDialog = true;
     },
@@ -293,60 +288,67 @@ export default {
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
+      if (this.validateForRole()) {
+        if (this.role.id) {
+          const payload = this.role;
+          //UPDATE
+          this.roleService.update(this.role.id, payload).then((data) => {
+            this.roles[this.findIndexById(data.data.id)] = data.data;
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+          const payload = this.role;
+          this.roleService.create(payload).then((data) => {
+            this.roles.unshift(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
-        this.productDialog = false;
-        this.product = {};
+        this.hideDialog()
+        //this.defaultObjects();
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
+    validateForRole() {
+      return this.role.name && this.role.permissions.length > 0;
+      //this.machine.serie_number && this.machine.name;
+    },
+    editProduct(role) {
+      this.role = {...role};
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
+    confirmDeleteProduct(role) {
+      this.role = role;
       this.deleteProductDialog = true;
     },
     deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
       this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+      this.roleService.delete(this.role.id).then((data) => {
+        this.roles = this.roles.filter(
+            (val) => val.id !== this.role.id
+        );
+        this.defaultObjects();
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.roles.length; i++) {
+        if (this.roles[i].id === id) {
           index = i;
           break;
         }
@@ -356,7 +358,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -370,7 +372,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-        (val) => !this.selectedProducts.includes(val)
+          (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -381,9 +383,15 @@ export default {
         life: 3000,
       });
     },
+    defaultObjects() {
+      this.role = {
+        name: null,
+        permissions: [],
+      }
+    },
     initFilters() {
       this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
       };
     },
   },
