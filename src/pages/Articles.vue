@@ -98,14 +98,14 @@
           </Column>
 
           <Column
-            field="serialNumber"
-            header="Serial Number"
+            field="serie_number"
+            header="Serie Number"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Serial Number</span>
-              {{ slotProps.data.name }}
+              <span class="p-column-title">Serie Number</span>
+              {{ slotProps.data.serie_number }}
             </template>
           </Column>
           <Column
@@ -218,20 +218,20 @@
             <div class="col-6">
               <div class="formgrid grid">
                 <div class="field col">
-                  <label for="serialNumber">Serial Number</label>
+                  <label for="serialNumber">Serie Number</label>
                   <InputText
                     id="serialNumber"
-                    v-model.trim="article.serial_number"
+                    v-model.trim="article.serie_number"
                     required="true"
                     :disabled="isView"
                     autofocus
                     :class="{
-                      'p-invalid': submitted && !article.serial_number,
+                      'p-invalid': submitted && !article.serie_number,
                     }"
                   />
                   <small
                     class="p-invalid"
-                    v-if="submitted && !article.serial_number"
+                    v-if="submitted && !article.serie_number"
                     >Serial Number is required.</small
                   >
                 </div>
@@ -553,7 +553,7 @@ export default {
       deleteDialog: false,
       deleteProductsDialog: false,
       article: {
-        // serial_number: null,
+        // serie_number: null,
         //image: null,
         // technical_sheet:null,
         name: null,
@@ -720,7 +720,7 @@ export default {
             });
           }
           const payload = this.article;
-          // console.log(payload);
+          console.log(payload);
           //payload.image="...";
           this.articlesService.create(payload).then((data) => {
             this.articles.unshift(data.data);
@@ -891,7 +891,7 @@ export default {
     },
     defaultObjects() {
       this.article = {
-        // serial_number: null,
+        // serie_number: null,
         //image: null,
         // technical_sheet:null,
         name: null,
