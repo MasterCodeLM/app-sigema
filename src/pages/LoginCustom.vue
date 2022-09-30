@@ -25,7 +25,7 @@
             >the email and/or password are not valid.</small>
 
             <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-            <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="w-full mb-3"
+            <Password id="password1" v-model="password" :feedback="false" placeholder="Password" class="w-full mb-3"
                       inputClass="w-full" inputStyle="padding:1rem"></Password>
 
             <div class="flex align-items-center justify-content-between mb-5">
