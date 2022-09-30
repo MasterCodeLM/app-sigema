@@ -5,6 +5,10 @@ export default class EmployeesService {
     async getAll() {
         return HttpService.prototype.getAll(uri)
     }
+    async getAllWithoutUser() {
+        let uri2 = uri + '/withoutUser'
+        return HttpService.prototype.getAll(uri2)
+    }
     async getGenerateSafeCredentials(id) {
         let uril = uri+'/'+id+'/generate-safe-credentials';
         return HttpService.prototype.create(uril)
