@@ -592,11 +592,12 @@ export default {
       if (this.validateFormSupplier()) {
         if (this.supplier.id) {
           //UPDATE
+          const id = this.supplier.id;
           const payload = this.supplier;
           this.supplierService
-              .update(this.supplier.id, payload)
+              .update(id, payload)
               .then((data) => {
-                this.supplier[this.findIndexById(this.supplier.id)] = data.data;
+                this.suppliers[this.findIndexById(id)] = data.data;
                 this.$toast.add({
                   severity: "success",
                   summary: "Successful",
