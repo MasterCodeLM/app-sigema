@@ -731,6 +731,8 @@ export default {
       this.articlesService.getOne(article.id).then((data) => {
         this.article = {...data};
         this.productDialog = true;
+        this.loadingSuppliers = false;
+        this.loadingArticleTypes = false;
       });
     },
     confirmDelete(resource) {
