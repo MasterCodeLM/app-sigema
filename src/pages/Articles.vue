@@ -437,7 +437,7 @@
                           style="  width: 100%;height: 300px; max-width:450px"
                       />
                     </div>
-                    <div class="w-full">
+                    <div v-if="!isView" class="w-full">
                       <FileUpload
                           class="w-full"
                           mode="basic"
@@ -453,13 +453,24 @@
                 </div>
                 <div class="">
                   <h5>Technical Sheet</h5>
-                  <div class="w-full">
+                  <div v-if="article.id && isView && article.technical_sheet" class="w-full mb-2">
+                    <Button
+                        label="View PDF"
+                        icon="pi pi-arrow-up-right"
+                        class="p-button-info mr-2"
+                        @click="viewPDF"
+                    />
+                  </div>
+                  <div v-if="article.id && isView && !article.technical_sheet" class="w-full mb-2">
+                    <Message severity="info" :closable="false">Without PDF</Message>
+                  </div>
+                  <div v-if="!isView" class="w-full">
                     <FileUpload
                         class="w-full"
                         mode="basic"
                         accept="application/pdf"
                         :disabled="isView"
-                        :maxFileSize="5000000"
+                        :maxFileSize="2000000"
                         @input="onUploadFile"
                     />
                   </div>
@@ -684,7 +695,7 @@ export default {
                 this.article.image.name
             );
             await this.imageService.upload(formdataImage).then((data) => {
-              console.log('Hola')
+              // console.log('Hola')
               this.article.image = data.path;
             });
           }
@@ -700,7 +711,7 @@ export default {
             });
           }
           const payload = this.article;
-          console.log(payload)
+          // console.log(payload)
           //UPDATE
           this.articlesService.update(this.article.id, payload).then((data) => {
             this.articles[this.findIndexById(data.data.id)] = data.data;
@@ -896,9 +907,15 @@ export default {
     },
     onUploadFile(event) {
       const [file] = event.target.files;
-      if (file) {
+      if (file && file.size < 2000000) {
         this.article.technical_sheet = file;
       }
+    },
+    viewPDF(){
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.article.technical_sheet}`
+      window.open(uri)
+      // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+
     },
     initFilters() {
       this.filters = {
