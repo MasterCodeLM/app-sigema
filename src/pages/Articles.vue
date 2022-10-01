@@ -421,8 +421,8 @@
               <div class="card w-full h-full m-0">
                 <div class="mb-4">
                   <h5>Imagen</h5>
-                  <div class="flex flex-column align-items-center">
-                    <div class="p-2">
+                  <div class="flex flex-column align-items-center justify-content-center">
+                    <div class="mb-2">
                       <img
                           id="blah"
                           :disabled="isView"
@@ -437,21 +437,25 @@
                           style="  width: 100%;height: 300px; max-width:450px"
                       />
                     </div>
-                    <FileUpload
-                        mode="basic"
-                        name="demo[]"
-                        url="./upload.php"
-                        accept="image/*"
-                        :disabled="isView"
-                        :maxFileSize="5000000"
-                        @input="onUploadImage"
-                    />
+                    <div class="w-full">
+                      <FileUpload
+                          class="w-full"
+                          mode="basic"
+                          name="demo[]"
+                          url="./upload.php"
+                          accept="image/*"
+                          :disabled="isView"
+                          :maxFileSize="2000000"
+                          @input="onUploadImage"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="">
                   <h5>Technical Sheet</h5>
-                  <div class="flex justify-content-center">
+                  <div class="w-full">
                     <FileUpload
+                        class="w-full"
                         mode="basic"
                         accept="application/pdf"
                         :disabled="isView"
@@ -677,9 +681,10 @@ export default {
             formdataImage.append(
                 "image",
                 this.article.image,
-                this.article.image
+                this.article.image.name
             );
             await this.imageService.upload(formdataImage).then((data) => {
+              console.log('Hola')
               this.article.image = data.path;
             });
           }
@@ -695,6 +700,7 @@ export default {
             });
           }
           const payload = this.article;
+          console.log(payload)
           //UPDATE
           this.articlesService.update(this.article.id, payload).then((data) => {
             this.articles[this.findIndexById(data.data.id)] = data.data;
@@ -713,7 +719,7 @@ export default {
             formdataImage.append(
                 "image",
                 this.article.image,
-                this.article.image
+                this.article.image.name
             );
             await this.imageService.upload(formdataImage).then((data) => {
               this.article.image = data.path;
@@ -854,7 +860,6 @@ export default {
       }
     },
     validateFormArticle() {
-      console.log(this.article);
       return (
           this.article.article_type &&
           this.article.name &&
@@ -885,7 +890,7 @@ export default {
     },
     onUploadImage(event) {
       const [file] = event.target.files;
-      if (file) {
+      if (file && file.size < 2000000) {
         this.article.image = file;
       }
     },
