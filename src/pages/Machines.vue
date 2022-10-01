@@ -2,63 +2,63 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                  label="New"
-                  icon="pi pi-plus"
-                  class="p-button-success mr-2"
-                  @click="openNew"
+                label="New"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="openNew"
               />
               <Button
-                  label="Delete"
-                  icon="pi pi-trash"
-                  class="p-button-danger"
-                  @click="confirmDeleteSelected"
-                  :disabled="!selectedProducts || !selectedProducts.length"
+                label="Delete"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                @click="confirmDeleteSelected"
+                :disabled="!selectedProducts || !selectedProducts.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="Export"
-                icon="pi pi-upload"
-                class="p-button-help"
-                @click="exportCSV($event)"
+              label="Export"
+              icon="pi pi-upload"
+              class="p-button-help"
+              @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="machines"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
-            :loading="loadingMachines"
+          ref="dt"
+          :value="machines"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+          :loading="loadingMachines"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Machines</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -67,10 +67,10 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-              field="name"
-              header="Name"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -79,10 +79,10 @@
           </Column>
 
           <Column
-              field="serie_number"
-              header="Serial Number"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="serie_number"
+            header="Serial Number"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
@@ -91,10 +91,10 @@
           </Column>
 
           <Column
-              field="model"
-              header="Model"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="model"
+            header="Model"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Model</span>
@@ -103,10 +103,10 @@
           </Column>
 
           <Column
-              field="brand"
-              header="Brand"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="brand"
+            header="Brand"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Brand</span>
@@ -118,22 +118,24 @@
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                  :src="
-                  slotProps.data.image ? getImage(slotProps.data.image) : imageDefault
+                :src="
+                  slotProps.data.image
+                    ? getImage(slotProps.data.image)
+                    : imageDefault
                 "
-                  :alt="'machine'"
-                  class="shadow-2"
-                  width="100"
-                  height="100"
+                :alt="'machine'"
+                class="shadow-2"
+                width="100"
+                height="100"
               />
             </template>
           </Column>
 
           <Column
-              field="maximum_working_time"
-              header="Daily Working Hours"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="maximum_working_time"
+            header="Daily Working Hours"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Daily Working Hours</span>
@@ -142,10 +144,10 @@
           </Column>
 
           <Column
-              field="usefulLifehours"
-              header="Useful Life Hours"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="usefulLifehours"
+            header="Useful Life Hours"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Useful Life Hours</span>
@@ -154,21 +156,21 @@
           </Column>
 
           <Column
-              field="inventoryStatus"
-              header="Status"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="inventoryStatus"
+            header="Status"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span
-                  :class="
+                :class="
                   'product-badge status-' +
                   (slotProps.data.inventoryStatus
                     ? slotProps.data.inventoryStatus.toLowerCase()
                     : '')
                 "
-              >{{ slotProps.data.inventoryStatus }}</span
+                >{{ slotProps.data.inventoryStatus }}</span
               >
             </template>
           </Column>
@@ -177,19 +179,19 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    icon="pi pi-eye"
-                    class="p-button-rounded p-button-info mr-2"
-                    @click="viewMachine(slotProps.data)"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewMachine(slotProps.data)"
                 />
                 <Button
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
-                    icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger"
-                    @click="confirmDelete(slotProps.data)"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                  @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -197,17 +199,17 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '900px' }"
-            :header="
+          v-model:visible="productDialog"
+          :style="{ width: '900px' }"
+          :header="
             !machine.id
               ? 'New Machine'
               : !isView
               ? 'Edit Machine'
               : 'Info Machine'
           "
-            :modal="true"
-            class="p-fluid"
+          :modal="true"
+          class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="col-8">
@@ -215,34 +217,34 @@
                 <div class="field">
                   <label for="serie_number">Serial Number</label>
                   <InputText
-                      id="serie_number"
-                      v-model.trim="machine.serie_number"
-                      required="true"
-                      autofocus
-                      :class="{ 'p-invalid': submitted && !machine.serie_number }"
-                      :disabled="isView"
-                      autocomplete="off"
+                    id="serie_number"
+                    v-model.trim="machine.serie_number"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.serie_number }"
+                    :disabled="isView"
+                    autocomplete="off"
                   />
                   <small
-                      class="p-invalid"
-                      v-if="submitted && !machine.serie_number"
-                  >Serial Number is required.</small
+                    class="p-invalid"
+                    v-if="submitted && !machine.serie_number"
+                    >Serial Number is required.</small
                   >
                 </div>
 
                 <div class="field">
                   <label for="name">Name</label>
                   <InputText
-                      id="name"
-                      v-model.trim="machine.name"
-                      required="true"
-                      autofocus
-                      :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
-                      autocomplete="off"
+                    id="name"
+                    v-model.trim="machine.name"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.name }"
+                    :disabled="isView"
+                    autocomplete="off"
                   />
                   <small class="p-invalid" v-if="submitted && !machine.name"
-                  >Name is required.</small
+                    >Name is required.</small
                   >
                 </div>
 
@@ -250,56 +252,58 @@
                   <div class="field col">
                     <label for="model">Model</label>
                     <InputText
-                        id="model"
-                        v-model.trim="machine.model"
-                        required="true"
-                        autofocus
-                        :class="{ 'p-invalid': submitted && !machine.name }"
-                        :disabled="isView"
-                        autocomplete="off"
+                      id="model"
+                      v-model.trim="machine.model"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
                     />
                     <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Model is required.</small
+                      >Model is required.</small
                     >
                   </div>
 
                   <div class="field col">
                     <label for="brand">Brand</label>
                     <InputText
-                        id="barnd"
-                        v-model.trim="machine.brand"
-                        required="true"
-                        autofocus
-                        :class="{ 'p-invalid': submitted && !machine.name }"
-                        :disabled="isView"
-                        autocomplete="off"
+                      id="barnd"
+                      v-model.trim="machine.brand"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
                     />
                     <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Brand is required.</small
+                      >Brand is required.</small
                     >
                   </div>
                 </div>
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="maximum_working_time">Daily Working Hours</label>
+                    <label for="maximum_working_time"
+                      >Daily Working Hours</label
+                    >
                     <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                     <InputNumber
-                        id="maximum_working_time"
-                        v-model="machine.maximum_working_time"
-                        showButtons
-                        mode="decimal"
-                        :disabled="isView"
-                        :class="{
-                      'p-invalid': submitted && !machine.maximum_working_time,
-                    }"
-                        :min="0"
-                        :useGrouping="false"
+                      id="maximum_working_time"
+                      v-model="machine.maximum_working_time"
+                      showButtons
+                      mode="decimal"
+                      :disabled="isView"
+                      :class="{
+                        'p-invalid': submitted && !machine.maximum_working_time,
+                      }"
+                      :min="0"
+                      :useGrouping="false"
                     />
                     <small
-                        class="p-invalid"
-                        v-if="submitted && !machine.maximum_working_time"
-                    >Daily working hours is required.</small
+                      class="p-invalid"
+                      v-if="submitted && !machine.maximum_working_time"
+                      >Daily working hours is required.</small
                     >
                   </div>
 
@@ -329,27 +333,27 @@
                   <div class="field col">
                     <label for="sparePart">Spare Parts</label>
                     <Dropdown
-                        id="sparePart"
-                        v-model="sparePartItem"
-                        :options="sparePartItems"
-                        optionLabel="name"
-                        placeholder="Select One"
-                        :filter="true"
-                        :loading="loadingSpareParts"
-                        :class="{
+                      id="sparePart"
+                      v-model="sparePartItem"
+                      :options="sparePartItems"
+                      optionLabel="name"
+                      placeholder="Select One"
+                      :filter="true"
+                      :loading="loadingSpareParts"
+                      :class="{
                         'p-invalid': submittedAddSparePart && !sparePartItem,
                       }"
                     >
                     </Dropdown>
                     <small
-                        class="p-invalid"
-                        v-if="submittedAddSparePart && !sparePartItem"
-                    >Spare Part is required.</small
+                      class="p-invalid"
+                      v-if="submittedAddSparePart && !sparePartItem"
+                      >Spare Part is required.</small
                     >
                   </div>
 
                   <div
-                      class="
+                    class="
                       field
                       col-2
                       flex
@@ -358,24 +362,24 @@
                     "
                   >
                     <Button
-                        icon="pi pi-plus"
-                        class="p-button-secondary"
-                        style="margin-top: 1.8rem"
-                        @click="addSparePart"
+                      icon="pi pi-plus"
+                      class="p-button-secondary"
+                      style="margin-top: 1.8rem"
+                      @click="addSparePart"
                     ></Button>
                   </div>
                 </div>
                 <div class="card">
                   <DataTable
-                      :value="machine.articles"
-                      responsiveLayout="scroll"
+                    :value="machine.articles"
+                    responsiveLayout="scroll"
                   >
                     <Column
-                        v-for="col of columns"
-                        :field="col.field"
-                        :header="col.header"
-                        :key="col.field"
-                        style="width: 25%"
+                      v-for="col of columns"
+                      :field="col.field"
+                      :header="col.header"
+                      :key="col.field"
+                      style="width: 25%"
                     >
                     </Column>
 
@@ -383,9 +387,9 @@
                       <template #body="slotProps">
                         <div style="display: flex; justify-content: end">
                           <Button
-                              icon="pi pi-trash"
-                              class="p-button-rounded p-button-danger"
-                              @click="removeSparePart(slotProps.data)"
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger"
+                            @click="removeSparePart(slotProps.data)"
                           />
                         </div>
                       </template>
@@ -400,56 +404,69 @@
               <div class="card w-full h-full m-0">
                 <div class="mb-4">
                   <h5>Imagen</h5>
-                  <div class="flex flex-column align-items-center justify-content-center">
+                  <div
+                    class="
+                      flex flex-column
+                      align-items-center
+                      justify-content-center
+                    "
+                  >
                     <div class="mb-2">
                       <img
-                          id="blah"
-                          :disabled="isView"
-                          :src="
-                    !this.machine.image?
-                      imageDefault
-                      :
-                      isFile(this.machine.image)?
-                        getImageObjectUrl(this.machine.image)
-                        :
-                        getImage(this.machine.image)"
-                          alt="your image"
-                          style="  width: 100%;height: 300px; max-width:450px"
+                        id="blah"
+                        :disabled="isView"
+                        :src="
+                          !this.machine.image
+                            ? imageDefault
+                            : isFile(this.machine.image)
+                            ? getImageObjectUrl(this.machine.image)
+                            : getImage(this.machine.image)
+                        "
+                        alt="your image"
+                        style="width: 100%; height: 300px; max-width: 450px"
                       />
                     </div>
                     <div v-if="!isView" class="w-full">
                       <FileUpload
-                          class="w-full"
-                          mode="basic"
-                          accept="image/*"
-                          :disabled="isView"
-                          :maxFileSize="2000000"
-                          @input="onUploadImage"
+                        class="w-full"
+                        mode="basic"
+                        accept="image/*"
+                        :disabled="isView"
+                        :maxFileSize="2000000"
+                        @input="onUploadImage"
                       />
                     </div>
                   </div>
                 </div>
                 <div>
                   <h5>Technical Sheet</h5>
-                  <div v-if="machine.id && isView && machine.technical_sheet" class="w-full mb-2">
+                  <div
+                    v-if="machine.id && isView && machine.technical_sheet"
+                    class="w-full mb-2"
+                  >
                     <Button
-                        label="View PDF"
-                        icon="pi pi-arrow-up-right"
-                        class="p-button-info mr-2"
-                        @click="viewPDF"
+                      label="View PDF"
+                      icon="pi pi-arrow-up-right"
+                      class="p-button-info mr-2"
+                      @click="viewPDF"
                     />
                   </div>
-                  <div v-if="machine.id && isView && !machine.technical_sheet" class="w-full mb-2">
-                    <Message severity="info" :closable="false">Without PDF</Message>
+                  <div
+                    v-if="machine.id && isView && !machine.technical_sheet"
+                    class="w-full mb-2"
+                  >
+                    <Message severity="info" :closable="false"
+                      >Without PDF</Message
+                    >
                   </div>
                   <div v-if="!isView" class="w-full">
                     <FileUpload
-                        class="w-full"
-                        mode="basic"
-                        accept="application/pdf"
-                        :disabled="isView"
-                        :maxFileSize="2000000"
-                        @input="onUploadFile"
+                      class="w-full"
+                      mode="basic"
+                      accept="application/pdf"
+                      :disabled="isView"
+                      :maxFileSize="2000000"
+                      @input="onUploadFile"
                     />
                   </div>
                 </div>
@@ -460,80 +477,80 @@
 
           <template #footer>
             <Button
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-text p-button-danger"
-                @click="hideDialog"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
             />
             <Button
-                v-if="!isView"
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="resource"
-            >Are you sure you want to delete <b>{{ resource.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deletetDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deletetDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteResource"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductsDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete the selected products?</span
+              >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteResource"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -543,7 +560,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import MachinesService from "../service/MachinesService";
 import ArticlesService from "../service/ArticlesService";
 import ImageService from "../service/ImageService";
@@ -581,23 +598,23 @@ export default {
       loadingSpareParts: true,
 
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
 
       submittedAddSparePart: false,
 
       columns: [
-        {field: "model", header: "Serial Number"},
-        {field: "name", header: "Nombre"},
+        { field: "model", header: "Serial Number" },
+        { field: "name", header: "Nombre" },
       ],
 
       sparePartItem: null,
       sparePartItems: null,
       image: null,
       file: null,
-      imageDefault: 'https://via.placeholder.com/150x180',
+      imageDefault: "https://via.placeholder.com/150x180",
       loadingMachines: true,
       isView: false,
     };
@@ -629,11 +646,11 @@ export default {
       }
     },
     getImageObjectUrl(file) {
-      return URL.createObjectURL(file)
+      return URL.createObjectURL(file);
     },
     isFile(value) {
       if (value) {
-        return typeof value === "object"
+        return typeof value === "object";
       }
       return false;
     },
@@ -676,14 +693,22 @@ export default {
           // console.log(this.machine)
           if (this.isFile(this.machine.image)) {
             let formdataImage = new FormData();
-            formdataImage.append("image", this.machine.image, this.machine.image);
+            formdataImage.append(
+              "image",
+              this.machine.image,
+              this.machine.image
+            );
             await this.imageService.upload(formdataImage).then((data) => {
               this.machine.image = data.path;
             });
           }
           if (this.isFile(this.machine.technical_sheet)) {
             let formdataFile = new FormData();
-            formdataFile.append("file", this.machine.technical_sheet, this.machine.technical_sheet);
+            formdataFile.append(
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
+            );
             await this.fileService.upload(formdataFile).then((data) => {
               this.machine.technical_sheet = data.path;
             });
@@ -710,14 +735,22 @@ export default {
           //UPLOAD IMAGES
           if (this.isFile(this.machine.image)) {
             let formdataImage = new FormData();
-            formdataImage.append("image", this.machine.image, this.machine.image);
+            formdataImage.append(
+              "image",
+              this.machine.image,
+              this.machine.image
+            );
             await this.imageService.upload(formdataImage).then((data) => {
               this.machine.image = data.path;
             });
           }
           if (this.isFile(this.machine.technical_sheet)) {
             let formdataFile = new FormData();
-            formdataFile.append("file", this.machine.technical_sheet, this.machine.technical_sheet);
+            formdataFile.append(
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
+            );
             await this.fileService.upload(formdataFile).then((data) => {
               this.machine.technical_sheet = data.path;
             });
@@ -740,15 +773,19 @@ export default {
     viewMachine(machine) {
       this.isView = true;
       this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = {...data};
+        this.machine = { ...data };
         this.productDialog = true;
       });
     },
     editProduct(machine) {
       this.isView = false;
       this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = {...data};
+        this.machine = { ...data };
         this.productDialog = true;
+      });
+
+      this.sparePartService.getAllSparePart().then((data) => {
+        this.sparePartItems = data;
         this.loadingSpareParts = false;
       });
     },
@@ -760,7 +797,7 @@ export default {
       this.deleteDialog = false;
       this.machinesService.delete(this.resource.id).then((data) => {
         this.machines = this.machines.filter(
-            (val) => val.id !== this.resource.id
+          (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
@@ -794,7 +831,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -808,7 +845,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -825,7 +862,7 @@ export default {
       if (this.validateFormSparePart()) {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
-          this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
           // console.log(this.spare_Part);
           this.machine.articles.unshift(this.spare_Part);
         } else {
@@ -846,11 +883,11 @@ export default {
     validateFormMachine() {
       // return true;
       return (
-          this.machine.serie_number &&
-          this.machine.name &&
-          this.machine.brand &&
-          this.machine.model &&
-          this.machine.maximum_working_time
+        this.machine.serie_number &&
+        this.machine.name &&
+        this.machine.brand &&
+        this.machine.model &&
+        this.machine.maximum_working_time
       );
     },
     validateFormSparePart() {
@@ -859,22 +896,21 @@ export default {
     },
     removeSparePart(data) {
       this.machine.articles = this.machine.articles.filter(
-          (val) => val.id !== data.id
+        (val) => val.id !== data.id
       );
     },
     getImage(path) {
       // console.log(path)
       return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
-    viewPDF(){
-      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.machine.technical_sheet}`
-      window.open(uri)
+    viewPDF() {
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.machine.technical_sheet}`;
+      window.open(uri);
       // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
-
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
     defaultObjects() {
