@@ -164,7 +164,7 @@
             >
           </div>
           <div class="formgrid grid">
-            <div class="field col">
+            <div class="field col-12">
               <label for="user">User</label>
               <InputText
                 id="user"
@@ -177,7 +177,7 @@
                 }"
               />
             </div>
-            <div class="field col">
+            <div class="field col-12" v-show="false">
               <label for="password">Password</label>
               <InputText
                 id="password"

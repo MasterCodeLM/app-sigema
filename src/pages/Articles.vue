@@ -64,13 +64,14 @@
                 <h5 class="m-0">
                   Filter by:
                   <Dropdown
-                    id="state"
-                    v-model="dropdownItem"
-                    :options="dropdownItems"
-                    optionLabel="name"
-                    placeholder="Select One"
-                    :filter="true"
-                    :loading="false"
+                      id="state"
+                      v-model="filter"
+                      :options="articleTypeFilterItems"
+                      optionLabel="name"
+                      placeholder="Select One"
+                      :filter="false"
+                      :loading="loadingArticleTypesFilter"
+                      @change="filterByArticleType"
                   ></Dropdown>
                 </h5>
               </div>
@@ -597,6 +598,7 @@ export default {
   data() {
     return {
       articles: null,
+      articlesAll: null,
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
@@ -645,6 +647,9 @@ export default {
       loadingArticles: true,
       isView: false,
 
+      articleTypeFilterItems: null,
+      loadingArticleTypesFilter: true,
+
       imageDefault: "https://via.placeholder.com/450x450",
     };
   },
@@ -665,11 +670,21 @@ export default {
     //this.loading = true;
     this.articlesService.getAll().then((data) => {
       this.articles = data;
+      this.articlesAll = data;
       this.loadingArticles = false;
     });
-    this.articleTypeService
-      .getAll()
-      .then((data) => (this.articleTypeItems = data));
+    this.articleTypeService.getAll().then((data) => {
+      this.articleTypeFilterItems = data;
+      this.articleTypeFilterItems.unshift({
+        id: 1,
+        name: 'All',
+      })
+      this.loadingArticleTypesFilter = false;
+      this.filter = {
+        id: 1,
+        name: 'All',
+      }
+    });
     this.supplierRefService
       .getAll()
       .then((data) => (this.supplierRefItems = data));
@@ -737,6 +752,7 @@ export default {
           //UPDATE
           this.articlesService.update(this.article.id, payload).then((data) => {
             this.articles[this.findIndexById(data.data.id)] = data.data;
+            this.articlesAll[this.findIndexById(data.data.id)] = data.data;
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -774,6 +790,7 @@ export default {
           //payload.image="...";
           this.articlesService.create(payload).then((data) => {
             this.articles.unshift(data.data);
+            this.articlesAll.unshift(data.data);
             this.$toast.add({
               severity: "success",
               summary: "Successful",
@@ -937,6 +954,15 @@ export default {
       let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.article.technical_sheet}`;
       window.open(uri);
       // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+    },
+    filterByArticleType(data) {
+      let article_type = data.value
+      this.loadingArticles = true
+      this.articles = this.articlesAll.filter(
+          (val) => val.article_type.id === article_type.id
+      );
+      if (article_type.id === 1) this.articles = this.articlesAll
+      this.loadingArticles = false
     },
     initFilters() {
       this.filters = {
