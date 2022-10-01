@@ -866,7 +866,12 @@ export default {
       // console.log(path)
       return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
+    viewPDF(){
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.machine.technical_sheet}`
+      window.open(uri)
+      // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
 
+    },
     initFilters() {
       this.filters = {
         global: {value: null, matchMode: FilterMatchMode.CONTAINS},
