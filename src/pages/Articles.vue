@@ -64,14 +64,14 @@
                 <h5 class="m-0">
                   Filter by:
                   <Dropdown
-                      id="state"
-                      v-model="filter"
-                      :options="articleTypeFilterItems"
-                      optionLabel="name"
-                      placeholder="Select One"
-                      :filter="false"
-                      :loading="loadingArticleTypesFilter"
-                      @change="filterByArticleType"
+                    id="state"
+                    v-model="filter"
+                    :options="articleTypeFilterItems"
+                    optionLabel="name"
+                    placeholder="Select One"
+                    :filter="false"
+                    :loading="loadingArticleTypesFilter"
+                    @change="filterByArticleType"
                   ></Dropdown>
                 </h5>
               </div>
@@ -160,22 +160,14 @@
           </Column>
 
           <Column
-            field="inventoryStatus"
-            header="Status"
+            field="article_type.name"
+            header="Article Type"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <span class="p-column-title">Article Type</span>
+              {{ slotProps.data.article_type.name }}
             </template>
           </Column>
 
@@ -246,6 +238,7 @@
                       required="true"
                       autofocus
                       :disabled="isView"
+                      autocomplete="off"
                       :class="{ 'p-invalid': submitted && !article.name }"
                     />
                     <small class="p-invalid" v-if="submitted && !article.name"
@@ -677,13 +670,13 @@ export default {
       this.articleTypeFilterItems = data;
       this.articleTypeFilterItems.unshift({
         id: 1,
-        name: 'All',
-      })
+        name: "All",
+      });
       this.loadingArticleTypesFilter = false;
       this.filter = {
         id: 1,
-        name: 'All',
-      }
+        name: "All",
+      };
     });
     this.supplierRefService
       .getAll()
@@ -808,6 +801,9 @@ export default {
       this.articlesService.getOne(article.id).then((data) => {
         this.article = { ...data };
         this.productDialog = true;
+      });
+      this.articleTypeService.getAll().then((data) => {
+        this.articleTypeItems = data;
         this.loadingArticleTypes = false;
       });
     },
@@ -817,6 +813,9 @@ export default {
         this.article = { ...data };
         this.productDialog = true;
         this.loadingSuppliers = false;
+      });
+      this.articleTypeService.getAll().then((data) => {
+        this.articleTypeItems = data;
         this.loadingArticleTypes = false;
       });
     },
@@ -828,6 +827,10 @@ export default {
       this.deleteDialog = false;
       this.articlesService.delete(this.resource.id).then((data) => {
         this.articles = this.articles.filter(
+          (val) => val.id !== this.resource.id
+        );
+
+        this.articlesAll = this.articlesAll.filter(
           (val) => val.id !== this.resource.id
         );
 
@@ -956,13 +959,13 @@ export default {
       // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
     filterByArticleType(data) {
-      let article_type = data.value
-      this.loadingArticles = true
+      let article_type = data.value;
+      this.loadingArticles = true;
       this.articles = this.articlesAll.filter(
-          (val) => val.article_type.id === article_type.id
+        (val) => val.article_type.id === article_type.id
       );
-      if (article_type.id === 1) this.articles = this.articlesAll
-      this.loadingArticles = false
+      if (article_type.id === 1) this.articles = this.articlesAll;
+      this.loadingArticles = false;
     },
     initFilters() {
       this.filters = {

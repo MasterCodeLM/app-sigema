@@ -1,14 +1,9 @@
 <template>
   <div class="grid">
     <div class="col-12">
-      <Button
-        icon="pi pi-arrow-left"
-        class="p-button-rounded mr-2 mb-2"
-        @click="backPage"
-      />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">ASSIST CONTROL</h3>
+          <h3 class="text-900 font-medium">ATTENDANCES</h3>
         </div>
       </div>
     </div>
@@ -17,25 +12,37 @@
         <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
-            <div class="my-2">
-              <Button
-                label="Check in"
-                class="p-button-success mr-2 mb-2"
-                @click="checkIn"
-              />
-
-              <Button label="Check out" class="p-button-danger mr-2 mb-2" />
+            <div class="grid">
+              <label for="name1">Since</label>
+              <Calendar
+                :showIcon="true"
+                :showButtonBar="true"
+                v-model="calendarValue"
+                :minDate="minDateValue"
+              ></Calendar>
+              <label for="name1">Until</label>
+              <Calendar
+                :showIcon="true"
+                :showButtonBar="true"
+                v-model="calendarValue"
+                :minDate="minDateValue"
+              ></Calendar>
             </div>
           </template>
 
           <template v-slot:end>
-            <Button label="Save Record" class="mr-2 mb-2"></Button>
+            <Button
+              label="New Attendance Control"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="nextPage"
+            />
           </template>
         </Toolbar>
 
         <DataTable
           ref="dt"
-          :value="employeesList"
+          :value="sheetsAttendances"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
@@ -43,8 +50,9 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Article Types"
           responsiveLayout="scroll"
+          :loading="loadingSheets"
         >
           <template #header>
             <div
@@ -53,7 +61,7 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">List</h5>
+              <h5 class="m-0">hojasssssssssssssss</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -65,51 +73,49 @@
           </template>
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-
           <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:60%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Name</span>
-              {{ slotProps.data.lastname + " " + slotProps.data.name }}
-            </template>
-          </Column>
-
-          <Column
-            field="check_in"
-            header="Check in time"
+            field="date"
+            header="Date"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Check in time</span>
-              {{ slotProps.data.check_in }}
+              <span class="p-column-title">Date</span>
+              {{ slotProps.data.date }}
             </template>
           </Column>
           <Column
-            field="check_out"
-            header="Check out time"
+            field="responsible"
+            header="Responsible"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Check out time</span>
-              {{ slotProps.data.check_out }}
+              <span class="p-column-title">Responsible</span>
+              {{ slotProps.data.responsible }}
+            </template>
+          </Column>
+          <Column
+            field="is_open"
+            header="Estado"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Estado</span>
+              {{ slotProps.data.is_open }}
             </template>
           </Column>
 
-          <Column
-            field="status_working"
-            header="Status"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
+          <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              {{ slotProps.data.status_working }}
+              <div style="display: flex; justify-content: end">
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -117,7 +123,13 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '450px' }"
-          header="New Article Type"
+          :header="
+            !attendanceSheet.id
+              ? 'New Article Type'
+              : !isView
+              ? 'Edit Article Type'
+              : 'Info Article Type'
+          "
           :modal="true"
           class="p-fluid"
         >
@@ -125,12 +137,13 @@
             <label for="name">Name</label>
             <InputText
               id="name"
-              v-model.trim="product.name"
+              v-model.trim="attendanceSheet.name"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+              :disabled="isView"
+              :class="{ 'p-invalid': submitted && !attendanceSheet.name }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
+            <small class="p-invalid" v-if="submitted && !attendanceSheet.name"
               >Name is required.</small
             >
           </div>
@@ -142,6 +155,7 @@
               @click="hideDialog"
             />
             <Button
+              v-if="!isView"
               label="Save"
               icon="pi pi-check"
               class="p-button-text"
@@ -151,7 +165,7 @@
         </Dialog>
 
         <Dialog
-          v-model:visible="deleteProductDialog"
+          v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
           header="Confirm"
           :modal="true"
@@ -161,8 +175,8 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="product"
-              >Are you sure you want to delete <b>{{ product.name }}</b
+            <span v-if="attendanceSheet"
+              >Are you sure you want to delete <b>{{ attendanceSheet.name }}</b
               >?</span
             >
           </div>
@@ -171,13 +185,13 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deleteProductDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"
               icon="pi pi-check"
               class="p-button-text"
-              @click="deleteProduct"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -219,83 +233,53 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-//import ProductService from "../service/ProductService";
 import AttendanceService from "../service/AttendanceService";
+// import ToastDoc from './ToastDoc';
 
 export default {
   data() {
     return {
-      //products: null,
-      employeesList: null,
+      sheetsAttendances: null,
       productDialog: false,
-      deleteProductDialog: false,
+      deleteDialog: false,
       deleteProductsDialog: false,
       product: {},
-      selectedProducts: [],
+      attendanceSheet: {}, // One Resource ArticleType
+      selectedProducts: null,
       filters: {},
       submitted: false,
+      message: null,
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+      loadingSheets: true,
+      isView: false,
     };
   },
-  sheetListService: null,
-  //productService: null,
+  sheetAttendanceService: null,
   created() {
-    //this.productService = new ProductService();
-    this.sheetListService = new AttendanceService();
+    this.sheetAttendanceService = new AttendanceService();
     this.initFilters();
   },
   mounted() {
-    console.log(this.$route.params);
-    let sheet = this.$route.params;
-
-    //this.productService.getProducts().then((data) => (this.products = data));
-
-    this.sheetListService
-      .getOne(sheet.id)
-      .then((data) => (this.employeesList = data.employees));
+    this.sheetAttendanceService.getAll().then((data) => {
+      this.sheetsAttendances = data;
+      this.loadingSheets = false;
+    });
   },
   methods: {
-    backPage() {
-      this.$router.push(`/attendance-sheet`);
-    },
-    checkIn() {
-      if (this.selectedProducts.length > 0) {
-        var moment = require("moment");
-        // obtener el nombre del mes, día del mes, año, hora
-        var now = moment().format("HH:mm:ss");
-        //console.log(now);
-
-        this.selectedProducts = this.selectedProducts.map((employee) => {
-          console.log(employee);
-          employee.check_in = now;
-        });
-        console.log(this.selectedProducts);
-      } else {
-        this.$toast.add({
-          severity: "error",
-          summary: "Warning",
-          detail: "You must select at least one employee ",
-          life: 3000,
-        });
-      }
-
-      //console.log(this.selectedProducts);
-    },
-
-    formatCurrency(value) {
-      if (value)
-        return value.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        });
-      return;
+    nextPage() {
+      const payload = this.attendanceSheet;
+      this.sheetAttendanceService.create(payload).then((data) => {
+        this.sheetsAttendances.unshift(data.data);
+        this.$router.push(`/new-attendance-control/${data.data.id}`);
+      });
     },
     openNew() {
-      this.product = {};
+      this.isView = false;
+      this.attendanceSheet = {};
       this.submitted = false;
       this.productDialog = true;
     },
@@ -305,60 +289,72 @@ export default {
     },
     saveProduct() {
       this.submitted = true;
-      if (this.product.name.trim()) {
-        if (this.product.id) {
-          this.product.inventoryStatus = this.product.inventoryStatus.value
-            ? this.product.inventoryStatus.value
-            : this.product.inventoryStatus;
-          this.products[this.findIndexById(this.product.id)] = this.product;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Updated",
-            life: 3000,
+      if (this.attendanceSheet.name.trim()) {
+        if (this.attendanceSheet.id) {
+          //UPDATE
+          const id = this.attendanceSheet.id;
+          const payload = this.attendanceSheet;
+          this.articleTypesService.update(id, payload).then((data) => {
+            this.articleTypes[this.findIndexById(id)] = data.data;
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         } else {
-          this.product.id = this.createId();
-          this.product.code = this.createId();
-          this.product.image = "product-placeholder.svg";
-          this.product.inventoryStatus = this.product.inventoryStatus
-            ? this.product.inventoryStatus.value
-            : "INSTOCK";
-          this.products.push(this.product);
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Created",
-            life: 3000,
+          // CREATE
+          const payload = this.attendanceSheet;
+          this.articleTypesService.create(payload).then((data) => {
+            this.articleTypes.unshift(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
           });
         }
         this.productDialog = false;
-        this.product = {};
+        this.attendanceSheet = {};
       }
     },
-    editProduct(product) {
-      this.product = { ...product };
+    viewArticleTypes(attendanceSheet) {
+      this.isView = true;
+      this.attendanceSheet = { ...attendanceSheet };
       this.productDialog = true;
     },
-    confirmDeleteProduct(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    editProduct(attendanceSheet) {
+      this.$router.push(`/new-attendance-control/${attendanceSheet.id}`);
+
+      /*this.isView = false;
+      this.attendanceSheet = { ...attendanceSheet };
+      this.productDialog = true;*/
     },
-    deleteProduct() {
-      this.products = this.products.filter((val) => val.id !== this.product.id);
-      this.deleteProductDialog = false;
-      this.product = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+    confirmDelete(attendanceSheet) {
+      this.attendanceSheet = attendanceSheet;
+      this.deleteDialog = true;
+    },
+    deleteResource() {
+      this.deleteDialog = false;
+      this.articleTypesService.delete(this.attendanceSheet.id).then((data) => {
+        this.articleTypes = this.articleTypes.filter(
+          (val) => val.id !== this.attendanceSheet.id
+        );
+        this.attendanceSheet = {};
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
       });
     },
     findIndexById(id) {
       let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
+      for (let i = 0; i < this.articleTypes.length; i++) {
+        if (this.articleTypes[i].id === id) {
           index = i;
           break;
         }

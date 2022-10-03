@@ -153,7 +153,12 @@ const routes = [
                 component: () => import('./pages/Employees.vue')
             },
             {
-                path: '/new-attendance-control',
+                path: '/attendance-sheet',
+                name: 'attendance-sheet',
+                component: () => import('./pages/AttendanceSheet.vue')
+            },
+            {
+                path: '/new-attendance-control/:id',
                 name: 'new-attendance-control',
                 component: () => import('./pages/NewAttendanceControl.vue')
             },
@@ -238,6 +243,9 @@ function hasAccess(name) {
 
         case 'employees':
             return permissions.includes('employees')
+
+        case 'attendance-sheet':
+            return permissions.includes('attendance-sheets')
 
         case 'new-attendance-control':
             return permissions.includes('attendance-sheets')
