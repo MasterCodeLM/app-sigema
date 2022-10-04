@@ -16,7 +16,7 @@
               <label for="name1">Since</label>
               <Calendar
                   :showIcon="true"
-                  :showButtonBar="true"
+                  :showButtonBar="false"
                   v-model="start_date"
                   :maxDate="minDateValue"
                   dateFormat="yy-mm-dd"
@@ -24,7 +24,7 @@
               <label for="name1">Until</label>
               <Calendar
                   :showIcon="true"
-                  :showButtonBar="true"
+                  :showButtonBar="false"
                   v-model="end_date"
                   :maxDate="minDateValue"
                   dateFormat="yy-mm-dd"
@@ -293,22 +293,24 @@ export default {
   watch: {
     start_date(value) {
       let start_date = moment(value).format('YYYY-MM-DD')
-      let end_date = this.end_date
+      let end_date = moment(this.end_date).format('YYYY-MM-DD')
       this.loadingSheets = true;
       this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
         this.sheetsAttendances = data;
         this.loadingSheets = false;
       });
-      // console.log(date)
+      console.log(start_date,end_date)
     },
     end_date(value) {
-      let start_date = this.start_date
+      let start_date = moment(this.start_date).format('YYYY-MM-DD')
       let end_date = moment(value).format('YYYY-MM-DD')
       this.loadingSheets = true;
       this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
         this.sheetsAttendances = data;
         this.loadingSheets = false;
       });
+      console.log(start_date,end_date)
+
     }
   },
   methods: {
