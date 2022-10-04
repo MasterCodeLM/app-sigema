@@ -134,7 +134,7 @@ export default {
                 {
                   label: "Attendance Control",
                   icon: "pi pi-fw pi-user-edit",
-                  to: "/new-attendance-control",
+                  to: "/attendance-sheet",
                 },
               ],
             },

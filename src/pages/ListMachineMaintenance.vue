@@ -2,233 +2,925 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <h5 style="text-align: center">LIST OF MACHINES - MAINTENANCE</h5>
-        <DataView
-            :value="machines"
-            :layout="layout"
-            :paginator="true"
-            :rows="9"
-            :sortOrder="sortOrder"
-            :sortField="sortField"
-        >
-          <template #header>
-            <div class="grid grid-nogutter">
-              <div class="col-6 text-left">
-                <Dropdown
-                    v-model="sortKey"
-                    :options="sortOptions"
-                    optionLabel="label"
-                    placeholder="Sort By Status"
-                    @change="onSortChange($event)"
-                />
-              </div>
-              <div class="col-6 text-right">
-                <DataViewLayoutOptions v-model="layout"/>
-              </div>
-            </div>
-          </template>
-          <template #list="slotProps">
-            <div class="col-12">
-              <div
-                  class="
-                  flex flex-column
-                  md:flex-row
-                  align-items-center
-                  p-3
-                  w-full
-                "
-              >
-                <img
-                    :src="slotProps.data.image"
-                    :alt="slotProps.data.name"
-                    class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
-                />
-                <div class="flex-1 text-center md:text-left">
-                  <div class="font-bold text-2xl">
-                    {{ slotProps.data.name }}
-                  </div>
-                  <div class="mb-3">{{ slotProps.data.description }}</div>
-                  <Rating
-                      :modelValue="slotProps.data.rating"
-                      :readonly="true"
-                      :cancel="false"
-                      class="mb-2"
-                  ></Rating>
-                  <div class="flex align-items-center">
-                    <i class="pi pi-tag mr-2"></i>
-                    <span class="font-semibold">{{
-                        slotProps.data.category
-                      }}</span>
-                  </div>
-                </div>
-                <div
-                    class="
-                    flex flex-row
-                    md:flex-column
-                    justify-content-between
-                    w-full
-                    md:w-auto
-                    align-items-center
-                    md:align-items-end
-                    mt-5
-                    md:mt-0
-                  "
-                >
-                  <span
-                      class="
-                      text-2xl
-                      font-semibold
-                      mb-2
-                      align-self-center
-                      md:align-self-end
-                    "
-                  >${{ slotProps.data.price }}</span
-                  >
-                  <Button
-                      icon="pi pi-cog"
-                      label="Add to Cart"
-                      :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
-                      class="mb-2"
-                      @click="redirect(slotProps.data)"
-                  ></Button>
-                  <!--
-                  <span
-                    :class="
-                      'product-badge status-' +
-                      slotProps.data.inventoryStatus.toLowerCase()
-                    "
-                    >{{ slotProps.data.inventoryStatus }}</span
-                  >-->
-                </div>
-              </div>
+        <Toast />
+        <Toolbar class="mb-4">
+          <template v-slot:start>
+            <div class="grid">
+              <label for="name1">Since</label>
+              <Calendar
+                :showIcon="true"
+                :showButtonBar="true"
+                v-model="calendarValue"
+                :minDate="minDateValue"
+              ></Calendar>
+              <label for="name1">Until</label>
+              <Calendar
+                :showIcon="true"
+                :showButtonBar="true"
+                v-model="calendarValue"
+                :minDate="minDateValue"
+              ></Calendar>
             </div>
           </template>
 
-          <template #grid="slotProps">
-            <div class="col-12 md:col-4">
-              <div class="card m-3 border-1 surface-border">
-                <!--<div class="flex align-items-center justify-content-between">
-                  <div class="flex align-items-center">
-                    <i class="pi pi-tag mr-2"></i>
-                    <span class="font-semibold">{{
-                      slotProps.data.category
-                    }}</span>
-                  </div>
-                  <span
-                    :class="
-                      'product-badge status-' +
-                      slotProps.data.inventoryStatus.toLowerCase()
-                    "
-                    >{{ slotProps.data.inventoryStatus }}</span
-                  >
-                </div>-->
-                <div class="text-center">
-                  <img
-                      :src="slotProps.data.image"
-                      :alt="slotProps.data.name"
-                      class="w-9 shadow-2 my-3 mx-0"
+          <template v-slot:end>
+            <Button
+              label="New Maintenance"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="nextPage"
+            />
+            <!--@click="exportCSV($event)"-->
+          </template>
+        </Toolbar>
+
+        <DataTable
+          ref="dt"
+          :value="machines"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+          :loading="loadingMachines"
+        >
+          <template #header>
+            <div
+              class="
+                flex flex-column
+                md:flex-row md:justify-content-between md:align-items-center
+              "
+            >
+              <h5 class="m-0">LIST MAINTENANCES</h5>
+              <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
+                />
+              </span>
+            </div>
+          </template>
+
+          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+
+          <Column
+            field="name"
+            header="Number"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Number</span>
+              {{ slotProps.data.number }}
+            </template>
+          </Column>
+
+          <Column
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Name</span>
+              {{ slotProps.data.name }}
+            </template>
+          </Column>
+
+          <Column
+            field="serie_number"
+            header="Serial Number"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Serial Number</span>
+              {{ slotProps.data.serie_number }}
+            </template>
+          </Column>
+
+          <Column
+            field="model"
+            header="Model"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Model</span>
+              {{ slotProps.data.model }}
+            </template>
+          </Column>
+
+          <Column
+            field="brand"
+            header="Brand"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Brand</span>
+              {{ slotProps.data.brand }}
+            </template>
+          </Column>
+
+          <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+            <template #body="slotProps">
+              <span class="p-column-title">Image</span>
+              <img
+                :src="
+                  slotProps.data.image
+                    ? getImage(slotProps.data.image)
+                    : imageDefault
+                "
+                :alt="'machine'"
+                class="shadow-2"
+                width="100"
+                height="100"
+              />
+            </template>
+          </Column>
+
+          <Column
+            field="inventoryStatus"
+            header="Status"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Status</span>
+              <span
+                :class="
+                  'product-badge status-' +
+                  (slotProps.data.inventoryStatus
+                    ? slotProps.data.inventoryStatus.toLowerCase()
+                    : '')
+                "
+                >{{ slotProps.data.inventoryStatus }}</span
+              >
+            </template>
+          </Column>
+
+          <Column headerStyle="min-width:10rem;">
+            <template #body="slotProps">
+              <div style="display: flex; justify-content: end">
+                <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewMachine(slotProps.data)"
+                />
+                <!--<Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
+                />-->
+                <Button
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                  @click="confirmDelete(slotProps.data)"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+
+        <Dialog
+          v-model:visible="productDialog"
+          :style="{ width: '900px' }"
+          :header="
+            !machine.id
+              ? 'New Machine'
+              : !isView
+              ? 'Edit Machine'
+              : 'Info Machine'
+          "
+          :modal="true"
+          class="p-fluid"
+        >
+          <div class="formgrid grid">
+            <div class="col-8">
+              <div class="card mb-4">
+                <div class="field">
+                  <label for="serie_number">Serial Number</label>
+                  <InputText
+                    id="serie_number"
+                    v-model.trim="machine.serie_number"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.serie_number }"
+                    :disabled="isView"
+                    autocomplete="off"
                   />
-                  <div class="text-2xl font-bold">
-                    {{ slotProps.data.name }}
-                  </div>
-                  <div class="mb-3">{{ slotProps.data.description }}</div>
-                  <Rating
-                      :modelValue="slotProps.data.rating"
-                      :readonly="true"
-                      :cancel="false"
-                  ></Rating>
-                </div>
-                <div class="flex align-items-center justify-content-between">
-                  <span class="text-2xl font-semibold"
-                  >${{ slotProps.data.price }}</span
+                  <small
+                    class="p-invalid"
+                    v-if="submitted && !machine.serie_number"
+                    >Serial Number is required.</small
                   >
-                  <Button
-                      icon="pi pi-cog"
-                      :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
-                      @click="redirect(slotProps.data)"
-                  ></Button>
+                </div>
+
+                <div class="field">
+                  <label for="name">Name</label>
+                  <InputText
+                    id="name"
+                    v-model.trim="machine.name"
+                    required="true"
+                    autofocus
+                    :class="{ 'p-invalid': submitted && !machine.name }"
+                    :disabled="isView"
+                    autocomplete="off"
+                  />
+                  <small class="p-invalid" v-if="submitted && !machine.name"
+                    >Name is required.</small
+                  >
+                </div>
+
+                <div class="formgrid grid">
+                  <div class="field col">
+                    <label for="model">Model</label>
+                    <InputText
+                      id="model"
+                      v-model.trim="machine.model"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
+                    />
+                    <small class="p-invalid" v-if="submitted && !machine.name"
+                      >Model is required.</small
+                    >
+                  </div>
+
+                  <div class="field col">
+                    <label for="brand">Brand</label>
+                    <InputText
+                      id="barnd"
+                      v-model.trim="machine.brand"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
+                    />
+                    <small class="p-invalid" v-if="submitted && !machine.name"
+                      >Brand is required.</small
+                    >
+                  </div>
+                </div>
+
+                <div class="formgrid grid">
+                  <div class="field col">
+                    <label for="maximum_working_time"
+                      >Daily Working Hours</label
+                    >
+                    <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
+                    <InputNumber
+                      id="maximum_working_time"
+                      v-model="machine.maximum_working_time"
+                      showButtons
+                      mode="decimal"
+                      :disabled="isView"
+                      :class="{
+                        'p-invalid': submitted && !machine.maximum_working_time,
+                      }"
+                      :min="0"
+                      :useGrouping="false"
+                    />
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !machine.maximum_working_time"
+                      >Daily working hours is required.</small
+                    >
+                  </div>
+
+                  <div class="field col">
+                    <label for="usefulLifehours">Useful Life Hours</label>
+                    <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
+                    <!--                  <InputNumber-->
+                    <!--                      id="usefulLifehours"-->
+                    <!--                      v-model="inputNumberValue"-->
+                    <!--                      showButtons-->
+                    <!--                      mode="decimal"-->
+                    <!--                      required="true"-->
+                    <!--                      autofocus-->
+                    <!--                      :disabled="isView"-->
+                    <!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
+                    <!--                      :min="0"-->
+                    <!--                      :useGrouping="false"-->
+                    <!--                  />-->
+                    <!--<small class="p-invalid" v-if="submitted && !product.name"
+                      >Useful Life Hours is required.</small
+                    >-->
+                  </div>
+                </div>
+              </div>
+              <div class="card m-0">
+                <div v-if="!isView" class="formgrid grid">
+                  <div class="field col">
+                    <label for="sparePart">Spare Parts</label>
+                    <Dropdown
+                      id="sparePart"
+                      v-model="sparePartItem"
+                      :options="sparePartItems"
+                      optionLabel="name"
+                      placeholder="Select One"
+                      :filter="true"
+                      :loading="loadingSpareParts"
+                      :class="{
+                        'p-invalid': submittedAddSparePart && !sparePartItem,
+                      }"
+                    >
+                    </Dropdown>
+                    <small
+                      class="p-invalid"
+                      v-if="submittedAddSparePart && !sparePartItem"
+                      >Spare Part is required.</small
+                    >
+                  </div>
+
+                  <div
+                    class="
+                      field
+                      col-2
+                      flex
+                      justify-content-center
+                      align-items-center
+                    "
+                  >
+                    <Button
+                      icon="pi pi-plus"
+                      class="p-button-secondary"
+                      style="margin-top: 1.8rem"
+                      @click="addSparePart"
+                    ></Button>
+                  </div>
+                </div>
+                <div class="card">
+                  <DataTable
+                    :value="machine.articles"
+                    responsiveLayout="scroll"
+                  >
+                    <Column
+                      v-for="col of columns"
+                      :field="col.field"
+                      :header="col.header"
+                      :key="col.field"
+                      style="width: 25%"
+                    >
+                    </Column>
+
+                    <Column v-if="!isView" headerStyle="min-width:10rem;">
+                      <template #body="slotProps">
+                        <div style="display: flex; justify-content: end">
+                          <Button
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger"
+                            @click="removeSparePart(slotProps.data)"
+                          />
+                        </div>
+                      </template>
+                    </Column>
+                  </DataTable>
                 </div>
               </div>
             </div>
+
+            <div class="col-4">
+              <!-- <div class="col-12"> -->
+              <div class="card w-full h-full m-0">
+                <div class="mb-4">
+                  <h5>Imagen</h5>
+                  <div
+                    class="
+                      flex flex-column
+                      align-items-center
+                      justify-content-center
+                    "
+                  >
+                    <div class="mb-2">
+                      <img
+                        id="blah"
+                        :disabled="isView"
+                        :src="
+                          !this.machine.image
+                            ? imageDefault
+                            : isFile(this.machine.image)
+                            ? getImageObjectUrl(this.machine.image)
+                            : getImage(this.machine.image)
+                        "
+                        alt="your image"
+                        style="width: 100%; height: 300px; max-width: 450px"
+                      />
+                    </div>
+                    <div v-if="!isView" class="w-full">
+                      <FileUpload
+                        class="w-full"
+                        mode="basic"
+                        accept="image/*"
+                        :disabled="isView"
+                        :maxFileSize="2000000"
+                        @input="onUploadImage"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h5>Technical Sheet</h5>
+                  <div
+                    v-if="machine.id && isView && machine.technical_sheet"
+                    class="w-full mb-2"
+                  >
+                    <Button
+                      label="View PDF"
+                      icon="pi pi-arrow-up-right"
+                      class="p-button-info mr-2"
+                      @click="viewPDF"
+                    />
+                  </div>
+                  <div
+                    v-if="machine.id && isView && !machine.technical_sheet"
+                    class="w-full mb-2"
+                  >
+                    <Message severity="info" :closable="false"
+                      >Without PDF</Message
+                    >
+                  </div>
+                  <div v-if="!isView" class="w-full">
+                    <FileUpload
+                      class="w-full"
+                      mode="basic"
+                      accept="application/pdf"
+                      :disabled="isView"
+                      :maxFileSize="2000000"
+                      @input="onUploadFile"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- </div> -->
+            </div>
+          </div>
+
+          <template #footer>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
+            />
+            <Button
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
+            />
           </template>
-        </DataView>
+        </Dialog>
+
+        <Dialog
+          v-model:visible="deleteDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="resource"
+              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >?</span
+            >
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deletetDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
+            />
+          </template>
+        </Dialog>
+
+        <Dialog
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span v-if="product"
+              >Are you sure you want to delete the selected products?</span
+            >
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ProductService from "../service/ProductService";
+import { FilterMatchMode } from "primevue/api";
 import MachinesService from "../service/MachinesService";
+import ArticlesService from "../service/ArticlesService";
+import ImageService from "../service/ImageService";
+import FileService from "../service/FileService";
 
 export default {
   data() {
     return {
-      picklistValue: [
-        [
-          {name: "San Francisco", code: "SF"},
-          {name: "London", code: "LDN"},
-          {name: "Paris", code: "PRS"},
-          {name: "Istanbul", code: "IST"},
-          {name: "Berlin", code: "BRL"},
-          {name: "Barcelona", code: "BRC"},
-          {name: "Rome", code: "RM"},
-        ],
-        [],
-      ],
-      orderlistValue: [
-        {name: "San Francisco", code: "SF"},
-        {name: "London", code: "LDN"},
-        {name: "Paris", code: "PRS"},
-        {name: "Istanbul", code: "IST"},
-        {name: "Berlin", code: "BRL"},
-        {name: "Barcelona", code: "BRC"},
-        {name: "Rome", code: "RM"},
-      ],
-      dataviewValue: null,
+      // apiHost: "https://stormy-tundra-82595.herokuapp.com/storage/",
       machines: null,
-      layout: "grid",
-      sortKey: null,
-      sortOrder: null,
-      sortField: null,
-      sortOptions: [
-        {label: "Price High to Low", value: "!price"},
-        {label: "Price Low to High", value: "price"},
+      productDialog: false,
+      deleteDialog: false,
+      deleteProductsDialog: false,
+      minDateValue: new Date(),
+      machine: {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        maximum_working_time: null,
+        image: null,
+        articles: [],
+      },
+      spare_Part: {
+        id: null,
+        model: null,
+        name: null,
+      },
+      product: {},
+      resource: {},
+      selectedProducts: null,
+      filters: {},
+      submitted: false,
+      message: null,
+
+      loadingSpareParts: true,
+
+      statuses: [
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+
+      submittedAddSparePart: false,
+
+      columns: [
+        { field: "model", header: "Serial Number" },
+        { field: "name", header: "Nombre" },
+      ],
+
+      sparePartItem: null,
+      sparePartItems: null,
+      image: null,
+      file: null,
+      imageDefault: "https://via.placeholder.com/150x180",
+      loadingMachines: true,
+      isView: false,
     };
   },
+
   machinesService: null,
-  productService: null,
+  sparePartService: null,
+  imageService: null,
+  fileService: null,
   created() {
-    this.productService = new ProductService();
     this.machinesService = new MachinesService();
+    this.sparePartService = new ArticlesService();
+    this.imageService = new ImageService();
+    this.fileService = new FileService();
+    this.initFilters();
   },
   mounted() {
-    this.loading = true;
-    // TODO: GET ONLY MACHINES WITH PENDING MAINTENANCE
-    this.machinesService.getAll().then((data) => (this.machines = data));
-    // this.productService
-    //   .getProducts()
-    //   .then((data) => (this.dataviewValue = data));
-    this.loading = false;
+    this.machinesService.getAll().then((data) => {
+      this.machines = data;
+      this.loadingMachines = false;
+    });
+    this.sparePartService.getAll().then((data) => (this.sparePartItems = data));
   },
   methods: {
-    onSortChange(event) {
-      const value = event.value.value;
-      const sortValue = event.value;
-
-      if (value.indexOf("!") === 0) {
-        this.sortOrder = -1;
-        this.sortField = value.substring(1, value.length);
-        this.sortKey = sortValue;
-      } else {
-        this.sortOrder = 1;
-        this.sortField = value;
-        this.sortKey = sortValue;
+    onUploadImage(event) {
+      const [file] = event.target.files;
+      if (file) {
+        // this.machine.image = URL.createObjectURL(file)
+        this.machine.image = file;
       }
     },
-    redirect(data) {
-      this.$router.push(`new-maintenance-sheet/id=${data.id}`)
+    getImageObjectUrl(file) {
+      return URL.createObjectURL(file);
+    },
+    isFile(value) {
+      if (value) {
+        return typeof value === "object";
+      }
+      return false;
+    },
+    onUploadFile(event) {
+      // console.log(event.target.files)
+      const [file] = event.target.files;
+      if (file) {
+        this.machine.technical_sheet = file;
+      }
+    },
+    formatCurrency(value) {
+      if (value)
+        return value.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        });
+      return;
+    },
+    nextPage() {
+      this.$router.push(
+        `/new-maintenance-sheet/89212bd9-279e-47aa-9cf8-0ffc6f6f8f47`
+      );
+    },
+    openNew() {
+      this.isView = false;
+      this.defaultObjects();
+      this.sparePartService.getAllSparePart().then((data) => {
+        this.sparePartItems = data;
+        this.loadingSpareParts = false;
+      });
+      //this.product = {};
+      this.submitted = false;
+      this.productDialog = true;
+    },
+    hideDialog() {
+      this.defaultObjects();
+      this.productDialog = false;
+      this.submitted = false;
+    },
+    async saveProduct() {
+      this.submitted = true;
+      if (this.validateFormMachine()) {
+        if (this.machine.id) {
+          //UPLOAD IMAGES
+          // console.log(this.machine)
+          if (this.isFile(this.machine.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append(
+              "image",
+              this.machine.image,
+              this.machine.image
+            );
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.machine.image = data.path;
+            });
+          }
+          if (this.isFile(this.machine.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append(
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
+            );
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.machine.technical_sheet = data.path;
+            });
+          }
+          const payload = this.machine;
+          //console.log(payload, this.article, this.article.id);
+          //UPDATE
+          this.machinesService.update(this.machine.id, payload).then((data) => {
+            this.machines[this.findIndexById(data.data.id)] = data.data;
+            // console.log(data.data.id);
+            // console.log(this.findIndexById(data.data.id));
+            //console.log(this.article.id);
+            //console.log(this.findIndexById(this.article.id));
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+          });
+        } else {
+          // CREATE
+
+          //UPLOAD IMAGES
+          if (this.isFile(this.machine.image)) {
+            let formdataImage = new FormData();
+            formdataImage.append(
+              "image",
+              this.machine.image,
+              this.machine.image
+            );
+            await this.imageService.upload(formdataImage).then((data) => {
+              this.machine.image = data.path;
+            });
+          }
+          if (this.isFile(this.machine.technical_sheet)) {
+            let formdataFile = new FormData();
+            formdataFile.append(
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
+            );
+            await this.fileService.upload(formdataFile).then((data) => {
+              this.machine.technical_sheet = data.path;
+            });
+          }
+          const payload = this.machine;
+          await this.machinesService.create(payload).then((data) => {
+            this.machines.unshift(data.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+          });
+        }
+        this.productDialog = false;
+        this.defaultObjects();
+      }
+    },
+    viewMachine(machine) {
+      this.isView = true;
+      this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });
+    },
+    editProduct(machine) {
+      this.isView = false;
+      this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });
+
+      this.sparePartService.getAllSparePart().then((data) => {
+        this.sparePartItems = data;
+        this.loadingSpareParts = false;
+      });
+    },
+    confirmDelete(resource) {
+      this.resource = resource;
+      this.deleteDialog = true;
+    },
+    deleteResource() {
+      this.deleteDialog = false;
+      this.machinesService.delete(this.resource.id).then((data) => {
+        this.machines = this.machines.filter(
+          (val) => val.id !== this.resource.id
+        );
+        this.resource = {};
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
+      });
+    },
+    findIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.machines.length; i++) {
+        if (this.machines[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      return index;
+    },
+    findSparePartsIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.machine.articles.length; i++) {
+        if (this.machine.articles[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      return index;
+    },
+    createId() {
+      let id = "";
+      var chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (var i = 0; i < 5; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return id;
+    },
+    /*
+    exportCSV() {
+      this.$refs.dt.exportCSV();
+    },*/
+    confirmDeleteSelected() {
+      this.deleteProductsDialog = true;
+    },
+    deleteSelectedProducts() {
+      this.products = this.products.filter(
+        (val) => !this.selectedProducts.includes(val)
+      );
+      this.deleteProductsDialog = false;
+      this.selectedProducts = null;
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Products Deleted",
+        life: 3000,
+      });
+    },
+
+    addSparePart() {
+      this.submittedAddSparePart = true;
+      if (this.validateFormSparePart()) {
+        if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
+          // INSERT DATA
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
+          // console.log(this.spare_Part);
+          this.machine.articles.unshift(this.spare_Part);
+        } else {
+          this.$toast.add({
+            severity: "error",
+            summary: "Ooops!",
+            detail: "spare part already exists in the list.",
+            life: 3000,
+          });
+        }
+        // RESERT DATA
+        this.spare_Part = {};
+        this.sparePartItem = null;
+        this.submittedAddSparePart = false;
+      }
+    },
+
+    validateFormMachine() {
+      // return true;
+      return (
+        this.machine.serie_number &&
+        this.machine.name &&
+        this.machine.brand &&
+        this.machine.model &&
+        this.machine.maximum_working_time
+      );
+    },
+    validateFormSparePart() {
+      return true;
+      //this.sparePartItem;
+    },
+    removeSparePart(data) {
+      this.machine.articles = this.machine.articles.filter(
+        (val) => val.id !== data.id
+      );
+    },
+    getImage(path) {
+      // console.log(path)
+      return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+    },
+    viewPDF() {
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.machine.technical_sheet}`;
+      window.open(uri);
+      // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+    },
+    initFilters() {
+      this.filters = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+    defaultObjects() {
+      this.machine = {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        maximum_working_time: null,
+        image: null,
+        articles: [],
+      };
     },
   },
 };
