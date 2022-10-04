@@ -133,7 +133,7 @@ export default {
                 },
                 {
                   label: "Attendance Control",
-                  icon: "pi pi-fw pi-user-edit",
+                  icon: "pi pi-fw pi-list",
                   to: "/attendance-sheet",
                 },
               ],
@@ -161,7 +161,7 @@ export default {
             },
             {
               label: "Article Types",
-              icon: "pi pi-fw pi-user-edit",
+              icon: "pi pi-fw pi-list",
               to: "/article-types",
             },
             {
@@ -328,8 +328,8 @@ export default {
               },
               {
                 label: "Attendance Control",
-                icon: "pi pi-fw pi-user-edit",
-                to: "/new-attendance-control",
+                icon: "pi pi-fw pi-list",
+                to: "/attendance-sheet",
                 visible: this.permissions.includes("attendance-sheets"),
               },
             ],
@@ -350,7 +350,7 @@ export default {
               {
                 label: "Worked",
                 icon: "pi pi-fw pi-user-edit",
-                to: "/list",
+                to: "/new-work-start",
                 visible: this.permissions.includes("working-sheets"),
               },
             ],
