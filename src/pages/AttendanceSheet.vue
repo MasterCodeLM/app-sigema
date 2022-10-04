@@ -268,9 +268,9 @@ export default {
       loadingSheets: true,
       isView: false,
 
-      start_date: null,
-      end_date: null,
-      minDateValue: null
+      start_date: moment().format('YYYY-MM-DD'),
+      end_date: moment().format('YYYY-MM-DD'),
+      minDateValue: new Date()
     };
   },
   sheetAttendanceService: null,
@@ -280,13 +280,36 @@ export default {
   },
   mounted() {
     // let now = moment().format('YYYY-MM-DD')
-    this.start_date = moment().format('YYYY-MM-DD')
-    this.end_date = moment().format('YYYY-MM-DD')
-    this.minDateValue =  new Date()
-    this.sheetAttendanceService.getAll().then((data) => {
+    // this.start_date = moment().format('YYYY-MM-DD')
+    // this.end_date = moment().format('YYYY-MM-DD')
+    // this.minDateValue = new Date()
+    let start_date = this.start_date
+    let end_date = this.end_date
+    this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
       this.sheetsAttendances = data;
       this.loadingSheets = false;
     });
+  },
+  watch: {
+    start_date(value) {
+      let start_date = moment(value).format('YYYY-MM-DD')
+      let end_date = this.end_date
+      this.loadingSheets = true;
+      this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
+        this.sheetsAttendances = data;
+        this.loadingSheets = false;
+      });
+      // console.log(date)
+    },
+    end_date(value) {
+      let start_date = this.start_date
+      let end_date = moment(value).format('YYYY-MM-DD')
+      this.loadingSheets = true;
+      this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
+        this.sheetsAttendances = data;
+        this.loadingSheets = false;
+      });
+    }
   },
   methods: {
     nextPage() {
