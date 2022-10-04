@@ -334,7 +334,7 @@ export default {
         let employees = JSON.parse(JSON.stringify(this.employeesList))
 
         this.selectedProducts.map((employee) => {
-          if (!employees[this.findIndexEmployeesById(employee.id)].check_out) {
+          if (!employees[this.findIndexEmployeesById(employee.id)].check_out && employees[this.findIndexEmployeesById(employee.id)].check_in) {
             employees[this.findIndexEmployeesById(employee.id)].check_out = now;
           }
         });
