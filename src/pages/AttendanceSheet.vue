@@ -17,15 +17,17 @@
               <Calendar
                   :showIcon="true"
                   :showButtonBar="true"
-                  v-model="calendarValue"
-                  :minDate="minDateValue"
+                  v-model="start_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
               ></Calendar>
               <label for="name1">Until</label>
               <Calendar
                   :showIcon="true"
                   :showButtonBar="true"
-                  v-model="calendarValue"
-                  :minDate="minDateValue"
+                  v-model="end_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
               ></Calendar>
             </div>
           </template>
@@ -241,6 +243,8 @@
 <script>
 import {FilterMatchMode} from "primevue/api";
 import AttendanceService from "../service/AttendanceService";
+import moment from "moment/moment";
+// import moment from "moment/moment";
 // import ToastDoc from './ToastDoc';
 
 export default {
@@ -263,6 +267,10 @@ export default {
       ],
       loadingSheets: true,
       isView: false,
+
+      start_date: null,
+      end_date: null,
+      minDateValue: null
     };
   },
   sheetAttendanceService: null,
@@ -271,6 +279,10 @@ export default {
     this.initFilters();
   },
   mounted() {
+    // let now = moment().format('YYYY-MM-DD')
+    this.start_date = moment().format('YYYY-MM-DD')
+    this.end_date = moment().format('YYYY-MM-DD')
+    this.minDateValue =  new Date()
     this.sheetAttendanceService.getAll().then((data) => {
       this.sheetsAttendances = data;
       this.loadingSheets = false;
