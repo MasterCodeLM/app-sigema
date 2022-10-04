@@ -24,7 +24,11 @@
                   @click="checkIn"
               />
 
-              <Button label="Check out" class="p-button-danger mr-2 mb-2"/>
+              <Button
+                  label="Check out"
+                  class="p-button-danger mr-2 mb-2"
+                  @click="checkOut"
+              />
             </div>
           </template>
 
@@ -221,6 +225,7 @@
 import {FilterMatchMode} from "primevue/api";
 //import ProductService from "../service/ProductService";
 import AttendanceService from "../service/AttendanceService";
+import moment from "moment/moment";
 
 export default {
   data() {
@@ -264,13 +269,47 @@ export default {
     },
     checkIn() {
       if (this.selectedProducts.length > 0) {
-        let moment = require("moment");
         let now = moment().format("HH:mm:ss");
         let attendance_sheet = this.$route.params;
         let employees = JSON.parse(JSON.stringify(this.employeesList))
 
         this.selectedProducts.map((employee) => {
-          employees[this.findIndexEmployeesById(employee.id)].check_in = now;
+          if (!employees[this.findIndexEmployeesById(employee.id)].check_in) {
+            employees[this.findIndexEmployeesById(employee.id)].check_in = now;
+          }
+        });
+        let payload = {employees}
+        this.sheetListService
+            .update(attendance_sheet.id, payload)
+            .then((data) => {
+              this.employeesList = data.data.employees;
+              this.selectedProducts = [];
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: data.message,
+                life: 3000,
+              });
+            });
+      } else {
+        this.$toast.add({
+          severity: "error",
+          summary: "Warning",
+          detail: "You must select at least one employee ",
+          life: 3000,
+        });
+      }
+    },
+    checkOut() {
+      if (this.selectedProducts.length > 0) {
+        let now = moment().format("HH:mm:ss");
+        let attendance_sheet = this.$route.params;
+        let employees = JSON.parse(JSON.stringify(this.employeesList))
+
+        this.selectedProducts.map((employee) => {
+          if (!employees[this.findIndexEmployeesById(employee.id)].check_out) {
+            employees[this.findIndexEmployeesById(employee.id)].check_out = now;
+          }
         });
         let payload = {employees}
         this.sheetListService
