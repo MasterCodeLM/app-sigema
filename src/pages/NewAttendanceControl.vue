@@ -33,7 +33,10 @@
           </template>
 
           <template v-slot:end>
-            <Button label="Save Record" class="mr-2 mb-2"></Button>
+            <Button
+                label="Save Record" class="mr-2 mb-2"
+                @click="closeSheet"
+            ></Button>
           </template>
         </Toolbar>
 
@@ -254,7 +257,7 @@ export default {
     this.initFilters();
   },
   mounted() {
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
     let sheet = this.$route.params;
 
     //this.productService.getProducts().then((data) => (this.products = data));
@@ -332,6 +335,25 @@ export default {
           life: 3000,
         });
       }
+    },
+    closeSheet() {
+      let attendance_sheet = this.$route.params;
+      let payload = {
+        is_open: false
+      }
+      this.sheetListService
+          .update(attendance_sheet.id, payload)
+          .then((data) => {
+            this.employeesList = data.data.employees;
+            this.selectedProducts = [];
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+            this.$router.push(`/attendance-sheet`);
+          });
     },
 
     formatCurrency(value) {
