@@ -22,20 +22,25 @@
                   label="Check in"
                   class="p-button-success mr-2 mb-2"
                   @click="checkIn"
+                  :disabled="disabledButtonCheckIn"
               />
 
               <Button
                   label="Check out"
                   class="p-button-danger mr-2 mb-2"
                   @click="checkOut"
+                  :disabled="disabledButtonCheckOut"
+
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="Save Record" class="mr-2 mb-2"
+                label="Close Record" class="mr-2 mb-2"
                 @click="closeSheet"
+                :disabled="disabledButtonClose"
+
             ></Button>
           </template>
         </Toolbar>
@@ -247,6 +252,9 @@ export default {
         {label: "LOWSTOCK", value: "lowstock"},
         {label: "OUTOFSTOCK", value: "outofstock"},
       ],
+      disabledButtonCheckIn: false,
+      disabledButtonCheckOut: false,
+      disabledButtonClose: false,
     };
   },
   sheetListService: null,
@@ -264,7 +272,14 @@ export default {
 
     this.sheetListService
         .getOne(sheet.id)
-        .then((data) => (this.employeesList = data.employees));
+        .then((data) => {
+          if (!data.is_open) {
+            this.disabledButtonCheckIn = true;
+            this.disabledButtonCheckOut = true;
+            this.disabledButtonClose = true;
+          }
+          this.employeesList = data.employees;
+        });
   },
   methods: {
     backPage() {
@@ -285,14 +300,23 @@ export default {
         this.sheetListService
             .update(attendance_sheet.id, payload)
             .then((data) => {
-              this.employeesList = data.data.employees;
-              this.selectedProducts = [];
-              this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: data.message,
-                life: 3000,
-              });
+              if (data.data) {
+                this.employeesList = data.data.employees;
+                this.selectedProducts = [];
+                this.$toast.add({
+                  severity: "success",
+                  summary: "Successful",
+                  detail: data.message,
+                  life: 3000,
+                });
+              } else {
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Error",
+                  detail: data.message,
+                  life: 3000,
+                });
+              }
             });
       } else {
         this.$toast.add({
@@ -318,14 +342,23 @@ export default {
         this.sheetListService
             .update(attendance_sheet.id, payload)
             .then((data) => {
-              this.employeesList = data.data.employees;
-              this.selectedProducts = [];
-              this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: data.message,
-                life: 3000,
-              });
+              if (data.data) {
+                this.employeesList = data.data.employees;
+                this.selectedProducts = [];
+                this.$toast.add({
+                  severity: "success",
+                  summary: "Successful",
+                  detail: data.message,
+                  life: 3000,
+                });
+              } else {
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Error",
+                  detail: data.message,
+                  life: 3000,
+                });
+              }
             });
       } else {
         this.$toast.add({
