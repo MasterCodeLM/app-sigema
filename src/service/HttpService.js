@@ -64,6 +64,19 @@ export default class HttpService {
         }).then(res => res.json())
             .then(d => d);
     }
+
+    async login(uri, payload) {
+        return await httpService(`${apiHost}/${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify(payload),
+        }).then(res => {
+            // if (res.status === 401) logout()
+            return res.json()
+        }).then(d => d);
+    }
 }
 
 function httpService(url, options) {

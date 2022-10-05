@@ -26,7 +26,7 @@
 
             <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
             <Password id="password1" v-model="password" :feedback="false" placeholder="Password" class="w-full mb-3"
-                      inputClass="w-full" inputStyle="padding:1rem"></Password>
+                      inputClass="w-full" inputStyle="padding:1rem" v-on:keyup.enter="login"></Password>
 
             <div class="flex align-items-center justify-content-between mb-5">
             </div>
@@ -73,6 +73,7 @@ export default {
         } else {
           this.invalidCredential = true;
         }
+        // console.log(data)
         this.loadingButton = false;
       })
     },

@@ -2,7 +2,7 @@ import HttpService from "./HttpService";
 
 export default class AuthService {
     async login(payload) {
-        return HttpService.prototype.create('login', payload)
+        return HttpService.prototype.login('login', payload)
     }
 
     async logout() {
