@@ -1,6 +1,13 @@
 <template>
   <div class="grid">
     <div class="col-12">
+      <div class="col-12">
+        <div class="card p-fluid">
+          <div class="flex flex-column align-items-center">
+            <h3 class="text-900 font-medium">MAINTENANCES</h3>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <Toast />
         <Toolbar class="mb-4">
@@ -26,7 +33,7 @@
           <template v-slot:end>
             <Button
               label="New Maintenance"
-              icon="pi pi-plus"
+              icon="pi pi-sliders-h"
               class="p-button-success mr-2"
               @click="nextPage"
             />
@@ -55,7 +62,7 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">LIST MAINTENANCES</h5>
+              <h5 class="m-0">LIST MAINTENANCES SHEETS</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText

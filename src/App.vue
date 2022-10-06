@@ -27,6 +27,7 @@ import AppTopBar from "./AppTopbar.vue";
 import AppMenu from "./AppMenu.vue";
 import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
+import "primeicons/primeicons.css";
 
 export default {
   emits: ["change-theme"],
@@ -315,7 +316,7 @@ export default {
 
           {
             label: "Employees",
-            icon: "pi pi-fw pi-bookmark",
+            icon: "pi pi-users",
             visible:
               this.permissions.includes("employees") ||
               this.permissions.includes("attendance-sheets"),
@@ -343,21 +344,21 @@ export default {
             items: [
               {
                 label: "Maintenance",
-                icon: "pi pi-fw pi-user-edit",
-                to: "/list-machine-maintenance",
+                icon: "pi pi-sliders-h",
+                to: "/maintenance-sheet",
                 visible: this.permissions.includes("maintenance-sheets"),
               },
               {
                 label: "Worked",
-                icon: "pi pi-fw pi-user-edit",
-                to: "/new-work-start",
+                icon: "pi pi-cog",
+                to: "/work-sheet",
                 visible: this.permissions.includes("working-sheets"),
               },
             ],
           },
           {
             label: "Inventory",
-            icon: "pi pi-fw pi-user-edit",
+            icon: "pi pi-wallet",
             to: "/articles",
             visible: this.permissions.includes("articles"),
           },
@@ -369,13 +370,13 @@ export default {
           },
           {
             label: "Suppliers",
-            icon: "pi pi-fw pi-user-edit",
+            icon: "pi pi-briefcase",
             to: "/suppliers",
             visible: this.permissions.includes("suppliers"),
           },
           {
             label: "User Management",
-            icon: "pi pi-fw pi-bookmark",
+            icon: "pi pi-fw pi-desktop",
             visible:
               this.permissions.includes("roles") ||
               this.permissions.includes("users"),
@@ -396,7 +397,7 @@ export default {
           },
           {
             label: "Reports",
-            icon: "pi pi-fw pi-bookmark",
+            icon: "pi pi-folder-open",
             items: [
               {
                 label: "Report 01",
