@@ -23,6 +23,8 @@
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
+            id="description"
+            v-model.trim="workSheet.description"
             placeholder="Your Message"
             :autoResize="true"
             rows="9"
@@ -37,16 +39,24 @@
         <h5>Information</h5>
         <div class="grid">
           <div class="field col-12">
-            <label for="name1">Status: .......</label>
+            <label>Status: {{ this.workSheet.machine.status }}</label>
           </div>
           <div class="field col-12">
-            <label for="name1">Last use: .../.../...</label>
+            <label>Last use: {{ this.workSheet.machine.date_last_use }}</label>
           </div>
           <div class="field col-12">
-            <label for="name1">Total accumulated hours: ......</label>
+            <label
+              >Last maintenance date:
+              {{ this.workSheet.machine.date_last_maintenance }}</label
+            >
           </div>
           <div class="field col-12">
-            <label for="name1">Last maintenance date: .../.../...</label>
+            <!--<label
+              >Total accumulated:
+              {{ this.workSheet.machine.total_time_used.hours }} hs
+              {{ this.workSheet.machine.total_time_used.minutes }} min
+              {{ this.workSheet.machine.total_time_used.seconds }} sec</label
+            >-->
           </div>
         </div>
       </div>
@@ -70,20 +80,71 @@
               <Button
                 @click="showSuccess()"
                 label="STOP"
-                class="p-button-success mr-2"
+                class="p-button-danger"
               />
             </div>
           </div>
 
           <div class="col-12 grid">
-            <DataTable responsiveLayout="scroll" class="col-12">
+            <DataTable
+              ref="dt"
+              :value="workSheet.working_hours"
+              v-model:selection="selectedProducts"
+              dataKey="id"
+              :paginator="false"
+              :rows="10"
+              :filters="filters"
+              responsiveLayout="scroll"
+            >
+              <template #header>
+                <div
+                  class="
+                    flex flex-column
+                    md:flex-row md:justify-content-between md:align-items-center
+                  "
+                >
+                  <h5 class="m-0">Times</h5>
+                  <span class="block mt-2 md:mt-0 p-input-icon-left"> </span>
+                </div>
+              </template>
+
+              <Column headerStyle="width: 3rem"></Column>
+
               <Column
-                v-for="col of columns"
-                :field="col.field"
-                :header="col.header"
-                :key="col.field"
-                style="width: 25%"
+                field="date_time_start"
+                header="Data time start"
+                headerStyle="width:45%; min-width:10rem;"
               >
+                <template #body="slotProps">
+                  {{ slotProps.data.date_time_start }}
+                </template>
+              </Column>
+
+              <Column
+                field="date_time_end"
+                header="Data time end"
+                headerStyle="width:45%; min-width:10rem;"
+              >
+                <template #body="slotProps">
+                  {{ slotProps.data.date_time_end }}
+                </template>
+              </Column>
+
+              <Column
+                field="date_time_diff"
+                header="Cumulative hours"
+                headerStyle="width:45%; min-width:10rem;"
+              >
+                <template #body="slotProps">
+                  {{
+                    slotProps.data.date_time_diff.hours +
+                    "hr " +
+                    slotProps.data.date_time_diff.minutes +
+                    "min " +
+                    slotProps.data.date_time_diff.secons +
+                    "sec"
+                  }}
+                </template>
               </Column>
             </DataTable>
           </div>
@@ -97,9 +158,15 @@
         <div class="grid">
           <div class="field col-12">
             <img
-              src="@/assets/demo/flags/D33HOQRT4BEGNPOI5BZ6MBEAHM.png"
-              width="100%"
-              alt=""
+              :src="
+                this.workSheet.machine.image
+                  ? getImage(this.workSheet.machine.image)
+                  : imageDefault
+              "
+              :alt="'machine'"
+              class="shadow-2"
+              width="100"
+              height="100"
             />
           </div>
         </div>
@@ -152,10 +219,25 @@
 <script>
 import ProductService from "../service/ProductService";
 import { FilterMatchMode } from "primevue/api";
-
+import WorkSheetService from "../service/WorkSheetService";
 export default {
   data() {
     return {
+      workSheet: {
+        date: null,
+        description: null,
+        machine: {
+          //image: null,
+          status: null,
+          date_last_use: null,
+          date_last_maintenance: null,
+          total_time_used: null,
+        },
+        working_hours: [],
+        is_open: null,
+      },
+      imageDefault: "https://via.placeholder.com/150x180",
+
       dropdownItems: [
         { name: "Option 1", code: "Option 1" },
         { name: "Option 2", code: "Option 2" },
@@ -182,9 +264,12 @@ export default {
       },
     };
   },
+
+  machineWorkSheetService: null,
   productService: null,
   created() {
     this.productService = new ProductService();
+    this.machineWorkSheetService = new WorkSheetService();
 
     this.columns = [
       { field: "code", header: "Number Stop" },
@@ -192,6 +277,19 @@ export default {
       { field: "price", header: "End Time", mode: "currency", currency: "USD" },
       { field: "quantity", header: "Total time" },
     ];
+  },
+  mounted() {
+    console.log(this.$route.params);
+    let sheet = this.$route.params;
+    this.machineWorkSheetService.getOne(sheet.id).then((data) => {
+      if (!data.is_open) {
+        this.disabledButtonCheckIn = true;
+        this.disabledButtonCheckOut = true;
+        this.disabledButtonClose = true;
+      }
+      this.workSheet = data;
+      console.log(this.workSheet);
+    });
   },
   methods: {
     backPage() {
@@ -217,6 +315,10 @@ export default {
           else event.preventDefault();
           break;
       }
+    },
+    getImage(path) {
+      // console.log(path)
+      return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
     isPositiveInteger(val) {
       let str = String(val);
@@ -249,7 +351,7 @@ export default {
       }
     },
   },
-  mounted() {
+  /*mounted() {
     this.productService
       .getProductsSmall()
       .then((data) => (this.products1 = data));
@@ -259,6 +361,6 @@ export default {
     this.productService
       .getProductsSmall()
       .then((data) => (this.products3 = data));
-  },
+  },*/
 };
 </script>

@@ -45,6 +45,19 @@ export default class HttpService {
         }).then(d => d);
     }
 
+    async update2(uri, payload) {
+        return await httpService(`${apiHost}/${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'PUT',
+            body: JSON.stringify(payload),
+        }).then(res => {
+            if (res.status === 401) logout()
+            return res.json()
+        }).then(d => d);
+    }
+
     async delete(uri, id) {
         return await httpService(`${apiHost}/${uri}/${id}`, {
             method: 'DELETE',
