@@ -9,66 +9,66 @@
     </div>
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="grid">
-              <label for="name1">Since</label>
+              <label for="name1">From the</label>
               <Calendar
-                  :showIcon="true"
-                  :showButtonBar="false"
-                  v-model="start_date"
-                  :maxDate="minDateValue"
-                  dateFormat="yy-mm-dd"
+                :showIcon="true"
+                :showButtonBar="false"
+                v-model="start_date"
+                :maxDate="minDateValue"
+                dateFormat="yy-mm-dd"
               ></Calendar>
-              <label for="name1">Until</label>
+              <label for="name1">Until the</label>
               <Calendar
-                  :showIcon="true"
-                  :showButtonBar="false"
-                  v-model="end_date"
-                  :maxDate="minDateValue"
-                  dateFormat="yy-mm-dd"
+                :showIcon="true"
+                :showButtonBar="false"
+                v-model="end_date"
+                :maxDate="minDateValue"
+                dateFormat="yy-mm-dd"
               ></Calendar>
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="New Attendance Control"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="nextPage"
+              label="New Attendance Control"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="nextPage"
             />
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="sheetsAttendances"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Article Types"
-            responsiveLayout="scroll"
-            :loading="loadingSheets"
+          ref="dt"
+          :value="sheetsAttendances"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Article Types"
+          responsiveLayout="scroll"
+          :loading="loadingSheets"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">hojasssssssssssssss</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -76,10 +76,10 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-              field="date"
-              header="Date"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="date"
+            header="Date"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Date</span>
@@ -87,10 +87,10 @@
             </template>
           </Column>
           <Column
-              field="responsible"
-              header="Responsible"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="responsible"
+            header="Responsible"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Responsible</span>
@@ -98,14 +98,14 @@
             </template>
           </Column>
           <Column
-              field="is_open"
-              header="Estado"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="is_open"
+            header="Estado"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Estado</span>
-              {{ slotProps.data.is_open ? 'Open' : 'Closed' }}
+              {{ slotProps.data.is_open ? "Open" : "Closed" }}
             </template>
           </Column>
 
@@ -113,16 +113,16 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    v-if="!slotProps.data.is_open"
-                    icon="pi pi-eye"
-                    class="p-button-rounded p-button-info mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="!slotProps.data.is_open"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
-                    v-if="slotProps.data.is_open"
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="slotProps.data.is_open"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
               </div>
             </template>
@@ -130,108 +130,108 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '450px' }"
-            :header="
+          v-model:visible="productDialog"
+          :style="{ width: '450px' }"
+          :header="
             !attendanceSheet.id
               ? 'New Article Type'
               : !isView
               ? 'Edit Article Type'
               : 'Info Article Type'
           "
-            :modal="true"
-            class="p-fluid"
+          :modal="true"
+          class="p-fluid"
         >
           <div class="field">
             <label for="name">Name</label>
             <InputText
-                id="name"
-                v-model.trim="attendanceSheet.name"
-                required="true"
-                autofocus
-                :disabled="isView"
-                :class="{ 'p-invalid': submitted && !attendanceSheet.name }"
+              id="name"
+              v-model.trim="attendanceSheet.name"
+              required="true"
+              autofocus
+              :disabled="isView"
+              :class="{ 'p-invalid': submitted && !attendanceSheet.name }"
             />
             <small class="p-invalid" v-if="submitted && !attendanceSheet.name"
-            >Name is required.</small
+              >Name is required.</small
             >
           </div>
           <template #footer>
             <Button
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-text p-button-danger"
-                @click="hideDialog"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
             />
             <Button
-                v-if="!isView"
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="attendanceSheet"
-            >Are you sure you want to delete <b>{{ attendanceSheet.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ attendanceSheet.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteResource"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductsDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete the selected products?</span
+              >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductsDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductsDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteSelectedProducts"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -241,7 +241,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import AttendanceService from "../service/AttendanceService";
 import moment from "moment/moment";
 // import moment from "moment/moment";
@@ -261,16 +261,16 @@ export default {
       submitted: false,
       message: null,
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
       loadingSheets: true,
       isView: false,
 
-      start_date: moment().format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
-      minDateValue: new Date()
+      start_date: moment().format("YYYY-MM-DD"),
+      end_date: moment().format("YYYY-MM-DD"),
+      minDateValue: new Date(),
     };
   },
   sheetAttendanceService: null,
@@ -283,35 +283,40 @@ export default {
     // this.start_date = moment().format('YYYY-MM-DD')
     // this.end_date = moment().format('YYYY-MM-DD')
     // this.minDateValue = new Date()
-    let start_date = this.start_date
-    let end_date = this.end_date
-    this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
-      this.sheetsAttendances = data;
-      this.loadingSheets = false;
-    });
+    let start_date = this.start_date;
+    let end_date = this.end_date;
+    this.sheetAttendanceService
+      .getAllFilterDates(start_date, end_date)
+      .then((data) => {
+        this.sheetsAttendances = data;
+        this.loadingSheets = false;
+      });
   },
   watch: {
     start_date(value) {
-      let start_date = moment(value).format('YYYY-MM-DD')
-      let end_date = moment(this.end_date).format('YYYY-MM-DD')
+      let start_date = moment(value).format("YYYY-MM-DD");
+      let end_date = moment(this.end_date).format("YYYY-MM-DD");
       this.loadingSheets = true;
-      this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
-        this.sheetsAttendances = data;
-        this.loadingSheets = false;
-      });
-      console.log(start_date,end_date)
+      this.sheetAttendanceService
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.sheetsAttendances = data;
+          this.loadingSheets = false;
+        });
+      console.log(start_date, end_date);
     },
     end_date(value) {
-      let start_date = moment(this.start_date).format('YYYY-MM-DD')
-      let end_date = moment(value).format('YYYY-MM-DD')
+      let start_date = moment(this.start_date).format("YYYY-MM-DD");
+      let end_date = moment(value).format("YYYY-MM-DD");
       this.loadingSheets = true;
-      this.sheetAttendanceService.getAllFilterDates(start_date, end_date).then((data) => {
-        this.sheetsAttendances = data;
-        this.loadingSheets = false;
-      });
-      console.log(start_date,end_date)
-
-    }
+      this.sheetAttendanceService
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.sheetsAttendances = data;
+          this.loadingSheets = false;
+        });
+      console.log(start_date, end_date);
+    },
   },
   methods: {
     nextPage() {
@@ -366,7 +371,7 @@ export default {
     },
     viewArticleTypes(attendanceSheet) {
       this.isView = true;
-      this.attendanceSheet = {...attendanceSheet};
+      this.attendanceSheet = { ...attendanceSheet };
       this.productDialog = true;
     },
     editProduct(attendanceSheet) {
@@ -384,7 +389,7 @@ export default {
       this.deleteDialog = false;
       this.articleTypesService.delete(this.attendanceSheet.id).then((data) => {
         this.articleTypes = this.articleTypes.filter(
-            (val) => val.id !== this.attendanceSheet.id
+          (val) => val.id !== this.attendanceSheet.id
         );
         this.attendanceSheet = {};
         this.$toast.add({
@@ -408,7 +413,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -422,7 +427,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -435,7 +440,7 @@ export default {
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
   },

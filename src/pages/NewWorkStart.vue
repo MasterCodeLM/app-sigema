@@ -1,11 +1,19 @@
 <template>
   <div class="grid">
     <div class="col-12">
-      <Button icon="pi pi-arrow-left" class="p-button-rounded mr-2 mb-2" />
+      <Button
+        icon="pi pi-arrow-left"
+        class="p-button-rounded mr-2 mb-2"
+        @click="backPage"
+      />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
           <h3 class="text-900 font-medium">OPERATION CONTROL</h3>
-          <span class="text-600 font-medium text-lg">Machine Name</span>
+          <Button
+            label="Slect Machine"
+            class="p-button-secondary mr-2 mb-2"
+            @click="openNew"
+          />
         </div>
       </div>
     </div>
@@ -49,46 +57,40 @@
         <h5 style="text-align: center">OPERATION</h5>
 
         <div class="grid">
-          <div class="col-12 mg:col-6">
-            <div class="card">
+          <div class="col-12 grid">
+            <div class="col-6">
               <Button
                 @click="showSuccess()"
                 label="START"
                 class="p-button-success mr-2"
               />
             </div>
-          </div>
-          <div class="field col-12 sm:col-6">
-            <label for="username1">Start Time</label>
-            <InputText id="username1" :required="true" disabled></InputText>
-          </div>
-          <div class="field col-12 sm:col-6">
-            <label for="username1">End Time</label>
-            <InputText id="username1" :required="true" disabled></InputText>
-          </div>
-          <Divider layout="horizontal" align="center">
-            <span class="p-tag">Badge</span>
-          </Divider>
 
-          <div class="field col-5">
-            <label for="username1">Total Hours Worked Today</label>
-            <InputText id="username1" :required="true" disabled></InputText>
-            <br /><br />
-            <label for="username1">Total Hours Left Today</label>
-            <InputText id="username1" :required="true" disabled></InputText>
+            <div class="col-6">
+              <Button
+                @click="showSuccess()"
+                label="STOP"
+                class="p-button-success mr-2"
+              />
+            </div>
           </div>
 
-          <div class="col-2">
-            <Divider layout="vertical"> </Divider>
-          </div>
-
-          <div class="field col-5">
-            <label for="username1">Total Hours Of Life Useful Remaining</label>
-            <InputText id="username1" :required="true" disabled></InputText>
+          <div class="col-12 grid">
+            <DataTable responsiveLayout="scroll" class="col-12">
+              <Column
+                v-for="col of columns"
+                :field="col.field"
+                :header="col.header"
+                :key="col.field"
+                style="width: 25%"
+              >
+              </Column>
+            </DataTable>
           </div>
         </div>
       </div>
     </div>
+
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
         <h5>Photo and Name of machine</h5>
@@ -142,17 +144,6 @@
             />
           </template>
         </Column>
-        <Column headerStyle="min-width:10rem;">
-          <template #body="slotProps">
-            <div style="display: flex; justify-content: end">
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-danger"
-                @click="confirmDeleteProduct(slotProps.data)"
-              />
-            </div>
-          </template>
-        </Column>
       </DataTable>
     </div>
   </Dialog>
@@ -196,14 +187,16 @@ export default {
     this.productService = new ProductService();
 
     this.columns = [
-      { field: "code", header: "Serie" },
-      { field: "name", header: "Description" },
-      { field: "price", header: "Price", mode: "currency", currency: "USD" },
-      { field: "quantity", header: "Quantity" },
-      { field: "quantity", header: "Import" },
+      { field: "code", header: "Number Stop" },
+      { field: "name", header: "Start Time" },
+      { field: "price", header: "End Time", mode: "currency", currency: "USD" },
+      { field: "quantity", header: "Total time" },
     ];
   },
   methods: {
+    backPage() {
+      this.$router.push(`/work-sheet`);
+    },
     openNew() {
       this.product = {};
       this.submitted = false;
