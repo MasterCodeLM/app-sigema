@@ -69,42 +69,45 @@
 
         <div class="grid">
           <div class="col-12 grid">
-            <div class="col-6">
+            <div
+                v-if="workSheet.is_open && !workSheet.id"
+                class="col-6">
               <Button
                   icon="pi pi-play"
                   @click="startWork()"
                   label="START"
                   class="p-button-success mr-2"
-                  :disabled="!workSheet.is_open"
               />
             </div>
-
-            <div class="col-6">
-              <Button
-                  icon="pi pi-stop"
-                  @click="stopWork()"
-                  label="STOP"
-                  class="p-button-danger"
-                  :disabled="!workSheet.is_open"
-              />
-            </div>
-            <div class="col-6">
+            <div
+                v-if="workSheet.is_open && !workSheet.is_pause && workSheet.id"
+                class="col-6">
               <Button
                   icon="pi pi-pause"
                   @click="pauseWork()"
                   label="PAUSE"
                   class="p-button-warning mr-2"
-                  :disabled="!workSheet.is_open"
               />
             </div>
 
-            <div class="col-6">
+            <div
+                v-if="workSheet.is_open && workSheet.is_pause && workSheet.id"
+                class="col-6">
               <Button
                   icon="pi pi-reply"
                   @click="restartWork()"
                   label="RESTART"
                   class="p-button-success"
-                  :disabled="!workSheet.is_open"
+              />
+            </div>
+            <div
+                v-if="workSheet.is_open"
+                class="col-6">
+              <Button
+                  icon="pi pi-stop"
+                  @click="stopWork()"
+                  label="STOP"
+                  class="p-button-danger"
               />
             </div>
           </div>
@@ -197,7 +200,7 @@
     </div>
     <div class="col-12">
       <div class="flex justify-content-center">
-<!--        <Button label="Submit" class="mr-2 mb-2"></Button>-->
+        <!--        <Button label="Submit" class="mr-2 mb-2"></Button>-->
       </div>
     </div>
   </div>
@@ -370,6 +373,7 @@ export default {
         },
         working_hours: [],
         is_open: true,
+        is_pause: false,
       },
       imageDefault: "https://via.placeholder.com/150x180",
 
