@@ -212,7 +212,7 @@ const routes = [
             },
             
             {
-                path: '/new-work-start/:id',
+                path: '/new-work-start/:id?',
                 name: 'new-work-start',
                 component: () => import('./pages/NewWorkStart.vue')
             }

@@ -2,17 +2,18 @@
   <div class="grid">
     <div class="col-12">
       <Button
-        icon="pi pi-arrow-left"
-        class="p-button-rounded mr-2 mb-2"
-        @click="backPage"
+          icon="pi pi-arrow-left"
+          class="p-button-rounded mr-2 mb-2"
+          @click="backPage"
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
           <h3 class="text-900 font-medium">OPERATION CONTROL</h3>
           <Button
-            label="Slect Machine"
-            class="p-button-secondary mr-2 mb-2"
-            @click="openNew"
+              label="Select Machine"
+              class="p-button-secondary mr-2 mb-2"
+              @click="openNew"
+              :disabled="!workSheet.is_open"
           />
         </div>
       </div>
@@ -23,12 +24,12 @@
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
-            id="description"
-            v-model.trim="workSheet.description"
-            placeholder="Your Message"
-            :autoResize="true"
-            rows="9"
-            cols="30"
+              id="description"
+              v-model.trim="workSheet.description"
+              placeholder="Your Message"
+              :autoResize="true"
+              rows="9"
+              cols="30"
           />
         </div>
       </div>
@@ -46,7 +47,7 @@
           </div>
           <div class="field col-12">
             <label
-              >Last maintenance date:
+            >Last maintenance date:
               {{ this.workSheet.machine.date_last_maintenance }}</label
             >
           </div>
@@ -70,35 +71,57 @@
           <div class="col-12 grid">
             <div class="col-6">
               <Button
-                @click="showSuccess()"
-                label="START"
-                class="p-button-success mr-2"
+                  icon="pi pi-play"
+                  @click="startWork()"
+                  label="START"
+                  class="p-button-success mr-2"
+                  :disabled="!workSheet.is_open"
               />
             </div>
 
             <div class="col-6">
               <Button
-                @click="showSuccess()"
-                label="STOP"
-                class="p-button-danger"
+                  icon="pi pi-stop"
+                  @click="stopWork()"
+                  label="STOP"
+                  class="p-button-danger"
+                  :disabled="!workSheet.is_open"
+              />
+            </div>
+            <div class="col-6">
+              <Button
+                  icon="pi pi-pause"
+                  @click="pauseWork()"
+                  label="PAUSE"
+                  class="p-button-warning mr-2"
+                  :disabled="!workSheet.is_open"
+              />
+            </div>
+
+            <div class="col-6">
+              <Button
+                  icon="pi pi-reply"
+                  @click="restartWork()"
+                  label="RESTART"
+                  class="p-button-success"
+                  :disabled="!workSheet.is_open"
               />
             </div>
           </div>
 
           <div class="col-12 grid">
             <DataTable
-              ref="dt"
-              :value="workSheet.working_hours"
-              v-model:selection="selectedProducts"
-              dataKey="id"
-              :paginator="false"
-              :rows="10"
-              :filters="filters"
-              responsiveLayout="scroll"
+                ref="dt"
+                :value="workSheet.working_hours"
+                dataKey="id"
+                :paginator="false"
+                :rows="10"
+                :filters="filters"
+                responsiveLayout="scroll"
             >
               <template #header>
                 <div
-                  class="
+                    class="
                     flex flex-column
                     md:flex-row md:justify-content-between md:align-items-center
                   "
@@ -111,9 +134,9 @@
               <Column headerStyle="width: 3rem"></Column>
 
               <Column
-                field="date_time_start"
-                header="Data time start"
-                headerStyle="width:45%; min-width:10rem;"
+                  field="date_time_start"
+                  header="Data time start"
+                  headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
                   {{ slotProps.data.date_time_start }}
@@ -121,9 +144,9 @@
               </Column>
 
               <Column
-                field="date_time_end"
-                header="Data time end"
-                headerStyle="width:45%; min-width:10rem;"
+                  field="date_time_end"
+                  header="Data time end"
+                  headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
                   {{ slotProps.data.date_time_end }}
@@ -131,9 +154,9 @@
               </Column>
 
               <Column
-                field="date_time_diff"
-                header="Cumulative hours"
-                headerStyle="width:45%; min-width:10rem;"
+                  field="date_time_diff"
+                  header="Cumulative hours"
+                  headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
                   {{
@@ -158,15 +181,15 @@
         <div class="grid">
           <div class="field col-12">
             <img
-              :src="
+                :src="
                 this.workSheet.machine.image
                   ? getImage(this.workSheet.machine.image)
                   : imageDefault
               "
-              :alt="'machine'"
-              class="shadow-2"
-              width="100"
-              height="100"
+                :alt="'machine'"
+                class="shadow-2"
+                width="100"
+                height="100"
             />
           </div>
         </div>
@@ -174,52 +197,164 @@
     </div>
     <div class="col-12">
       <div class="flex justify-content-center">
-        <Button label="Submit" class="mr-2 mb-2"></Button>
+<!--        <Button label="Submit" class="mr-2 mb-2"></Button>-->
       </div>
     </div>
   </div>
   <Dialog
-    v-model:visible="productDialog"
-    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '50vw' }"
-    header="Add Articles"
-    :modal="true"
-    class="p-fluid"
+      v-model:visible="productDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+      :style="{ width: '50vw' }"
+      header="Add Articles"
+      :modal="true"
+      class="p-fluid"
   >
-    <div class="card">
-      <DataTable
-        :value="products1"
-        editMode="cell"
-        @cell-edit-complete="onCellEditComplete"
-        class="editable-cells-table"
+    <DataTable
+        ref="dt"
+        :value="machines"
+        dataKey="id"
+        :paginator="true"
+        :rows="10"
+        :filters="filters"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        :rowsPerPageOptions="[5, 10, 25]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
         responsiveLayout="scroll"
-      >
-        <Column
-          v-for="col of columns"
-          :field="col.field"
-          :header="col.header"
-          :key="col.field"
-          style="width: 25%"
+        :loading="loadingMachines"
+    >
+      <template #header>
+        <div
+            class="
+                flex flex-column
+                md:flex-row md:justify-content-between md:align-items-center
+              "
         >
-          <template #editor="{ data, field }">
-            <InputNumber
-              v-model="data[field]"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-              autofocus
+          <h5 class="m-0">Machines</h5>
+          <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"/>
+                <InputText
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
+                />
+              </span>
+        </div>
+      </template>
+      <Column
+          field="serie_number"
+          header="Serial Number"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
+      >
+        <template #body="slotProps">
+          <span class="p-column-title">Serial Number</span>
+          {{ slotProps.data.serie_number }}
+        </template>
+      </Column>
+      <Column
+          field="name"
+          header="Name"
+          :sortable="true"
+          headerStyle="width:50%; min-width:10rem;"
+      >
+        <template #body="slotProps">
+          <span class="p-column-title">Name</span>
+          {{ slotProps.data.name }}
+        </template>
+      </Column>
+
+
+      <!--        <Column-->
+      <!--            field="model"-->
+      <!--            header="Model"-->
+      <!--            :sortable="true"-->
+      <!--            headerStyle="width:14%; min-width:10rem;"-->
+      <!--        >-->
+      <!--          <template #body="slotProps">-->
+      <!--            <span class="p-column-title">Model</span>-->
+      <!--            {{ slotProps.data.model }}-->
+      <!--          </template>-->
+      <!--        </Column>-->
+
+      <!--        <Column-->
+      <!--            field="brand"-->
+      <!--            header="Brand"-->
+      <!--            :sortable="true"-->
+      <!--            headerStyle="width:14%; min-width:10rem;"-->
+      <!--        >-->
+      <!--          <template #body="slotProps">-->
+      <!--            <span class="p-column-title">Brand</span>-->
+      <!--            {{ slotProps.data.brand }}-->
+      <!--          </template>-->
+      <!--        </Column>-->
+
+      <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+        <template #body="slotProps">
+          <span class="p-column-title">Image</span>
+          <img
+              :src="
+                  slotProps.data.image
+                    ? getImage(slotProps.data.image)
+                    : imageDefault
+                "
+              :alt="'machine'"
+              class="shadow-2"
+              width="100"
+              height="100"
+          />
+        </template>
+      </Column>
+      <Column
+          field="inventoryStatus"
+          header="Status"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
+      >
+        <template #body="slotProps">
+          <span class="p-column-title">Status</span>
+          <span
+              :class="
+                  'product-badge status-' +
+                  (slotProps.data.inventoryStatus
+                    ? slotProps.data.inventoryStatus.toLowerCase()
+                    : '')
+                "
+          >{{ slotProps.data.inventoryStatus }}</span
+          >
+        </template>
+      </Column>
+
+      <Column headerStyle="min-width:10rem;">
+        <template #body="slotProps">
+          <div style="display: flex; justify-content: end">
+            <Button
+                icon="pi pi-plus"
+                class="p-button-rounded p-button-success mr-2"
+                @click="selectMachine(slotProps.data)"
             />
-          </template>
-        </Column>
-      </DataTable>
-    </div>
+            <!--              <Button-->
+            <!--                  icon="pi pi-pencil"-->
+            <!--                  class="p-button-rounded p-button-warning mr-2"-->
+            <!--                  @click="editProduct(slotProps.data)"-->
+            <!--              />-->
+            <!--              <Button-->
+            <!--                  icon="pi pi-trash"-->
+            <!--                  class="p-button-rounded p-button-danger"-->
+            <!--                  @click="confirmDelete(slotProps.data)"-->
+            <!--              />-->
+          </div>
+        </template>
+      </Column>
+    </DataTable>
   </Dialog>
 </template>
 
 <script>
 import ProductService from "../service/ProductService";
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode} from "primevue/api";
 import WorkSheetService from "../service/WorkSheetService";
+import MachinesService from "@/service/MachinesService";
+import moment from "moment/moment";
+
 export default {
   data() {
     return {
@@ -234,14 +369,14 @@ export default {
           total_time_used: null,
         },
         working_hours: [],
-        is_open: null,
+        is_open: true,
       },
       imageDefault: "https://via.placeholder.com/150x180",
 
       dropdownItems: [
-        { name: "Option 1", code: "Option 1" },
-        { name: "Option 2", code: "Option 2" },
-        { name: "Option 3", code: "Option 3" },
+        {name: "Option 1", code: "Option 1"},
+        {name: "Option 2", code: "Option 2"},
+        {name: "Option 3", code: "Option 3"},
       ],
       productDialog: false,
       dropdownItem: null,
@@ -252,56 +387,69 @@ export default {
       products2: null,
       products3: null,
       statuses: [
-        { label: "In Stock", value: "INSTOCK" },
-        { label: "Low Stock", value: "LOWSTOCK" },
-        { label: "Out of Stock", value: "OUTOFSTOCK" },
+        {label: "In Stock", value: "INSTOCK"},
+        {label: "Low Stock", value: "LOWSTOCK"},
+        {label: "Out of Stock", value: "OUTOFSTOCK"},
       ],
-      filters: {
-        code: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        quantity: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      },
+      filters: {},
+      // filters: {
+      //   code: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+      //   name: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+      //   quantity: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+      //   price: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+      // },
+      machines: [],
+      loadingMachines: true,
     };
   },
 
   machineWorkSheetService: null,
+  machineService: null,
   productService: null,
   created() {
     this.productService = new ProductService();
     this.machineWorkSheetService = new WorkSheetService();
-
+    this.machineService = new MachinesService();
+    this.initFilters();
     this.columns = [
-      { field: "code", header: "Number Stop" },
-      { field: "name", header: "Start Time" },
-      { field: "price", header: "End Time", mode: "currency", currency: "USD" },
-      { field: "quantity", header: "Total time" },
+      {field: "code", header: "Number Stop"},
+      {field: "name", header: "Start Time"},
+      {field: "price", header: "End Time", mode: "currency", currency: "USD"},
+      {field: "quantity", header: "Total time"},
     ];
   },
   mounted() {
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
     let sheet = this.$route.params;
-    this.machineWorkSheetService.getOne(sheet.id).then((data) => {
-      if (!data.is_open) {
-        this.disabledButtonCheckIn = true;
-        this.disabledButtonCheckOut = true;
-        this.disabledButtonClose = true;
-      }
-      this.workSheet = data;
-      console.log(this.workSheet);
-    });
+    // console.log(sheet);
+    if (sheet.id) {
+
+      this.machineWorkSheetService.getOne(sheet.id).then((data) => {
+        if (!data.is_open) {
+          this.disabledButtonCheckIn = true;
+          this.disabledButtonCheckOut = true;
+          this.disabledButtonClose = true;
+        }
+        this.workSheet = data;
+        // console.log(this.workSheet);
+      });
+    }
   },
   methods: {
     backPage() {
       this.$router.push(`/work-sheet`);
     },
     openNew() {
-      this.product = {};
-      this.submitted = false;
       this.productDialog = true;
+      //  SET DATA
+      this.loadingMachines = true;
+      this.machineService.getAll().then((data) => {
+        this.machines = data;
+        this.loadingMachines = false;
+      });
     },
     onCellEditComplete(event) {
-      let { data, newValue, field } = event;
+      let {data, newValue, field} = event;
 
       switch (field) {
         case "quantity":
@@ -331,7 +479,7 @@ export default {
       return n !== Infinity && String(n) === str && n >= 0;
     },
     onRowEditSave(event) {
-      let { newData, index } = event;
+      let {newData, index} = event;
 
       this.products2[index] = newData;
     },
@@ -350,6 +498,54 @@ export default {
           return "NA";
       }
     },
+    initFilters() {
+      this.filters = {
+        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+      };
+    },
+    selectMachine(value) {
+      this.machineService.getOne(value.id).then((data) => {
+        this.workSheet.machine = {...data};
+        this.productDialog = false;
+      });
+    },
+    startWork() {
+      // console.log('Start')
+      this.workSheet.date = moment().format('YYYY-MM-DD HH:mm:ss');
+      let payload = this.workSheet;
+      // console.log(payload);
+
+      this.machineWorkSheetService.start(payload).then((data) => {
+        this.workSheet = data.data
+      });
+    },
+    pauseWork() {
+      let id = this.workSheet.id;
+      let payload = {
+        date: moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.machineWorkSheetService.pause(id, payload).then((data) => {
+        this.workSheet = data.data
+      });
+    },
+    restartWork() {
+      let id = this.workSheet.id;
+      let payload = {
+        date: moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.machineWorkSheetService.restart(id, payload).then((data) => {
+        this.workSheet = data.data
+      });
+    },
+    stopWork() {
+      let id = this.workSheet.id;
+      let payload = {
+        date: moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.machineWorkSheetService.stop(id, payload).then((data) => {
+        this.workSheet = data.data
+      });
+    }
   },
   /*mounted() {
     this.productService
