@@ -19,7 +19,61 @@
       </div>
     </div>
     <div class="col-12 md:col-6">
-      <div class="card p-fluid">
+      <div class="card p-fluid h-full">
+        <div class="grid">
+          <div class="col-6">
+            <h5>Information</h5>
+            <div class="grid">
+              <div class="field col-12">
+                <label>Serie: {{ this.workSheet.machine.serie_number }}</label>
+              </div>
+              <div class="field col-12">
+                <label>Machine: {{ this.workSheet.machine.name }}</label>
+              </div>
+              <div class="field col-12">
+                <label>Status: {{ this.workSheet.machine.status }}</label>
+              </div>
+              <div class="field col-12">
+                <label>Last use: {{ this.workSheet.machine.date_last_use }}</label>
+              </div>
+              <div class="field col-12">
+                <label
+                >Last maintenance date:
+                  {{ this.workSheet.machine.date_last_maintenance }}</label
+                >
+              </div>
+              <div class="field col-12">
+                <label
+                >Total accumulated:
+                  {{ this.workSheet.machine.total_time_used.hours }} hs
+                  {{ this.workSheet.machine.total_time_used.minutes }} min
+                  {{ this.workSheet.machine.total_time_used.seconds }} sec</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="grid h-full">
+              <div class="field col-12 flex justify-content-center align-items-center">
+                <img
+                    :src="
+                this.workSheet.machine.image
+                  ? getImage(this.workSheet.machine.image)
+                  : imageDefault
+              "
+                    :alt="'machine'"
+                    class="shadow-2"
+                    width="180"
+                    height="200"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="card p-fluid h-full">
         <h5>Pre-check description</h5>
         <div class="field">
           <!--          <label for="name1">Description</label>-->
@@ -28,42 +82,16 @@
               v-model.trim="workSheet.description"
               placeholder="Your Message"
               :autoResize="true"
-              rows="9"
+              rows="10"
               cols="30"
+              :disabled="workSheet.id"
           />
         </div>
       </div>
     </div>
 
-    <div class="col-12 md:col-6">
-      <div class="card p-fluid">
-        <h5>Information</h5>
-        <div class="grid">
-          <div class="field col-12">
-            <label>Status: {{ this.workSheet.machine.status }}</label>
-          </div>
-          <div class="field col-12">
-            <label>Last use: {{ this.workSheet.machine.date_last_use }}</label>
-          </div>
-          <div class="field col-12">
-            <label
-            >Last maintenance date:
-              {{ this.workSheet.machine.date_last_maintenance }}</label
-            >
-          </div>
-          <div class="field col-12">
-            <!--<label
-              >Total accumulated:
-              {{ this.workSheet.machine.total_time_used.hours }} hs
-              {{ this.workSheet.machine.total_time_used.minutes }} min
-              {{ this.workSheet.machine.total_time_used.seconds }} sec</label
-            >-->
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-12 md:col-6">
+    <div class="col-12">
       <div class="card p-fluid">
         <h5 style="text-align: center">OPERATION</h5>
 
@@ -108,11 +136,12 @@
                   @click="stopWork()"
                   label="STOP"
                   class="p-button-danger"
+                  :disabled="!workSheet.id"
               />
             </div>
           </div>
 
-          <div class="col-12 grid">
+          <div class="col-12">
             <DataTable
                 ref="dt"
                 :value="workSheet.working_hours"
@@ -175,32 +204,6 @@
             </DataTable>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="col-12 md:col-6">
-      <div class="card p-fluid">
-        <h5>Photo and Name of machine</h5>
-        <div class="grid">
-          <div class="field col-12">
-            <img
-                :src="
-                this.workSheet.machine.image
-                  ? getImage(this.workSheet.machine.image)
-                  : imageDefault
-              "
-                :alt="'machine'"
-                class="shadow-2"
-                width="100"
-                height="100"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
-      <div class="flex justify-content-center">
-        <!--        <Button label="Submit" class="mr-2 mb-2"></Button>-->
       </div>
     </div>
   </div>
@@ -362,14 +365,20 @@ export default {
   data() {
     return {
       workSheet: {
+        id: null,
         date: null,
         description: null,
         machine: {
           //image: null,
+          id: null,
           status: null,
           date_last_use: null,
           date_last_maintenance: null,
-          total_time_used: null,
+          total_time_used: {
+            hours: null,
+            minutes: null,
+            seconds: null
+          },
         },
         working_hours: [],
         is_open: true,
@@ -514,14 +523,16 @@ export default {
       });
     },
     startWork() {
-      // console.log('Start')
-      this.workSheet.date = moment().format('YYYY-MM-DD HH:mm:ss');
-      let payload = this.workSheet;
-      // console.log(payload);
+      if (this.workSheet.machine.id) {
 
-      this.machineWorkSheetService.start(payload).then((data) => {
-        this.workSheet = data.data
-      });
+        this.workSheet.date = moment().format('YYYY-MM-DD HH:mm:ss');
+        let payload = this.workSheet;
+        // console.log(payload);
+
+        this.machineWorkSheetService.start(payload).then((data) => {
+          this.workSheet = data.data
+        });
+      }
     },
     pauseWork() {
       let id = this.workSheet.id;

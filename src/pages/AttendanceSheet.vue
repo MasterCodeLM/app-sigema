@@ -303,7 +303,7 @@ export default {
           this.sheetsAttendances = data;
           this.loadingSheets = false;
         });
-      console.log(start_date, end_date);
+      // console.log(start_date, end_date);
     },
     end_date(value) {
       let start_date = moment(this.start_date).format("YYYY-MM-DD");
@@ -315,7 +315,7 @@ export default {
           this.sheetsAttendances = data;
           this.loadingSheets = false;
         });
-      console.log(start_date, end_date);
+      // console.log(start_date, end_date);
     },
   },
   methods: {

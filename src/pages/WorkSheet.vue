@@ -16,16 +16,18 @@
               <label for="name1">Since</label>
               <Calendar
                   :showIcon="true"
-                  :showButtonBar="true"
-                  v-model="calendarValue"
-                  :minDate="minDateValue"
+                  :showButtonBar="false"
+                  v-model="start_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
               ></Calendar>
               <label for="name1">Until</label>
               <Calendar
                   :showIcon="true"
-                  :showButtonBar="true"
-                  v-model="calendarValue"
-                  :minDate="minDateValue"
+                  :showButtonBar="false"
+                  v-model="end_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
               ></Calendar>
             </div>
           </template>
@@ -208,6 +210,7 @@ import ArticlesService from "../service/ArticlesService";
 import ImageService from "../service/ImageService";
 import FileService from "../service/FileService";
 import WorkSheetService from "../service/WorkSheetService";
+import moment from "moment";
 
 export default {
   data() {
@@ -219,7 +222,7 @@ export default {
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
-      minDateValue: new Date(),
+      // minDateValue: new Date(),
       machine: {
         serie_number: null,
         name: null,
@@ -263,6 +266,9 @@ export default {
       imageDefault: "https://via.placeholder.com/150x180",
       loadingMachines: true,
       isView: false,
+      start_date: moment().format("YYYY-MM-DD"),
+      end_date: moment().format("YYYY-MM-DD"),
+      minDateValue: new Date(),
     };
   },
 
@@ -278,10 +284,38 @@ export default {
     this.initFilters();
   },
   mounted() {
-    this.workSheetService.getAll().then((data) => {
+    let start_date = this.start_date;
+    let end_date = this.end_date;
+    this.workSheetService.getAllFilterDates(start_date, end_date).then((data) => {
       this.workSheets = data;
       this.loadingMachines = false;
     });
+  },
+  watch: {
+    start_date(value) {
+      let start_date = moment(value).format("YYYY-MM-DD");
+      let end_date = moment(this.end_date).format("YYYY-MM-DD");
+      this.loadingMachines = true;
+      this.workSheetService
+          .getAllFilterDates(start_date, end_date)
+          .then((data) => {
+            this.workSheets = data;
+            this.loadingMachines = false;
+          });
+      // console.log(start_date, end_date);
+    },
+    end_date(value) {
+      let start_date = moment(this.start_date).format("YYYY-MM-DD");
+      let end_date = moment(value).format("YYYY-MM-DD");
+      this.loadingMachines = true;
+      this.workSheetService
+          .getAllFilterDates(start_date, end_date)
+          .then((data) => {
+            this.workSheets = data;
+            this.loadingMachines = false;
+          });
+      // console.log(start_date, end_date);
+    },
   },
   methods: {
     onUploadImage(event) {

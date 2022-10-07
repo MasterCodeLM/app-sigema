@@ -5,6 +5,10 @@ export default class WorkSheetService {
     async getAll() {
         return HttpService.prototype.getAll(uri)
     }
+    async getAllFilterDates(start_date, end_date) {
+        let custom_uri = `${uri}?start_date=${start_date}&end_date=${end_date}`
+        return HttpService.prototype.getAll(custom_uri)
+    }
     
     async getOne(id) {
         return HttpService.prototype.getOne(uri,id)
