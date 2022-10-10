@@ -340,7 +340,7 @@
         <template #body="slotProps">
           <div style="display: flex; justify-content: end">
             <Button
-              icon="pi pi-plus"
+              icon="pi pi-angle-double-down"
               class="p-button-rounded p-button-success mr-2"
               @click="selectMachine(slotProps.data)"
             />

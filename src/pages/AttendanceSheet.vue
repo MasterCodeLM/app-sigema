@@ -34,16 +34,10 @@
 
           <template v-slot:end>
             <Button
-              label="Newxxxxxxxxxxxxx"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openNew"
-            />
-            <Button
               label="New Attendance Control"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              @click="nextPage"
+              @click="openNew"
             />
           </template>
         </Toolbar>
@@ -135,7 +129,7 @@
           </Column>
         </DataTable>
 
-        <Dialog v-model:visible="productDialog" :style="{ width: '1200px' }">
+        <Dialog v-model:visible="productDialog" :style="{ width: '1600px' }">
           <div class="content-section introduction">
             <div class="feature-intro">
               <h1>PickList New Attendance</h1>
@@ -151,37 +145,97 @@
                 listStyle="height:342px"
                 dataKey="id"
               >
-                <template #sourceheader> Available </template>
+                <template #sourceheader>
+                  Available
+                  <div
+                    class="
+                      flex flex-column
+                      md:flex-row
+                      md:justify-content-between
+                      md:align-items-center
+                    "
+                  >
+                    <div class="field grid col-8">
+                      <div class="field col-6 px-2">
+                        <h5 class="m-0">
+                          <h6>Filter by:</h6>
+
+                          <Dropdown
+                            id="state"
+                            v-model="filter"
+                            :options="articleTypeFilterItems"
+                            optionLabel="name"
+                            placeholder="Type employee"
+                            :filter="false"
+                            :loading="loadingArticleTypesFilter"
+                            @change="filterByArticleType"
+                          ></Dropdown>
+                        </h5>
+                      </div>
+
+                      <div class="field col-6 px-2">
+                        <h5 class="m-0">
+                          <h6>Filter by:</h6>
+
+                          <Dropdown
+                            id="state"
+                            v-model="filter"
+                            :options="articleTypeFilterItems"
+                            optionLabel="name"
+                            placeholder="Turn"
+                            :filter="false"
+                            :loading="loadingArticleTypesFilter"
+                            @change="filterByArticleType"
+                          ></Dropdown>
+                        </h5>
+                      </div>
+                    </div>
+                    <div class="field col-4">
+                      <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search" />
+                        <InputText
+                          v-model="filters['global'].value"
+                          placeholder="Search..."
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </template>
                 <template #targetheader> Selected </template>
                 <template #item="slotProps">
                   <div class="product-item">
-                    <div class="image-container">
-                      <img
-                        :src="'demo/images/product/' + slotProps.item.image"
-                        :alt="slotProps.item.name"
-                      />
-                    </div>
                     <div class="product-list-detail">
-                      <h6 class="mb-2">{{ slotProps.item.name }}</h6>
-                      <i class="pi pi-tag product-category-icon"></i>
-                      <span class="product-category">{{
-                        slotProps.item.category
-                      }}</span>
+                      <div class="grid">
+                        <div class="col 6">
+                          <h6 class="mb-2">
+                            {{
+                              slotProps.item.name + "" + slotProps.item.lastname
+                            }}
+                          </h6>
+                        </div>
+                        <div class="col 6">
+                          <h6 class="mb-2">
+                            {{ slotProps.item.document_type.name }}
+                          </h6>
+                        </div>
+                        <div class="col 6">
+                          <h6 class="mb-2">
+                            {{ slotProps.item.document_type.name }}
+                          </h6>
+                        </div>
+                      </div>
                     </div>
-                    <!--
-                    <div class="product-list-action">
-                      <h6 class="mb-2">${{ slotProps.item.price }}</h6>
-                      <span
-                        :class="
-                          'product-badge status-' +
-                          slotProps.item.inventoryStatus.toLowerCase()
-                        "
-                        >{{ slotProps.item.inventoryStatus }}</span
-                      >
-                    </div>-->
                   </div>
                 </template>
               </PickList>
+            </div>
+            <div class="flex justify-content-end">
+              <Button
+                label="Next"
+                icon="pi pi-list"
+                class="p-button-success mr-2"
+                @click="nextPage"
+              />
             </div>
           </div>
         </Dialog>
