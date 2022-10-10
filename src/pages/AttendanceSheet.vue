@@ -34,6 +34,12 @@
 
           <template v-slot:end>
             <Button
+              label="Newxxxxxxxxxxxxx"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openNew"
+            />
+            <Button
               label="New Attendance Control"
               icon="pi pi-plus"
               class="p-button-success mr-2"
@@ -129,48 +135,55 @@
           </Column>
         </DataTable>
 
-        <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '450px' }"
-          :header="
-            !attendanceSheet.id
-              ? 'New Article Type'
-              : !isView
-              ? 'Edit Article Type'
-              : 'Info Article Type'
-          "
-          :modal="true"
-          class="p-fluid"
-        >
-          <div class="field">
-            <label for="name">Name</label>
-            <InputText
-              id="name"
-              v-model.trim="attendanceSheet.name"
-              required="true"
-              autofocus
-              :disabled="isView"
-              :class="{ 'p-invalid': submitted && !attendanceSheet.name }"
-            />
-            <small class="p-invalid" v-if="submitted && !attendanceSheet.name"
-              >Name is required.</small
-            >
+        <Dialog v-model:visible="productDialog" :style="{ width: '1200px' }">
+          <div class="content-section introduction">
+            <div class="feature-intro">
+              <h1>PickList New Attendance</h1>
+              <p>Add the employees who will work the next shift to open</p>
+            </div>
+            <AppDemoActions />
           </div>
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
-            />
-            <Button
-              v-if="!isView"
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
-            />
-          </template>
+
+          <div class="content-section implementation">
+            <div class="card">
+              <PickList
+                v-model="employees"
+                listStyle="height:342px"
+                dataKey="id"
+              >
+                <template #sourceheader> Available </template>
+                <template #targetheader> Selected </template>
+                <template #item="slotProps">
+                  <div class="product-item">
+                    <div class="image-container">
+                      <img
+                        :src="'demo/images/product/' + slotProps.item.image"
+                        :alt="slotProps.item.name"
+                      />
+                    </div>
+                    <div class="product-list-detail">
+                      <h6 class="mb-2">{{ slotProps.item.name }}</h6>
+                      <i class="pi pi-tag product-category-icon"></i>
+                      <span class="product-category">{{
+                        slotProps.item.category
+                      }}</span>
+                    </div>
+                    <!--
+                    <div class="product-list-action">
+                      <h6 class="mb-2">${{ slotProps.item.price }}</h6>
+                      <span
+                        :class="
+                          'product-badge status-' +
+                          slotProps.item.inventoryStatus.toLowerCase()
+                        "
+                        >{{ slotProps.item.inventoryStatus }}</span
+                      >
+                    </div>-->
+                  </div>
+                </template>
+              </PickList>
+            </div>
+          </div>
         </Dialog>
 
         <Dialog
@@ -244,12 +257,14 @@
 import { FilterMatchMode } from "primevue/api";
 import AttendanceService from "../service/AttendanceService";
 import moment from "moment/moment";
+import EmployeesService from "../service/EmployeesService";
 // import moment from "moment/moment";
 // import ToastDoc from './ToastDoc';
 
 export default {
   data() {
     return {
+      employees: null,
       sheetsAttendances: null,
       productDialog: false,
       deleteDialog: false,
@@ -274,8 +289,10 @@ export default {
     };
   },
   sheetAttendanceService: null,
+  employeesService: null,
   created() {
     this.sheetAttendanceService = new AttendanceService();
+    this.employeesService = new EmployeesService();
     this.initFilters();
   },
   mounted() {
@@ -328,7 +345,12 @@ export default {
     },
     openNew() {
       this.isView = false;
+
       this.attendanceSheet = {};
+      this.employeesService
+        .getAll()
+        .then((data) => (this.employees = [data, []]));
+      console.log(this.employees);
       this.submitted = false;
       this.productDialog = true;
     },

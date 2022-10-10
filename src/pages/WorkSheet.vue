@@ -9,67 +9,72 @@
     </div>
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
-            <div class="grid">
-              <label for="name1">Since</label>
-              <Calendar
+            <div class="field grid">
+              <div style="vertical-align: inherit" class="px-2">
+                <label>From the </label>
+                <Calendar
                   :showIcon="true"
                   :showButtonBar="false"
                   v-model="start_date"
                   :maxDate="minDateValue"
                   dateFormat="yy-mm-dd"
-              ></Calendar>
-              <label for="name1">Until</label>
-              <Calendar
+                ></Calendar>
+              </div>
+
+              <div style="vertical-align: inherit" class="px-2">
+                <label> Until the </label>
+                <Calendar
                   :showIcon="true"
                   :showButtonBar="false"
                   v-model="end_date"
                   :maxDate="minDateValue"
                   dateFormat="yy-mm-dd"
-              ></Calendar>
+                ></Calendar>
+              </div>
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="New Work"
-                icon="pi pi-cog"
-                class="p-button-success mr-2"
-                @click="nextPage"
+              label="New Work"
+              icon="pi pi-cog"
+              class="p-button-success mr-2"
+              @click="nextPage"
             />
             <!--@click="exportCSV($event)"-->
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="workSheets"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
-            :loading="loadingMachines"
+          ref="dt"
+          :value="workSheets"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          responsiveLayout="scroll"
+          :loading="loadingMachines"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">LIST WORK SHEETS</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -78,10 +83,22 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-              field="date"
-              header="Date"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="code"
+            header="Code"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Code</span>
+              {{ slotProps.data.code }}
+            </template>
+          </Column>
+
+          <Column
+            field="date"
+            header="Date"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Date</span>
@@ -90,10 +107,10 @@
           </Column>
 
           <Column
-              field="serie_number"
-              header="Serial Number"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="machine.serie_number"
+            header="Serial Number"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
@@ -102,10 +119,10 @@
           </Column>
 
           <Column
-              field="name"
-              header="Name"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="machine.name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -117,24 +134,24 @@
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                  :src="
+                :src="
                   slotProps.data.machine.image
                     ? getImage(slotProps.data.machine.image)
                     : imageDefault
                 "
-                  :alt="'machine'"
-                  class="shadow-2"
-                  width="100"
-                  height="100"
+                :alt="'machine'"
+                class="shadow-2"
+                width="100"
+                height="100"
               />
             </template>
           </Column>
 
           <Column
-              field="is_open"
-              header="Estado"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="is_open"
+            header="Estado"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Estado</span>
@@ -146,16 +163,16 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    v-if="!slotProps.data.is_open"
-                    icon="pi pi-eye"
-                    class="p-button-rounded p-button-info mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="!slotProps.data.is_open"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
-                    v-if="slotProps.data.is_open"
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="slotProps.data.is_open"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <!--<Button
                   icon="pi pi-trash"
@@ -168,33 +185,33 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="deleteDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="resource"
-            >Are you sure you want to delete <b>{{ resource.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deletetDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deletetDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteResource"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
@@ -204,7 +221,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 //import MachinesService from "../service/MachinesService";
 import ArticlesService from "../service/ArticlesService";
 import ImageService from "../service/ImageService";
@@ -247,16 +264,16 @@ export default {
       loadingSpareParts: true,
 
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
 
       submittedAddSparePart: false,
 
       columns: [
-        {field: "model", header: "Serial Number"},
-        {field: "name", header: "Nombre"},
+        { field: "model", header: "Serial Number" },
+        { field: "name", header: "Nombre" },
       ],
 
       sparePartItem: null,
@@ -286,10 +303,12 @@ export default {
   mounted() {
     let start_date = this.start_date;
     let end_date = this.end_date;
-    this.workSheetService.getAllFilterDates(start_date, end_date).then((data) => {
-      this.workSheets = data;
-      this.loadingMachines = false;
-    });
+    this.workSheetService
+      .getAllFilterDates(start_date, end_date)
+      .then((data) => {
+        this.workSheets = data;
+        this.loadingMachines = false;
+      });
   },
   watch: {
     start_date(value) {
@@ -297,11 +316,11 @@ export default {
       let end_date = moment(this.end_date).format("YYYY-MM-DD");
       this.loadingMachines = true;
       this.workSheetService
-          .getAllFilterDates(start_date, end_date)
-          .then((data) => {
-            this.workSheets = data;
-            this.loadingMachines = false;
-          });
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.workSheets = data;
+          this.loadingMachines = false;
+        });
       // console.log(start_date, end_date);
     },
     end_date(value) {
@@ -309,11 +328,11 @@ export default {
       let end_date = moment(value).format("YYYY-MM-DD");
       this.loadingMachines = true;
       this.workSheetService
-          .getAllFilterDates(start_date, end_date)
-          .then((data) => {
-            this.workSheets = data;
-            this.loadingMachines = false;
-          });
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.workSheets = data;
+          this.loadingMachines = false;
+        });
       // console.log(start_date, end_date);
     },
   },
@@ -377,9 +396,9 @@ export default {
           if (this.isFile(this.machine.image)) {
             let formdataImage = new FormData();
             formdataImage.append(
-                "image",
-                this.machine.image,
-                this.machine.image
+              "image",
+              this.machine.image,
+              this.machine.image
             );
             await this.imageService.upload(formdataImage).then((data) => {
               this.machine.image = data.path;
@@ -388,9 +407,9 @@ export default {
           if (this.isFile(this.machine.technical_sheet)) {
             let formdataFile = new FormData();
             formdataFile.append(
-                "file",
-                this.machine.technical_sheet,
-                this.machine.technical_sheet
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
             );
             await this.fileService.upload(formdataFile).then((data) => {
               this.machine.technical_sheet = data.path;
@@ -419,9 +438,9 @@ export default {
           if (this.isFile(this.machine.image)) {
             let formdataImage = new FormData();
             formdataImage.append(
-                "image",
-                this.machine.image,
-                this.machine.image
+              "image",
+              this.machine.image,
+              this.machine.image
             );
             await this.imageService.upload(formdataImage).then((data) => {
               this.machine.image = data.path;
@@ -430,9 +449,9 @@ export default {
           if (this.isFile(this.machine.technical_sheet)) {
             let formdataFile = new FormData();
             formdataFile.append(
-                "file",
-                this.machine.technical_sheet,
-                this.machine.technical_sheet
+              "file",
+              this.machine.technical_sheet,
+              this.machine.technical_sheet
             );
             await this.fileService.upload(formdataFile).then((data) => {
               this.machine.technical_sheet = data.path;
@@ -456,7 +475,7 @@ export default {
     viewMachine(machine) {
       this.isView = true;
       this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = {...data};
+        this.machine = { ...data };
         this.productDialog = true;
       });
     },
@@ -471,7 +490,7 @@ export default {
       this.deleteDialog = false;
       this.machinesService.delete(this.resource.id).then((data) => {
         this.machines = this.machines.filter(
-            (val) => val.id !== this.resource.id
+          (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
@@ -505,7 +524,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -520,7 +539,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -537,7 +556,7 @@ export default {
       if (this.validateFormSparePart()) {
         if (this.findSparePartsIndexById(this.sparePartItem.id) === -1) {
           // INSERT DATA
-          this.spare_Part = {...this.spare_Part, ...this.sparePartItem};
+          this.spare_Part = { ...this.spare_Part, ...this.sparePartItem };
           // console.log(this.spare_Part);
           this.machine.articles.unshift(this.spare_Part);
         } else {
@@ -558,11 +577,11 @@ export default {
     validateFormMachine() {
       // return true;
       return (
-          this.machine.serie_number &&
-          this.machine.name &&
-          this.machine.brand &&
-          this.machine.model &&
-          this.machine.maximum_working_time
+        this.machine.serie_number &&
+        this.machine.name &&
+        this.machine.brand &&
+        this.machine.model &&
+        this.machine.maximum_working_time
       );
     },
     validateFormSparePart() {
@@ -571,7 +590,7 @@ export default {
     },
     removeSparePart(data) {
       this.machine.articles = this.machine.articles.filter(
-          (val) => val.id !== data.id
+        (val) => val.id !== data.id
       );
     },
     getImage(path) {
@@ -585,7 +604,7 @@ export default {
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
     defaultObjects() {
