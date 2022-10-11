@@ -44,7 +44,6 @@
               class="p-button-success mr-2"
               @click="nextPage"
             />
-            <!--@click="exportCSV($event)"-->
           </template>
         </Toolbar>
 
@@ -58,7 +57,7 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} work sheets"
           responsiveLayout="scroll"
           :loading="loadingMachines"
         >

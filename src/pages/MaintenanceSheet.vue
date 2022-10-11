@@ -1,32 +1,36 @@
 <template>
   <div class="grid">
     <div class="col-12">
-      <div class="col-12">
-        <div class="card p-fluid">
-          <div class="flex flex-column align-items-center">
-            <h3 class="text-900 font-medium">MAINTENANCES</h3>
-          </div>
+      <div class="card p-fluid">
+        <div class="flex flex-column align-items-center">
+          <h3 class="text-900 font-medium">MAINTENANCES</h3>
         </div>
       </div>
+    </div>
+    <div class="col-12">
       <div class="card">
         <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
-            <div class="grid">
-              <label for="name1">Since</label>
-              <Calendar
-                :showIcon="true"
-                :showButtonBar="true"
-                v-model="calendarValue"
-                :minDate="minDateValue"
-              ></Calendar>
-              <label for="name1">Until</label>
-              <Calendar
-                :showIcon="true"
-                :showButtonBar="true"
-                v-model="calendarValue"
-                :minDate="minDateValue"
-              ></Calendar>
+            <div class="fiel grid">
+              <div style="vertical-align: inherit" class="px-2">
+                <label for="name1">From the</label>
+                <Calendar
+                  :showIcon="true"
+                  :showButtonBar="true"
+                  v-model="calendarValue"
+                  :minDate="minDateValue"
+                ></Calendar>
+              </div>
+              <div style="vertical-align: inherit" class="px-2">
+                <label for="name1">Until the</label>
+                <Calendar
+                  :showIcon="true"
+                  :showButtonBar="true"
+                  v-model="calendarValue"
+                  :minDate="minDateValue"
+                ></Calendar>
+              </div>
             </div>
           </template>
 
@@ -51,7 +55,7 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} maitenance sheets"
           responsiveLayout="scroll"
           :loading="loadingMachines"
         >
@@ -194,300 +198,6 @@
             </template>
           </Column>
         </DataTable>
-
-        <Dialog
-          v-model:visible="productDialog"
-          :style="{ width: '900px' }"
-          :header="
-            !machine.id
-              ? 'New Machine'
-              : !isView
-              ? 'Edit Machine'
-              : 'Info Machine'
-          "
-          :modal="true"
-          class="p-fluid"
-        >
-          <div class="formgrid grid">
-            <div class="col-8">
-              <div class="card mb-4">
-                <div class="field">
-                  <label for="serie_number">Serial Number</label>
-                  <InputText
-                    id="serie_number"
-                    v-model.trim="machine.serie_number"
-                    required="true"
-                    autofocus
-                    :class="{ 'p-invalid': submitted && !machine.serie_number }"
-                    :disabled="isView"
-                    autocomplete="off"
-                  />
-                  <small
-                    class="p-invalid"
-                    v-if="submitted && !machine.serie_number"
-                    >Serial Number is required.</small
-                  >
-                </div>
-
-                <div class="field">
-                  <label for="name">Name</label>
-                  <InputText
-                    id="name"
-                    v-model.trim="machine.name"
-                    required="true"
-                    autofocus
-                    :class="{ 'p-invalid': submitted && !machine.name }"
-                    :disabled="isView"
-                    autocomplete="off"
-                  />
-                  <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Name is required.</small
-                  >
-                </div>
-
-                <div class="formgrid grid">
-                  <div class="field col">
-                    <label for="model">Model</label>
-                    <InputText
-                      id="model"
-                      v-model.trim="machine.model"
-                      required="true"
-                      autofocus
-                      :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
-                      autocomplete="off"
-                    />
-                    <small class="p-invalid" v-if="submitted && !machine.name"
-                      >Model is required.</small
-                    >
-                  </div>
-
-                  <div class="field col">
-                    <label for="brand">Brand</label>
-                    <InputText
-                      id="barnd"
-                      v-model.trim="machine.brand"
-                      required="true"
-                      autofocus
-                      :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
-                      autocomplete="off"
-                    />
-                    <small class="p-invalid" v-if="submitted && !machine.name"
-                      >Brand is required.</small
-                    >
-                  </div>
-                </div>
-
-                <div class="formgrid grid">
-                  <div class="field col">
-                    <label for="maximum_working_time"
-                      >Daily Working Hours</label
-                    >
-                    <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-                    <InputNumber
-                      id="maximum_working_time"
-                      v-model="machine.maximum_working_time"
-                      showButtons
-                      mode="decimal"
-                      :disabled="isView"
-                      :class="{
-                        'p-invalid': submitted && !machine.maximum_working_time,
-                      }"
-                      :min="0"
-                      :useGrouping="false"
-                    />
-                    <small
-                      class="p-invalid"
-                      v-if="submitted && !machine.maximum_working_time"
-                      >Daily working hours is required.</small
-                    >
-                  </div>
-
-                  <div class="field col">
-                    <label for="usefulLifehours">Useful Life Hours</label>
-                    <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-                    <!--                  <InputNumber-->
-                    <!--                      id="usefulLifehours"-->
-                    <!--                      v-model="inputNumberValue"-->
-                    <!--                      showButtons-->
-                    <!--                      mode="decimal"-->
-                    <!--                      required="true"-->
-                    <!--                      autofocus-->
-                    <!--                      :disabled="isView"-->
-                    <!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
-                    <!--                      :min="0"-->
-                    <!--                      :useGrouping="false"-->
-                    <!--                  />-->
-                    <!--<small class="p-invalid" v-if="submitted && !product.name"
-                      >Useful Life Hours is required.</small
-                    >-->
-                  </div>
-                </div>
-              </div>
-              <div class="card m-0">
-                <div v-if="!isView" class="formgrid grid">
-                  <div class="field col">
-                    <label for="sparePart">Spare Parts</label>
-                    <Dropdown
-                      id="sparePart"
-                      v-model="sparePartItem"
-                      :options="sparePartItems"
-                      optionLabel="name"
-                      placeholder="Select One"
-                      :filter="true"
-                      :loading="loadingSpareParts"
-                      :class="{
-                        'p-invalid': submittedAddSparePart && !sparePartItem,
-                      }"
-                    >
-                    </Dropdown>
-                    <small
-                      class="p-invalid"
-                      v-if="submittedAddSparePart && !sparePartItem"
-                      >Spare Part is required.</small
-                    >
-                  </div>
-
-                  <div
-                    class="
-                      field
-                      col-2
-                      flex
-                      justify-content-center
-                      align-items-center
-                    "
-                  >
-                    <Button
-                      icon="pi pi-plus"
-                      class="p-button-secondary"
-                      style="margin-top: 1.8rem"
-                      @click="addSparePart"
-                    ></Button>
-                  </div>
-                </div>
-                <div class="card">
-                  <DataTable
-                    :value="machine.articles"
-                    responsiveLayout="scroll"
-                  >
-                    <Column
-                      v-for="col of columns"
-                      :field="col.field"
-                      :header="col.header"
-                      :key="col.field"
-                      style="width: 25%"
-                    >
-                    </Column>
-
-                    <Column v-if="!isView" headerStyle="min-width:10rem;">
-                      <template #body="slotProps">
-                        <div style="display: flex; justify-content: end">
-                          <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            @click="removeSparePart(slotProps.data)"
-                          />
-                        </div>
-                      </template>
-                    </Column>
-                  </DataTable>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4">
-              <!-- <div class="col-12"> -->
-              <div class="card w-full h-full m-0">
-                <div class="mb-4">
-                  <h5>Imagen</h5>
-                  <div
-                    class="
-                      flex flex-column
-                      align-items-center
-                      justify-content-center
-                    "
-                  >
-                    <div class="mb-2">
-                      <img
-                        id="blah"
-                        :disabled="isView"
-                        :src="
-                          !this.machine.image
-                            ? imageDefault
-                            : isFile(this.machine.image)
-                            ? getImageObjectUrl(this.machine.image)
-                            : getImage(this.machine.image)
-                        "
-                        alt="your image"
-                        style="width: 100%; height: 300px; max-width: 450px"
-                      />
-                    </div>
-                    <div v-if="!isView" class="w-full">
-                      <FileUpload
-                        class="w-full"
-                        mode="basic"
-                        accept="image/*"
-                        :disabled="isView"
-                        :maxFileSize="2000000"
-                        @input="onUploadImage"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h5>Technical Sheet</h5>
-                  <div
-                    v-if="machine.id && isView && machine.technical_sheet"
-                    class="w-full mb-2"
-                  >
-                    <Button
-                      label="View PDF"
-                      icon="pi pi-arrow-up-right"
-                      class="p-button-info mr-2"
-                      @click="viewPDF"
-                    />
-                  </div>
-                  <div
-                    v-if="machine.id && isView && !machine.technical_sheet"
-                    class="w-full mb-2"
-                  >
-                    <Message severity="info" :closable="false"
-                      >Without PDF</Message
-                    >
-                  </div>
-                  <div v-if="!isView" class="w-full">
-                    <FileUpload
-                      class="w-full"
-                      mode="basic"
-                      accept="application/pdf"
-                      :disabled="isView"
-                      :maxFileSize="2000000"
-                      @input="onUploadFile"
-                    />
-                  </div>
-                </div>
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
-
-          <template #footer>
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              class="p-button-text p-button-danger"
-              @click="hideDialog"
-            />
-            <Button
-              v-if="!isView"
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="saveProduct"
-            />
-          </template>
-        </Dialog>
 
         <Dialog
           v-model:visible="deleteDialog"

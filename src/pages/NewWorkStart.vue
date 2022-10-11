@@ -47,7 +47,7 @@
               <div class="field col-12">
                 <label
                   >Total accumulated:
-                  {{ this.workSheet.machine.total_time_used.hours }} hs
+                  {{ this.workSheet.machine.total_time_used.hours }} hrs
                   {{ this.workSheet.machine.total_time_used.minutes }} min
                   {{ this.workSheet.machine.total_time_used.seconds }}
                   sec</label
@@ -201,7 +201,7 @@
                 <template #body="slotProps">
                   {{
                     slotProps.data.date_time_diff.hours +
-                    "hr " +
+                    "hrs " +
                     slotProps.data.date_time_diff.minutes +
                     "min " +
                     slotProps.data.date_time_diff.secons +
@@ -340,7 +340,7 @@
         <template #body="slotProps">
           <div style="display: flex; justify-content: end">
             <Button
-              icon="pi pi-plus"
+              icon="pi pi-angle-double-down"
               class="p-button-rounded p-button-success mr-2"
               @click="selectMachine(slotProps.data)"
             />
