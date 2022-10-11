@@ -412,7 +412,9 @@ export default {
   },
   methods: {
     nextPage() {
-      const payload = this.attendanceSheet;
+      const payload = {
+        employees:this.employees[1]
+      };
       this.sheetAttendanceService.create(payload).then((data) => {
         this.sheetsAttendances.unshift(data.data);
         this.$router.push(`/new-attendance-control/${data.data.id}`);
