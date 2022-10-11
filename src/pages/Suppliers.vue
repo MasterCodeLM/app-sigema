@@ -2,63 +2,63 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                  label="New"
-                  icon="pi pi-plus"
-                  class="p-button-success mr-2"
-                  @click="openNew"
+                label="New"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="openNew"
               />
               <Button
-                  label="Delete"
-                  icon="pi pi-trash"
-                  class="p-button-danger"
-                  @click="confirmDeleteSelected"
-                  :disabled="!selectedSuppliers || !selectedSuppliers.length"
+                label="Delete"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                @click="confirmDeleteSelected"
+                :disabled="!selectedSuppliers || !selectedSuppliers.length"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="Export"
-                icon="pi pi-upload"
-                class="p-button-help"
-                @click="exportCSV($event)"
+              label="Export"
+              icon="pi pi-upload"
+              class="p-button-help"
+              @click="exportCSV($event)"
             />
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="suppliers"
-            v-model:selection="selectedSuppliers"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
-            :loading="loadingSuppliers"
+          ref="dt"
+          :value="suppliers"
+          v-model:selection="selectedSuppliers"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} suppliers"
+          responsiveLayout="scroll"
+          :loading="loadingSuppliers"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">Suppliers</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -66,10 +66,10 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-              field=""
-              header="Document Type"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field=""
+            header="Document Type"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Document Type</span>
@@ -77,10 +77,10 @@
             </template>
           </Column>
           <Column
-              field="document_number"
-              header="Document Number"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="document_number"
+            header="Document Number"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Document Number</span>
@@ -89,10 +89,10 @@
           </Column>
 
           <Column
-              field="name"
-              header="Name"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -100,10 +100,10 @@
             </template>
           </Column>
           <Column
-              field=""
-              header="Email"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field=""
+            header="Email"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
@@ -111,10 +111,10 @@
             </template>
           </Column>
           <Column
-              field=""
-              header="Telephone"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field=""
+            header="Telephone"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
@@ -122,10 +122,10 @@
             </template>
           </Column>
           <Column
-              field=""
-              header="Address"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field=""
+            header="Address"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Address</span>
@@ -136,19 +136,19 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    icon="pi pi-eye"
-                    class="p-button-rounded p-button-info mr-2"
-                    @click="viewSupplier(slotProps.data)"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewSupplier(slotProps.data)"
                 />
                 <Button
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editSupplier(slotProps.data)"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editSupplier(slotProps.data)"
                 />
                 <Button
-                    icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger"
-                    @click="confirmDelete(slotProps.data)"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                  @click="confirmDelete(slotProps.data)"
                 />
               </div>
             </template>
@@ -156,11 +156,17 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="supplierDialog"
-            :style="{ width: '700px' }"
-            :header="!supplier.id ? 'New Supplier' : !isView?'Edit Supplier':'Info Supplier'"
-            :modal="true"
-            class="p-fluid"
+          v-model:visible="supplierDialog"
+          :style="{ width: '700px' }"
+          :header="
+            !supplier.id
+              ? 'New Supplier'
+              : !isView
+              ? 'Edit Supplier'
+              : 'Info Supplier'
+          "
+          :modal="true"
+          class="p-fluid"
         >
           <!--  <div class="formgrid grid">-->
 
@@ -168,61 +174,69 @@
             <div class="field col">
               <label for="documentType">Document Type</label>
               <Dropdown
-                  id="documentType"
-                  v-model="supplier.document_type"
-                  :options="documentTypeItems"
-                  optionLabel="name"
-                  placeholder="Select One"
-                  :filter="false"
-                  :loading="false"
-                  :class="{ 'p-invalid': submitted && !supplier.document_type }"
-                  :disabled="isView"
-                  autocomplete="off"
+                id="documentType"
+                v-model="supplier.document_type"
+                :options="documentTypeItems"
+                optionLabel="name"
+                placeholder="Select One"
+                :filter="false"
+                :loading="false"
+                :class="{ 'p-invalid': submitted && !supplier.document_type }"
+                :disabled="isView"
+                autocomplete="off"
               ></Dropdown>
               <small
-                  class="p-invalid"
-                  v-if="submitted && !supplier.document_type"
-              >Document Type is required.</small
+                class="p-invalid"
+                v-if="submitted && !supplier.document_type"
+                >Document Type is required.</small
               >
             </div>
             <div class="field col">
               <label for="ruc">Document Number</label>
               <InputText
-                  id="ruc"
-                  v-model.trim="supplier.document_number"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': (submitted && !supplier.document_number) || (submitted && supplier.document_number.length < 8)}"
-                  :disabled="isView"
-                  autocomplete="off"
-                  @keypress="isNumber($event)"
+                id="ruc"
+                v-model.trim="supplier.document_number"
+                required="true"
+                autofocus
+                :class="{
+                  'p-invalid':
+                    (submitted && !supplier.document_number) ||
+                    (submitted && supplier.document_number.length < 8),
+                }"
+                :disabled="isView"
+                autocomplete="off"
+                @keypress="isNumber($event)"
               />
               <small
-                  class="p-invalid"
-                  v-if="submitted && !supplier.document_number"
-              >Document Number is required.</small
+                class="p-invalid"
+                v-if="submitted && !supplier.document_number"
+                >Document Number is required.</small
               >
-              <br>
+              <br />
               <small
-                  class="p-invalid"
-                  v-if="submitted && supplier.document_number && supplier.document_number.length < 8"
-              >The document number must be at least 8 characters.</small
+                class="p-invalid"
+                v-if="
+                  submitted &&
+                  supplier.document_number &&
+                  supplier.document_number.length < 8
+                "
+                >The document number must be at least 8 characters.</small
               >
             </div>
           </div>
-          <div class="field col">
+          <div class="field">
             <label for="businessName">Business Name</label>
             <InputText
-                id="businessName"
-                v-model.trim="supplier.name"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !supplier.name }"
-                :disabled="isView"
-                autocomplete="off"
+              id="businessName"
+              v-model.trim="supplier.name"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': submitted && !supplier.name }"
+              :disabled="isView"
+              autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !supplier.name"
-            >Business Name is required.</small
+              >Business Name is required.</small
             >
           </div>
 
@@ -232,42 +246,51 @@
             <div class="field col">
               <label for="telephone">Telephone</label>
               <InputText
-                  id="telephone"
-                  v-model.trim="supplier.phone"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': (submitted && !supplier.phone) || (submitted && supplier.phone.length < 9)  }"
-                  :disabled="isView"
-                  autocomplete="off"
-                  @keypress="isNumber($event)"
+                id="telephone"
+                v-model.trim="supplier.phone"
+                required="true"
+                autofocus
+                :class="{
+                  'p-invalid':
+                    (submitted && !supplier.phone) ||
+                    (submitted && supplier.phone.length < 9),
+                }"
+                :disabled="isView"
+                autocomplete="off"
+                @keypress="isNumber($event)"
               />
               <small class="p-invalid" v-if="submitted && !supplier.phone"
-              >Telephone is required.</small
+                >Telephone is required.</small
               >
-              <br>
+              <br />
               <small
-                  class="p-invalid"
-                  v-if="submitted && supplier.phone && supplier.phone.length < 9"
-              >The Telephone must be at least 9 characters.</small
+                class="p-invalid"
+                v-if="submitted && supplier.phone && supplier.phone.length < 9"
+                >The Telephone must be at least 9 characters.</small
               >
             </div>
 
             <div class="field col">
               <label for="email">Email</label>
               <InputText
-                  id="email"
-                  v-model.trim="supplier.email"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': (submitted && !supplier.email) || (submitted && !isEmail()) }"
-                  :disabled="isView"
-                  autocomplete="off"
+                id="email"
+                v-model.trim="supplier.email"
+                required="true"
+                autofocus
+                :class="{
+                  'p-invalid':
+                    (submitted && !supplier.email) || (submitted && !isEmail()),
+                }"
+                :disabled="isView"
+                autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.email"
-              >Email is required.</small
+                >Email is required.</small
               >
-              <small class="p-invalid" v-if="submitted && supplier.email && !isEmail()"
-              >The email must be a valid email address.</small
+              <small
+                class="p-invalid"
+                v-if="submitted && supplier.email && !isEmail()"
+                >The email must be a valid email address.</small
               >
             </div>
           </div>
@@ -276,36 +299,36 @@
             <div class="field col-8">
               <label for="address">Address</label>
               <InputText
-                  id="address"
-                  v-model.trim="supplier.address"
-                  required="true"
-                  autofocus
-                  :class="{ 'p-invalid': submitted && !supplier.address }"
-                  :disabled="isView"
-                  autocomplete="off"
+                id="address"
+                v-model.trim="supplier.address"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !supplier.address }"
+                :disabled="isView"
+                autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.address"
-              >Address is required.</small
+                >Address is required.</small
               >
             </div>
             <div class="field col-4">
               <label for="supplierType">Supplier Type</label>
               <Dropdown
-                  id="supplierType"
-                  v-model="supplier.supplier_type"
-                  :options="supplierTypeItems"
-                  optionLabel="name"
-                  placeholder="Select One"
-                  :filter="false"
-                  :loading="false"
-                  :class="{ 'p-invalid': submitted && !supplier.supplier_type }"
-                  :disabled="isView"
-                  autocomplete="off"
+                id="supplierType"
+                v-model="supplier.supplier_type"
+                :options="supplierTypeItems"
+                optionLabel="name"
+                placeholder="Select One"
+                :filter="false"
+                :loading="false"
+                :class="{ 'p-invalid': submitted && !supplier.supplier_type }"
+                :disabled="isView"
+                autocomplete="off"
               ></Dropdown>
               <small
-                  class="p-invalid"
-                  v-if="submitted && !supplier.supplier_type"
-              >Supplier Type is required.</small
+                class="p-invalid"
+                v-if="submitted && !supplier.supplier_type"
+                >Supplier Type is required.</small
               >
             </div>
           </div>
@@ -315,64 +338,64 @@
               <div class="field col-4">
                 <label for="bankingEntity">Banking Entity</label>
                 <Dropdown
-                    id="bankingEntity"
-                    v-model="bankItem"
-                    :options="bankItems"
-                    optionLabel="name"
-                    placeholder="Select One"
-                    :filter="false"
-                    :loading="false"
-                    :class="{ 'p-invalid': submittedAddBank && !bankItem }"
-                    autocomplete="off"
+                  id="bankingEntity"
+                  v-model="bankItem"
+                  :options="bankItems"
+                  optionLabel="name"
+                  placeholder="Select One"
+                  :filter="false"
+                  :loading="false"
+                  :class="{ 'p-invalid': submittedAddBank && !bankItem }"
+                  autocomplete="off"
                 ></Dropdown>
                 <small class="p-invalid" v-if="submittedAddBank && !bankItem"
-                >Banking Entity is required.</small
+                  >Banking Entity is required.</small
                 >
               </div>
 
               <div class="field col-3">
                 <label for="accountNumber">Account Number</label>
                 <InputText
-                    id="accountNumber"
-                    v-model.trim="bank.account_number"
-                    required="true"
-                    autofocus
-                    :class="{
+                  id="accountNumber"
+                  v-model.trim="bank.account_number"
+                  required="true"
+                  autofocus
+                  :class="{
                     'p-invalid': submittedAddBank && !bank.account_number,
                   }"
-                    autocomplete="off"
-                    @keypress="isNumber($event)"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
                 />
                 <small
-                    class="p-invalid"
-                    v-if="submittedAddBank && !bank.account_number"
-                >Account Number is required.</small
+                  class="p-invalid"
+                  v-if="submittedAddBank && !bank.account_number"
+                  >Account Number is required.</small
                 >
               </div>
 
               <div class="field col-4">
                 <label for="interbankCode">Interbank Code</label>
                 <InputText
-                    id="interbankCode"
-                    v-model.trim="bank.interbank_account_number"
-                    required="true"
-                    autofocus
-                    :class="{
+                  id="interbankCode"
+                  v-model.trim="bank.interbank_account_number"
+                  required="true"
+                  autofocus
+                  :class="{
                     'p-invalid':
                       submittedAddBank && !bank.interbank_account_number,
                   }"
-                    autocomplete="off"
-                    @keypress="isNumber($event)"
+                  autocomplete="off"
+                  @keypress="isNumber($event)"
                 />
                 <small
-                    class="p-invalid"
-                    v-if="submittedAddBank && !bank.interbank_account_number"
-                >Interbank Code is required.</small
+                  class="p-invalid"
+                  v-if="submittedAddBank && !bank.interbank_account_number"
+                  >Interbank Code is required.</small
                 >
               </div>
 
               <div
-                  class="
+                class="
                   field
                   col-1
                   flex
@@ -381,10 +404,10 @@
                 "
               >
                 <Button
-                    icon="pi pi-plus"
-                    class="p-button-secondary"
-                    style="margin-top: 1.85rem"
-                    @click="addBank"
+                  icon="pi pi-plus"
+                  class="p-button-secondary"
+                  style="margin-top: 1.85rem"
+                  @click="addBank"
                 ></Button>
               </div>
             </div>
@@ -392,11 +415,11 @@
             <div class="card">
               <DataTable :value="supplier.banks" responsiveLayout="scroll">
                 <Column
-                    v-for="col of columns"
-                    :field="col.field"
-                    :header="col.header"
-                    :key="col.field"
-                    style="width: 25%"
+                  v-for="col of columns"
+                  :field="col.field"
+                  :header="col.header"
+                  :key="col.field"
+                  style="width: 25%"
                 >
                 </Column>
 
@@ -404,9 +427,9 @@
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
-                          icon="pi pi-trash"
-                          class="p-button-rounded p-button-danger"
-                          @click="removeBank(slotProps.data)"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        @click="removeBank(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -417,80 +440,80 @@
 
           <template #footer>
             <Button
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-text p-button-danger"
-                @click="hideDialog"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
             />
             <Button
-                v-if="!isView"
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              v-if="!isView"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteSupplierDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteSupplierDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="supplier"
-            >Are you sure you want to delete <b>{{ supplier.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ supplier.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteSupplierDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteSupplierDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteSupplier"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSupplier"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductsDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete the selected suppliers?</span
+              >Are you sure you want to delete the selected suppliers?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductsDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductsDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteSelectedProducts"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -500,7 +523,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import SupplierTypeServices from "../service/SupplierTypeServices";
 import DocumentTypeServices from "../service/DocumentTypeServices";
 import BankServices from "../service/BankServices";
@@ -534,9 +557,9 @@ export default {
       submitted: false,
       submittedAddBank: false,
       columns: [
-        {field: "name", header: "Bank Entity"},
-        {field: "account_number", header: "Account Number"},
-        {field: "interbank_account_number", header: "Interbank Code"},
+        { field: "name", header: "Bank Entity" },
+        { field: "account_number", header: "Account Number" },
+        { field: "interbank_account_number", header: "Interbank Code" },
       ],
 
       bankItem: null,
@@ -566,11 +589,11 @@ export default {
       this.loadingSuppliers = false;
     });
     this.documentTypeService
-        .getAll()
-        .then((data) => (this.documentTypeItems = data));
+      .getAll()
+      .then((data) => (this.documentTypeItems = data));
     this.supplierTypeService
-        .getAll()
-        .then((data) => (this.supplierTypeItems = data));
+      .getAll()
+      .then((data) => (this.supplierTypeItems = data));
     this.bankService.getAll().then((data) => (this.bankItems = data));
   },
   methods: {
@@ -594,22 +617,20 @@ export default {
           //UPDATE
           const id = this.supplier.id;
           const payload = this.supplier;
-          this.supplierService
-              .update(id, payload)
-              .then((data) => {
-                this.suppliers[this.findIndexById(id)] = data.data;
-                this.$toast.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: data.message,
-                  life: 3000,
-                });
-              });
+          this.supplierService.update(id, payload).then((data) => {
+            this.suppliers[this.findIndexById(id)] = data.data;
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+          });
         } else {
           // CREATE
           const payload = this.supplier;
           this.supplierService.create(payload).then((data) => {
-            console.log(data)
+            console.log(data);
             this.suppliers.unshift(data.data);
             this.$toast.add({
               severity: "success",
@@ -626,14 +647,14 @@ export default {
     viewSupplier(supplier) {
       this.isView = true;
       this.supplierService.getOne(supplier.id).then((data) => {
-        this.supplier = {...data};
+        this.supplier = { ...data };
         this.supplierDialog = true;
       });
     },
     editSupplier(supplier) {
       this.isView = false;
       this.supplierService.getOne(supplier.id).then((data) => {
-        this.supplier = {...data};
+        this.supplier = { ...data };
         this.supplierDialog = true;
       });
     },
@@ -645,7 +666,7 @@ export default {
       this.deleteSupplierDialog = false;
       this.supplierService.delete(this.supplier.id).then((data) => {
         this.suppliers = this.suppliers.filter(
-            (val) => val.id !== this.supplier.id
+          (val) => val.id !== this.supplier.id
         );
         this.defaultObjects();
         this.$toast.add({
@@ -684,7 +705,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedSuppliers.includes(val)
+        (val) => !this.selectedSuppliers.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedSuppliers = null;
@@ -700,7 +721,7 @@ export default {
       if (this.validateFormBank()) {
         if (this.findBankIndexById(this.bankItem.id) === -1) {
           // INSERT DATA
-          this.bank = {...this.bank, ...this.bankItem};
+          this.bank = { ...this.bank, ...this.bankItem };
           this.supplier.banks.push(this.bank);
         } else {
           this.$toast.add({
@@ -718,44 +739,50 @@ export default {
     },
     validateFormSupplier() {
       return (
-          this.supplier.document_type &&
-          this.supplier.document_number &&
-          this.supplier.document_number.length >= 8 &&
-          this.supplier.name &&
-          this.supplier.phone &&
-          this.supplier.phone.length >= 9 &&
-          this.supplier.email &&
-          this.supplier.address &&
-          this.supplier.supplier_type
+        this.supplier.document_type &&
+        this.supplier.document_number &&
+        this.supplier.document_number.length >= 8 &&
+        this.supplier.name &&
+        this.supplier.phone &&
+        this.supplier.phone.length >= 9 &&
+        this.supplier.email &&
+        this.supplier.address &&
+        this.supplier.supplier_type
       );
     },
     validateFormBank() {
       return (
-          this.bankItem &&
-          this.bank.account_number &&
-          this.bank.interbank_account_number
+        this.bankItem &&
+        this.bank.account_number &&
+        this.bank.interbank_account_number
       );
     },
     removeBank(data) {
       this.supplier.banks = this.supplier.banks.filter(
-          (val) => val.id !== data.id
+        (val) => val.id !== data.id
       );
     },
     isNumber(evt) {
-      evt = (evt) ? evt : window.event;
-      let charCode = (evt.which) ? evt.which : evt.keyCode;
-      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+      evt = evt ? evt : window.event;
+      let charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
         evt.preventDefault();
       } else {
         return true;
       }
     },
     isEmail() {
-      return (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(this.supplier.email))
+      return /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(
+        this.supplier.email
+      );
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
     defaultObjects() {

@@ -42,7 +42,7 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} machines"
           responsiveLayout="scroll"
           :loading="loadingMachines"
         >
@@ -132,46 +132,37 @@
           </Column>
 
           <Column
-            field="maximum_working_time"
+            field="maximum_working_time_per_day"
             header="Daily Working Hours"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Daily Working Hours</span>
-              {{ slotProps.data.maximum_working_time }}
+              {{ slotProps.data.maximum_working_time_per_day }}
             </template>
           </Column>
 
           <Column
-            field="usefulLifehours"
+            field="maximum_working_time"
             header="Useful Life Hours"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Useful Life Hours</span>
-              {{ slotProps.data.price }}
+              {{ slotProps.data.maximum_working_time }}
             </template>
           </Column>
-
           <Column
-            field="inventoryStatus"
+            field="status"
             header="Status"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              {{ slotProps.data.status }}
             </template>
           </Column>
 
@@ -284,10 +275,32 @@
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="maximum_working_time"
+                    <label for="maximum_working_time_per_day"
                       >Daily Working Hours</label
                     >
                     <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
+                    <InputNumber
+                      id="maximum_working_time_per_day"
+                      v-model="machine.maximum_working_time_per_day"
+                      showButtons
+                      mode="decimal"
+                      :disabled="isView"
+                      :class="{
+                        'p-invalid':
+                          submitted && !machine.maximum_working_time_per_day,
+                      }"
+                      :min="0"
+                      :useGrouping="false"
+                    />
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !machine.maximum_working_time_per_day"
+                      >Daily working hours is required.</small
+                    >
+                  </div>
+
+                  <div class="field col">
+                    <label for="maximum_working_time">Useful Life Hours</label>
                     <InputNumber
                       id="maximum_working_time"
                       v-model="machine.maximum_working_time"
@@ -303,28 +316,8 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !machine.maximum_working_time"
-                      >Daily working hours is required.</small
+                      >Useful life hours is required.</small
                     >
-                  </div>
-
-                  <div class="field col">
-                    <label for="usefulLifehours">Useful Life Hours</label>
-                    <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
-                    <!--                  <InputNumber-->
-                    <!--                      id="usefulLifehours"-->
-                    <!--                      v-model="inputNumberValue"-->
-                    <!--                      showButtons-->
-                    <!--                      mode="decimal"-->
-                    <!--                      required="true"-->
-                    <!--                      autofocus-->
-                    <!--                      :disabled="isView"-->
-                    <!--                      :class="{ 'p-invalid': submitted && !product.name }"-->
-                    <!--                      :min="0"-->
-                    <!--                      :useGrouping="false"-->
-                    <!--                  />-->
-                    <!--<small class="p-invalid" v-if="submitted && !product.name"
-                      >Useful Life Hours is required.</small
-                    >-->
                   </div>
                 </div>
               </div>
@@ -580,6 +573,7 @@ export default {
         brand: null,
         model: null,
         maximum_working_time: null,
+        maximum_working_time_per_day: null,
         image: null,
         articles: [],
       },
@@ -887,7 +881,8 @@ export default {
         this.machine.name &&
         this.machine.brand &&
         this.machine.model &&
-        this.machine.maximum_working_time
+        this.machine.maximum_working_time &&
+        this.machine.maximum_working_time_per_day
       );
     },
     validateFormSparePart() {
@@ -920,6 +915,7 @@ export default {
         brand: null,
         model: null,
         maximum_working_time: null,
+        maximum_working_time_per_day: null,
         image: null,
         articles: [],
       };
