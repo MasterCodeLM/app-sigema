@@ -80,7 +80,7 @@
             field="document_number"
             header="Document Number"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:10%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Document Number</span>

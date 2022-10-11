@@ -67,14 +67,14 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-            field="name"
+            field="lastname"
             header="Name"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:22%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.name }}
+              {{ slotProps.data.lastname + " " + slotProps.data.name }}
             </template>
           </Column>
 
@@ -82,7 +82,7 @@
             field="document_type.name"
             header="Document Type"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:5%; min-width:3rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Document Type</span>
@@ -92,12 +92,12 @@
 
           <Column
             field="document_number"
-            header="Identification Document"
+            header="Document Number"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:8%; min-width:3rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Identification Document</span>
+              <span class="p-column-title">Document Number</span>
               {{ slotProps.data.document_number }}
             </template>
           </Column>
@@ -218,7 +218,7 @@
 
         <Dialog
           v-model:visible="productDialog"
-          :style="{ width: '550px' }"
+          :style="{ width: '600px' }"
           :header="
             !employee.id
               ? 'New Employee'
@@ -286,41 +286,39 @@
             </div>
           </div>
 
-          <!--  <div class="formgrid grid">-->
+          <div class="formgrid grid">
+            <div class="field col">
+              <label for="name">Name</label>
+              <InputText
+                id="name"
+                v-model.trim="employee.name"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !employee.name }"
+                :disabled="isView"
+                autocomplete="off"
+              />
+              <small class="p-invalid" v-if="submitted && !employee.name"
+                >Name is required.</small
+              >
+            </div>
 
-          <div class="field">
-            <label for="name">Name</label>
-            <InputText
-              id="name"
-              v-model.trim="employee.name"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !employee.name }"
-              :disabled="isView"
-              autocomplete="off"
-            />
-            <small class="p-invalid" v-if="submitted && !employee.name"
-              >Name is required.</small
-            >
+            <div class="field col">
+              <label for="lastname">Last Name</label>
+              <InputText
+                id="name"
+                v-model.trim="employee.lastname"
+                required="true"
+                autofocus
+                :class="{ 'p-invalid': submitted && !employee.lastname }"
+                :disabled="isView"
+                autocomplete="off"
+              />
+              <small class="p-invalid" v-if="submitted && !employee.lastname"
+                >Last Name is required.</small
+              >
+            </div>
           </div>
-
-          <div class="field">
-            <label for="lastname">Last Name</label>
-            <InputText
-              id="name"
-              v-model.trim="employee.lastname"
-              required="true"
-              autofocus
-              :class="{ 'p-invalid': submitted && !employee.lastname }"
-              :disabled="isView"
-              autocomplete="off"
-            />
-            <small class="p-invalid" v-if="submitted && !employee.lastname"
-              >Last Name is required.</small
-            >
-          </div>
-
-          <!-- </div> -->
 
           <div class="formgrid grid">
             <!--            <div class="field col-4">-->
@@ -426,22 +424,54 @@
           </div>
 
           <div class="formgrid grid">
-            <div class="field col-5">
+            <div class="field col">
               <label for="state">Native Language</label>
               <Dropdown
                 id="state"
                 v-model="employee.native_language"
                 :disabled="isView"
-                :options="dropdownItems"
+                :options="dropdownLenguageItems"
                 optionLabel="name"
-                optionValue="name"
+                optionValue="value"
                 placeholder="Select One"
                 :class="{ 'p-invalid': submitted && !employee.native_language }"
               ></Dropdown>
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.native_language"
-                >Native Language is required.</small
+                >Native language is required.</small
+              >
+            </div>
+            <div class="field col">
+              <label for="state">Type Personal</label>
+              <Dropdown
+                id="state"
+                v-model="employee.type"
+                :disabled="isView"
+                :options="dropdownTypePersonalItems"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Select One"
+                :class="{ 'p-invalid': submitted && !employee.type }"
+              ></Dropdown>
+              <small class="p-invalid" v-if="submitted && !employee.type"
+                >Type personal is required.</small
+              >
+            </div>
+            <div class="field col">
+              <label for="state">Turn of Entry</label>
+              <Dropdown
+                id="state"
+                v-model="employee.turn"
+                :disabled="isView"
+                :options="dropdownTurnEntryItems"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Select One"
+                :class="{ 'p-invalid': submitted && !employee.turn }"
+              ></Dropdown>
+              <small class="p-invalid" v-if="submitted && !employee.turn"
+                >Turn of entry is required.</small
               >
             </div>
           </div>
@@ -539,9 +569,17 @@ import TitleService from "../service/TitleService";
 export default {
   data() {
     return {
-      dropdownItems: [
-        { name: "English", code: "Option 1" },
-        { name: "Spanish", code: "Option 2" },
+      dropdownLenguageItems: [
+        { name: "English", value: "english" },
+        { name: "Spanish", value: "spanish" },
+      ],
+      dropdownTypePersonalItems: [
+        { name: "Permanent", value: "permanent" },
+        { name: "Relay", value: "relay" },
+      ],
+      dropdownTurnEntryItems: [
+        { name: "Day", value: "day" },
+        { name: "Night", value: "night" },
       ],
       dropdownItem: null,
       employees: null,
@@ -553,6 +591,8 @@ export default {
         position: null,
         personal_email: null,
         address: null,
+        type: null,
+        turn: null,
         native_language: null,
       },
       productDialog: false,
@@ -737,6 +777,8 @@ export default {
         this.employee.position &&
         this.employee.personal_email &&
         this.employee.address &&
+        this.employee.type &&
+        this.employee.turn &&
         this.employee.native_language
       );
     },
@@ -776,6 +818,9 @@ export default {
         position: null,
         personal_email: null,
         address: null,
+        type: null,
+        turn: null,
+        native_language: null,
       };
     },
   },
