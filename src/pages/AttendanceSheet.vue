@@ -12,23 +12,28 @@
         <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
-            <div class="grid">
-              <label for="name1">From the</label>
-              <Calendar
-                :showIcon="true"
-                :showButtonBar="false"
-                v-model="start_date"
-                :maxDate="minDateValue"
-                dateFormat="yy-mm-dd"
-              ></Calendar>
-              <label for="name1">Until the</label>
-              <Calendar
-                :showIcon="true"
-                :showButtonBar="false"
-                v-model="end_date"
-                :maxDate="minDateValue"
-                dateFormat="yy-mm-dd"
-              ></Calendar>
+            <div class="fiel grid">
+              <div style="vertical-align: inherit" class="px-2">
+                <label>From the</label>
+
+                <Calendar
+                  :showIcon="true"
+                  :showButtonBar="false"
+                  v-model="start_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
+                ></Calendar>
+              </div>
+              <div style="vertical-align: inherit" class="px-2">
+                <label>Until the</label>
+                <Calendar
+                  :showIcon="true"
+                  :showButtonBar="false"
+                  v-model="end_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
+                ></Calendar>
+              </div>
             </div>
           </template>
 
@@ -52,7 +57,7 @@
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Article Types"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} attendance sheets"
           responsiveLayout="scroll"
           :loading="loadingSheets"
         >
@@ -63,7 +68,7 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">hojasssssssssssssss</h5>
+              <h5 class="m-0">LIST ATTENDACE SHEETS</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
