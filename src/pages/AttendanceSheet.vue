@@ -9,7 +9,7 @@
     </div>
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="fiel grid">
@@ -17,21 +17,21 @@
                 <label>From the</label>
 
                 <Calendar
-                    :showIcon="true"
-                    :showButtonBar="false"
-                    v-model="start_date"
-                    :maxDate="minDateValue"
-                    dateFormat="yy-mm-dd"
+                  :showIcon="true"
+                  :showButtonBar="false"
+                  v-model="start_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
                 ></Calendar>
               </div>
               <div style="vertical-align: inherit" class="px-2">
                 <label>Until the</label>
                 <Calendar
-                    :showIcon="true"
-                    :showButtonBar="false"
-                    v-model="end_date"
-                    :maxDate="minDateValue"
-                    dateFormat="yy-mm-dd"
+                  :showIcon="true"
+                  :showButtonBar="false"
+                  v-model="end_date"
+                  :maxDate="minDateValue"
+                  dateFormat="yy-mm-dd"
                 ></Calendar>
               </div>
             </div>
@@ -39,41 +39,41 @@
 
           <template v-slot:end>
             <Button
-                label="New Attendance Control"
-                icon="pi pi-plus"
-                class="p-button-success mr-2"
-                @click="openNew"
+              label="New Attendance Control"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openNew"
             />
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="sheetsAttendances"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} attendance sheets"
-            responsiveLayout="scroll"
-            :loading="loadingSheets"
+          ref="dt"
+          :value="sheetsAttendances"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} attendance sheets"
+          responsiveLayout="scroll"
+          :loading="loadingSheets"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">LIST ATTENDACE SHEETS</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -81,10 +81,10 @@
 
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
-              field="date"
-              header="Date"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="date"
+            header="Date"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Date</span>
@@ -92,10 +92,10 @@
             </template>
           </Column>
           <Column
-              field="responsible"
-              header="Responsible"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="responsible"
+            header="Responsible"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Responsible</span>
@@ -103,10 +103,10 @@
             </template>
           </Column>
           <Column
-              field="is_open"
-              header="Estado"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="is_open"
+            header="Estado"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Estado</span>
@@ -118,16 +118,16 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
-                    v-if="!slotProps.data.is_open"
-                    icon="pi pi-eye"
-                    class="p-button-rounded p-button-info mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="!slotProps.data.is_open"
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
                 <Button
-                    v-if="slotProps.data.is_open"
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-warning mr-2"
-                    @click="editProduct(slotProps.data)"
+                  v-if="slotProps.data.is_open"
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  @click="editProduct(slotProps.data)"
                 />
               </div>
             </template>
@@ -140,20 +140,20 @@
               <h1>PickList New Attendance</h1>
               <p>Add the employees who will work the next shift to open</p>
             </div>
-            <AppDemoActions/>
+            <AppDemoActions />
           </div>
 
           <div class="content-section implementation">
             <div class="card">
               <PickList
-                  v-model="employees"
-                  listStyle="height:342px"
-                  dataKey="id"
+                v-model="employees"
+                listStyle="height:342px"
+                dataKey="id"
               >
                 <template #sourceheader>
                   Available
                   <div
-                      class="
+                    class="
                       flex flex-column
                       md:flex-row
                       md:justify-content-between
@@ -161,46 +161,43 @@
                     "
                   >
                     <div class="field grid col-8">
-                      <div class="field col-6 px-2">
-                        <h5 class="m-0">
-                          <h6>Filter by:</h6>
+                      <div style="vertical-align: inherit" class="px-2">
+                        <label>Type</label>
 
-                          <Dropdown
-                              id="state"
-                              v-model="typeItem"
-                              :options="employeeTypes"
-                              optionLabel="name"
-                              placeholder="Type employee"
-                              :filter="false"
-                              :loading="loadingArticleTypesFilter"
-                              @change="filterByType"
-                          ></Dropdown>
-                        </h5>
+                        <Dropdown
+                          id="state"
+                          v-model="typeItem"
+                          :options="employeeTypes"
+                          optionLabel="name"
+                          placeholder="Type employee"
+                          :filter="false"
+                          :loading="loadingArticleTypesFilter"
+                          @change="filterByType"
+                        ></Dropdown>
                       </div>
 
-                      <div class="field col-6 px-2">
-                        <h5 class="m-0">
-                          <h6>Filter by:</h6>
+                      <div style="vertical-align: inherit" class="px-2">
+                        <label>Turn</label>
 
-                          <Dropdown
-                              id="state"
-                              v-model="turnItem"
-                              :options="employeeTurns"
-                              optionLabel="name"
-                              placeholder="Turn"
-                              :filter="false"
-                              :loading="loadingArticleTypesFilter"
-                              @change="filterByTurn"
-                          ></Dropdown>
-                        </h5>
+                        <Dropdown
+                          id="state"
+                          v-model="turnItem"
+                          :options="employeeTurns"
+                          optionLabel="name"
+                          placeholder="Turn"
+                          :filter="false"
+                          :loading="loadingArticleTypesFilter"
+                          @change="filterByTurn"
+                        ></Dropdown>
                       </div>
                     </div>
-                    <div class="field col-4">
+
+                    <div class="field col-5">
                       <span class="block mt-2 md:mt-0 p-input-icon-left">
-                        <i class="pi pi-search"/>
+                        <i class="pi pi-search" />
                         <InputText
-                            v-model="filters['global'].value"
-                            placeholder="Search..."
+                          v-model="filters['global'].value"
+                          placeholder="Search..."
                         />
                       </span>
                     </div>
@@ -214,7 +211,9 @@
                         <div class="col 6">
                           <h6 class="mb-2">
                             {{
-                              slotProps.item.name + "" + slotProps.item.lastname
+                              slotProps.item.name +
+                              " " +
+                              slotProps.item.lastname
                             }}
                           </h6>
                         </div>
@@ -236,74 +235,74 @@
             </div>
             <div class="flex justify-content-end">
               <Button
-                  label="Next"
-                  icon="pi pi-list"
-                  class="p-button-success mr-2"
-                  @click="nextPage"
+                label="Next"
+                icon="pi pi-list"
+                class="p-button-success mr-2"
+                @click="nextPage"
               />
             </div>
           </div>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="attendanceSheet"
-            >Are you sure you want to delete <b>{{ attendanceSheet.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ attendanceSheet.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteResource"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteResource"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductsDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete the selected products?</span
+              >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductsDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductsDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteSelectedProducts"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -313,7 +312,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import AttendanceService from "../service/AttendanceService";
 import moment from "moment/moment";
 import EmployeesService from "../service/EmployeesService";
@@ -335,9 +334,9 @@ export default {
       submitted: false,
       message: null,
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
       loadingSheets: true,
       isView: false,
@@ -347,14 +346,14 @@ export default {
       minDateValue: new Date(),
 
       employeeTypes: [
-        {name: "All", value: ''},
-        {name: "Permanent", value: 'permanent'},
-        {name: "Relay", value: 'relay'},
+        { name: "All", value: "" },
+        { name: "Permanent", value: "permanent" },
+        { name: "Relay", value: "relay" },
       ],
       employeeTurns: [
-        {name: "All", value: ''},
-        {name: "Day", value: 'day'},
-        {name: "Night", value: 'night'},
+        { name: "All", value: "" },
+        { name: "Day", value: "day" },
+        { name: "Night", value: "night" },
       ],
       typeItem: null,
       turnItem: null,
@@ -375,14 +374,14 @@ export default {
     let start_date = this.start_date;
     let end_date = this.end_date;
     this.sheetAttendanceService
-        .getAllFilterDates(start_date, end_date)
-        .then((data) => {
-          this.sheetsAttendances = data;
-          this.loadingSheets = false;
-        });
+      .getAllFilterDates(start_date, end_date)
+      .then((data) => {
+        this.sheetsAttendances = data;
+        this.loadingSheets = false;
+      });
 
-    this.typeItem = this.employeeTypes[0]
-    this.turnItem = this.employeeTurns[0]
+    this.typeItem = this.employeeTypes[0];
+    this.turnItem = this.employeeTurns[0];
   },
   watch: {
     start_date(value) {
@@ -390,11 +389,11 @@ export default {
       let end_date = moment(this.end_date).format("YYYY-MM-DD");
       this.loadingSheets = true;
       this.sheetAttendanceService
-          .getAllFilterDates(start_date, end_date)
-          .then((data) => {
-            this.sheetsAttendances = data;
-            this.loadingSheets = false;
-          });
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.sheetsAttendances = data;
+          this.loadingSheets = false;
+        });
       // console.log(start_date, end_date);
     },
     end_date(value) {
@@ -402,18 +401,18 @@ export default {
       let end_date = moment(value).format("YYYY-MM-DD");
       this.loadingSheets = true;
       this.sheetAttendanceService
-          .getAllFilterDates(start_date, end_date)
-          .then((data) => {
-            this.sheetsAttendances = data;
-            this.loadingSheets = false;
-          });
+        .getAllFilterDates(start_date, end_date)
+        .then((data) => {
+          this.sheetsAttendances = data;
+          this.loadingSheets = false;
+        });
       // console.log(start_date, end_date);
     },
   },
   methods: {
     nextPage() {
       const payload = {
-        employees:this.employees[1]
+        employees: this.employees[1],
       };
       this.sheetAttendanceService.create(payload).then((data) => {
         this.sheetsAttendances.unshift(data.data);
@@ -424,12 +423,10 @@ export default {
       this.isView = false;
 
       this.attendanceSheet = {};
-      this.employeesService
-          .getAll()
-          .then((data) => {
-            this.employees = [data, []]
-            this.employeesAll = [data, []]
-          });
+      this.employeesService.getAll().then((data) => {
+        this.employees = [data, []];
+        this.employeesAll = [data, []];
+      });
       // console.log(this.employees);
       this.submitted = false;
       this.productDialog = true;
@@ -473,7 +470,7 @@ export default {
     },
     viewArticleTypes(attendanceSheet) {
       this.isView = true;
-      this.attendanceSheet = {...attendanceSheet};
+      this.attendanceSheet = { ...attendanceSheet };
       this.productDialog = true;
     },
     editProduct(attendanceSheet) {
@@ -491,7 +488,7 @@ export default {
       this.deleteDialog = false;
       this.articleTypesService.delete(this.attendanceSheet.id).then((data) => {
         this.articleTypes = this.articleTypes.filter(
-            (val) => val.id !== this.attendanceSheet.id
+          (val) => val.id !== this.attendanceSheet.id
         );
         this.attendanceSheet = {};
         this.$toast.add({
@@ -517,28 +514,28 @@ export default {
       this.turnItem = this.employeeTurns[0];
       this.loadingEmployees = true;
       this.employees[0] = this.employeesAll[0].filter(
-          (val) => val.type === type
+        (val) => val.type === type
       );
-      if (type === '') this.employees[0] = this.employeesAll[0];
+      if (type === "") this.employees[0] = this.employeesAll[0];
       this.loadingEmployees = false;
     },
     filterByTurn(data) {
       let turn = data.value.value;
       let type = this.typeItem.value;
-      if (type === '') {
+      if (type === "") {
         this.loadingEmployees = true;
         this.employees[0] = this.employeesAll[0].filter(
-            (val) => val.turn === turn
+          (val) => val.turn === turn
         );
-        if (turn === '') this.employees[0] = this.employeesAll[0];
+        if (turn === "") this.employees[0] = this.employeesAll[0];
       } else {
         this.loadingEmployees = true;
         this.employees[0] = this.employeesAll[0].filter(
-            (val) => val.turn === turn && val.type === type
+          (val) => val.turn === turn && val.type === type
         );
-        if (turn === '') {
+        if (turn === "") {
           this.employees[0] = this.employeesAll[0].filter(
-              (val) => val.type === type
+            (val) => val.type === type
           );
         }
       }
@@ -548,7 +545,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -562,7 +559,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -575,7 +572,7 @@ export default {
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
   },
