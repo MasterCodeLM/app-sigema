@@ -17,4 +17,7 @@ export default class MaintenenaceSheetService {
     async create(payload) {
         return HttpService.prototype.create(uri, payload)
     }
+    async delete(id) {
+        return HttpService.prototype.delete(uri, id)
+    }
 }

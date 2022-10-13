@@ -181,11 +181,11 @@
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
                 />-->
-<!--                <Button-->
-<!--                    icon="pi pi-trash"-->
-<!--                    class="p-button-rounded p-button-danger"-->
-<!--                    @click="confirmDelete(slotProps.data)"-->
-<!--                />-->
+                <Button
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    @click="confirmDelete(slotProps.data)"
+                />
               </div>
             </template>
           </Column>
@@ -203,7 +203,7 @@
                 style="font-size: 2rem"
             />
             <span v-if="resource"
-            >Are you sure you want to delete <b>{{ resource.name }}</b
+            >Are you sure you want to delete <b>{{ maintenanaceSheet.code }}</b
             >?</span
             >
           </div>
@@ -273,6 +273,7 @@ export default {
     return {
       // apiHost: "https://stormy-tundra-82595.herokuapp.com/storage/",
       machines: null,
+      maintenanaceSheet:null,
       productDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
@@ -536,14 +537,14 @@ export default {
       });
     },
     confirmDelete(resource) {
-      this.resource = resource;
+      this.maintenanaceSheet = resource;
       this.deleteDialog = true;
     },
     deleteResource() {
       this.deleteDialog = false;
-      this.machinesService.delete(this.resource.id).then((data) => {
+      this.maintenenaceSheetService.delete(this.maintenanaceSheet.id).then((data) => {
         this.machines = this.machines.filter(
-            (val) => val.id !== this.resource.id
+            (val) => val.id !== this.maintenanaceSheet.id
         );
         this.resource = {};
         this.$toast.add({
