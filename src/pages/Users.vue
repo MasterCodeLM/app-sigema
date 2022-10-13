@@ -63,11 +63,17 @@
             field="employee.name"
             header="Name"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:18%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.employee ? slotProps.data.employee.name : "" }}
+              {{
+                slotProps.data.employee
+                  ? slotProps.data.employee.name +
+                    " " +
+                    slotProps.data.employee.lastname
+                  : " "
+              }}
             </template>
           </Column>
 

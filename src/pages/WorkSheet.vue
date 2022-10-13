@@ -113,7 +113,11 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
-              {{ slotProps.data.machine.serie_number }}
+              {{
+                slotProps.data.machine
+                  ? slotProps.data.machine.serie_number
+                  : " "
+              }}
             </template>
           </Column>
 
@@ -125,7 +129,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.machine.name }}
+              {{ slotProps.data.machine ? slotProps.data.machine.name : " " }}
             </template>
           </Column>
 

@@ -2,9 +2,9 @@
   <div class="grid">
     <div class="col-12">
       <Button
-          icon="pi pi-arrow-left"
-          class="p-button-rounded mr-2 mb-2"
-          @click="backPage"
+        icon="pi pi-arrow-left"
+        class="p-button-rounded mr-2 mb-2"
+        @click="backPage"
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
@@ -14,63 +14,62 @@
     </div>
     <div class="col-12">
       <div class="card">
-        <Toast/>
+        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                  label="Check in"
-                  class="p-button-success mr-2 mb-2"
-                  @click="checkIn"
-                  :disabled="disabledButtonCheckIn"
+                label="Check in"
+                class="p-button-success mr-2 mb-2"
+                @click="checkIn"
+                :disabled="disabledButtonCheckIn"
               />
 
               <Button
-                  label="Check out"
-                  class="p-button-danger mr-2 mb-2"
-                  @click="checkOut"
-                  :disabled="disabledButtonCheckOut"
-
+                label="Check out"
+                class="p-button-danger mr-2 mb-2"
+                @click="checkOut"
+                :disabled="disabledButtonCheckOut"
               />
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="Close Record" class="mr-2 mb-2"
-                @click="closeSheet"
-                :disabled="disabledButtonClose"
-
+              label="Close Record"
+              class="mr-2 mb-2"
+              @click="closeSheet"
+              :disabled="disabledButtonClose"
             ></Button>
           </template>
         </Toolbar>
 
         <DataTable
-            ref="dt"
-            :value="employeesList"
-            v-model:selection="selectedProducts"
-            dataKey="id"
-            :paginator="true"
-            :rows="10"
-            :filters="filters"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            :rowsPerPageOptions="[5, 10, 25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-            responsiveLayout="scroll"
+          ref="dt"
+          :value="employeesList"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="10"
+          :filters="filters"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} employees"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div
-                class="
+              class="
                 flex flex-column
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
               <h5 class="m-0">List</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 />
               </span>
             </div>
@@ -79,10 +78,10 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-              field="name"
-              header="Name"
-              :sortable="true"
-              headerStyle="width:60%; min-width:10rem;"
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:60%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -91,10 +90,10 @@
           </Column>
 
           <Column
-              field="check_in"
-              header="Check in time"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="check_in"
+            header="Check in time"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Check in time</span>
@@ -102,10 +101,10 @@
             </template>
           </Column>
           <Column
-              field="check_out"
-              header="Check out time"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="check_out"
+            header="Check out time"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Check out time</span>
@@ -114,10 +113,10 @@
           </Column>
 
           <Column
-              field="status_working"
-              header="Status"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
+            field="status_working"
+            header="Status"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
@@ -127,100 +126,100 @@
         </DataTable>
 
         <Dialog
-            v-model:visible="productDialog"
-            :style="{ width: '450px' }"
-            header="New Article Type"
-            :modal="true"
-            class="p-fluid"
+          v-model:visible="productDialog"
+          :style="{ width: '450px' }"
+          header="New Article Type"
+          :modal="true"
+          class="p-fluid"
         >
           <div class="field">
             <label for="name">Name</label>
             <InputText
-                id="name"
-                v-model.trim="product.name"
-                required="true"
-                autofocus
-                :class="{ 'p-invalid': submitted && !product.name }"
+              id="name"
+              v-model.trim="product.name"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': submitted && !product.name }"
             />
             <small class="p-invalid" v-if="submitted && !product.name"
-            >Name is required.</small
+              >Name is required.</small
             >
           </div>
           <template #footer>
             <Button
-                label="Cancel"
-                icon="pi pi-times"
-                class="p-button-text p-button-danger"
-                @click="hideDialog"
+              label="Cancel"
+              icon="pi pi-times"
+              class="p-button-text p-button-danger"
+              @click="hideDialog"
             />
             <Button
-                label="Save"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="saveProduct"
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="saveProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete <b>{{ product.name }}</b
-            >?</span
+              >Are you sure you want to delete <b>{{ product.name }}</b
+              >?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteProduct"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteProduct"
             />
           </template>
         </Dialog>
 
         <Dialog
-            v-model:visible="deleteProductsDialog"
-            :style="{ width: '450px' }"
-            header="Confirm"
-            :modal="true"
+          v-model:visible="deleteProductsDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
             <i
-                class="pi pi-exclamation-triangle mr-3"
-                style="font-size: 2rem"
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
             />
             <span v-if="product"
-            >Are you sure you want to delete the selected products?</span
+              >Are you sure you want to delete the selected products?</span
             >
           </div>
           <template #footer>
             <Button
-                label="No"
-                icon="pi pi-times"
-                class="p-button-text"
-                @click="deleteProductsDialog = false"
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteProductsDialog = false"
             />
             <Button
-                label="Yes"
-                icon="pi pi-check"
-                class="p-button-text"
-                @click="deleteSelectedProducts"
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteSelectedProducts"
             />
           </template>
         </Dialog>
@@ -230,7 +229,7 @@
 </template>
 
 <script>
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 //import ProductService from "../service/ProductService";
 import AttendanceService from "../service/AttendanceService";
 import moment from "moment/moment";
@@ -248,9 +247,9 @@ export default {
       filters: {},
       submitted: false,
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
       disabledButtonCheckIn: false,
       disabledButtonCheckOut: false,
@@ -270,16 +269,14 @@ export default {
 
     //this.productService.getProducts().then((data) => (this.products = data));
 
-    this.sheetListService
-        .getOne(sheet.id)
-        .then((data) => {
-          if (!data.is_open) {
-            this.disabledButtonCheckIn = true;
-            this.disabledButtonCheckOut = true;
-            this.disabledButtonClose = true;
-          }
-          this.employeesList = data.employees;
-        });
+    this.sheetListService.getOne(sheet.id).then((data) => {
+      if (!data.is_open) {
+        this.disabledButtonCheckIn = true;
+        this.disabledButtonCheckOut = true;
+        this.disabledButtonClose = true;
+      }
+      this.employeesList = data.employees;
+    });
   },
   methods: {
     backPage() {
@@ -289,35 +286,35 @@ export default {
       if (this.selectedProducts.length > 0) {
         let now = moment().format("HH:mm:ss");
         let attendance_sheet = this.$route.params;
-        let employees = JSON.parse(JSON.stringify(this.employeesList))
+        let employees = JSON.parse(JSON.stringify(this.employeesList));
 
         this.selectedProducts.map((employee) => {
           if (!employees[this.findIndexEmployeesById(employee.id)].check_in) {
             employees[this.findIndexEmployeesById(employee.id)].check_in = now;
           }
         });
-        let payload = {employees}
+        let payload = { employees };
         this.sheetListService
-            .update(attendance_sheet.id, payload)
-            .then((data) => {
-              if (data.data) {
-                this.employeesList = data.data.employees;
-                this.selectedProducts = [];
-                this.$toast.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: data.message,
-                  life: 3000,
-                });
-              } else {
-                this.$toast.add({
-                  severity: "error",
-                  summary: "Error",
-                  detail: data.message,
-                  life: 3000,
-                });
-              }
-            });
+          .update(attendance_sheet.id, payload)
+          .then((data) => {
+            if (data.data) {
+              this.employeesList = data.data.employees;
+              this.selectedProducts = [];
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: data.message,
+                life: 3000,
+              });
+            } else {
+              this.$toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: data.message,
+                life: 3000,
+              });
+            }
+          });
       } else {
         this.$toast.add({
           severity: "error",
@@ -331,35 +328,38 @@ export default {
       if (this.selectedProducts.length > 0) {
         let now = moment().format("HH:mm:ss");
         let attendance_sheet = this.$route.params;
-        let employees = JSON.parse(JSON.stringify(this.employeesList))
+        let employees = JSON.parse(JSON.stringify(this.employeesList));
 
         this.selectedProducts.map((employee) => {
-          if (!employees[this.findIndexEmployeesById(employee.id)].check_out && employees[this.findIndexEmployeesById(employee.id)].check_in) {
+          if (
+            !employees[this.findIndexEmployeesById(employee.id)].check_out &&
+            employees[this.findIndexEmployeesById(employee.id)].check_in
+          ) {
             employees[this.findIndexEmployeesById(employee.id)].check_out = now;
           }
         });
-        let payload = {employees}
+        let payload = { employees };
         this.sheetListService
-            .update(attendance_sheet.id, payload)
-            .then((data) => {
-              if (data.data) {
-                this.employeesList = data.data.employees;
-                this.selectedProducts = [];
-                this.$toast.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: data.message,
-                  life: 3000,
-                });
-              } else {
-                this.$toast.add({
-                  severity: "error",
-                  summary: "Error",
-                  detail: data.message,
-                  life: 3000,
-                });
-              }
-            });
+          .update(attendance_sheet.id, payload)
+          .then((data) => {
+            if (data.data) {
+              this.employeesList = data.data.employees;
+              this.selectedProducts = [];
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: data.message,
+                life: 3000,
+              });
+            } else {
+              this.$toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: data.message,
+                life: 3000,
+              });
+            }
+          });
       } else {
         this.$toast.add({
           severity: "error",
@@ -372,21 +372,21 @@ export default {
     closeSheet() {
       let attendance_sheet = this.$route.params;
       let payload = {
-        is_open: false
-      }
+        is_open: false,
+      };
       this.sheetListService
-          .update(attendance_sheet.id, payload)
-          .then((data) => {
-            this.employeesList = data.data.employees;
-            this.selectedProducts = [];
-            this.$toast.add({
-              severity: "success",
-              summary: "Successful",
-              detail: data.message,
-              life: 3000,
-            });
-            this.$router.push(`/attendance-sheet`);
+        .update(attendance_sheet.id, payload)
+        .then((data) => {
+          this.employeesList = data.data.employees;
+          this.selectedProducts = [];
+          this.$toast.add({
+            severity: "success",
+            summary: "Successful",
+            detail: data.message,
+            life: 3000,
           });
+          this.$router.push(`/attendance-sheet`);
+        });
     },
 
     formatCurrency(value) {
@@ -411,8 +411,8 @@ export default {
       if (this.product.name.trim()) {
         if (this.product.id) {
           this.product.inventoryStatus = this.product.inventoryStatus.value
-              ? this.product.inventoryStatus.value
-              : this.product.inventoryStatus;
+            ? this.product.inventoryStatus.value
+            : this.product.inventoryStatus;
           this.products[this.findIndexById(this.product.id)] = this.product;
           this.$toast.add({
             severity: "success",
@@ -425,8 +425,8 @@ export default {
           this.product.code = this.createId();
           this.product.image = "product-placeholder.svg";
           this.product.inventoryStatus = this.product.inventoryStatus
-              ? this.product.inventoryStatus.value
-              : "INSTOCK";
+            ? this.product.inventoryStatus.value
+            : "INSTOCK";
           this.products.push(this.product);
           this.$toast.add({
             severity: "success",
@@ -440,7 +440,7 @@ export default {
       }
     },
     editProduct(product) {
-      this.product = {...product};
+      this.product = { ...product };
       this.productDialog = true;
     },
     confirmDeleteProduct(product) {
@@ -481,7 +481,7 @@ export default {
     createId() {
       let id = "";
       var chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -495,7 +495,7 @@ export default {
     },
     deleteSelectedProducts() {
       this.products = this.products.filter(
-          (val) => !this.selectedProducts.includes(val)
+        (val) => !this.selectedProducts.includes(val)
       );
       this.deleteProductsDialog = false;
       this.selectedProducts = null;
@@ -508,7 +508,7 @@ export default {
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
   },

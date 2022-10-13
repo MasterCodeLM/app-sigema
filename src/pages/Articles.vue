@@ -19,13 +19,6 @@
                 class="p-button-success mr-2"
                 @click="openNew"
               />
-              <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
-              />
             </div>
           </template>
 
