@@ -60,14 +60,25 @@
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
           <Column
-            field="lastname"
+            field="name"
             header="Name"
             :sortable="true"
             headerStyle="width:22%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.lastname + " " + slotProps.data.name }}
+              {{ slotProps.data.name }}
+            </template>
+          </Column>
+          <Column
+            field="lastname"
+            header="Last Name"
+            :sortable="true"
+            headerStyle="width:22%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Last Name</span>
+              {{ slotProps.data.lastname }}
             </template>
           </Column>
 
@@ -152,17 +163,6 @@
             <template #body="slotProps">
               <span class="p-column-title">Email</span>
               {{ slotProps.data.personal_email }}
-            </template>
-          </Column>
-          <Column
-            field="native_language"
-            header="Native Languague"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Native Languague</span>
-              {{ slotProps.data.native_language }}
             </template>
           </Column>
 

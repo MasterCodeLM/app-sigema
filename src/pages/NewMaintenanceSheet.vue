@@ -158,48 +158,219 @@
   <Dialog
     v-model:visible="productDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '50vw' }"
-    header="Add Articles"
+    :style="{ width: '80vw' }"
+    header="Add Sapare Parts"
     :modal="true"
     class="p-fluid"
   >
-    <div class="card">
-      <DataTable
-        :value="products1"
-        editMode="cell"
-        @cell-edit-complete="onCellEditComplete"
-        class="editable-cells-table"
-        responsiveLayout="scroll"
-      >
-        <Column
-          v-for="col of columns"
-          :field="col.field"
-          :header="col.header"
-          :key="col.field"
-          style="width: 25%"
-        >
-          <template #editor="{ data, field }">
-            <InputNumber
-              v-model="data[field]"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-              autofocus
-            />
-          </template>
-        </Column>
-        <Column headerStyle="min-width:10rem;">
-          <template #body="slotProps">
-            <div style="display: flex; justify-content: end">
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-danger"
-                @click="confirmDeleteProduct(slotProps.data)"
+    <div class="grid">
+      <div class="col-12 md:col-6">
+        <div class="card p-fluid">
+          <h5>Search spare part in inventory</h5>
+          <div class="grid">
+            <div class="field col-12">
+              <DataTable
+                ref="dt"
+                v-model:selection="selectedProducts"
+                dataKey="id"
+                :paginator="true"
+                :rows="10"
+                :filters="filters"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[5, 10, 25]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Spare Parts"
+                responsiveLayout="scroll"
+                :loading="loadingArticlesTypes"
+                ><!--:value="articles"-->
+                <template #header>
+                  <div
+                    class="
+                      flex flex-column
+                      md:flex-row
+                      md:justify-content-between
+                      md:align-items-center
+                    "
+                  >
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                      <i class="pi pi-search" />
+                      <InputText
+                        v-model="filters['global']"
+                        placeholder="Search..."
+                      />
+                    </span>
+                  </div>
+                </template>
+
+                <Column headerStyle="width: 3rem"></Column>
+                <Column
+                  field="name"
+                  header="Serail Number"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Serail Number</span>
+                    {{ slotProps.data.name }}
+                  </template>
+                </Column>
+                <Column
+                  field="name"
+                  header="Name"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Name</span>
+                    {{ slotProps.data.name }}
+                  </template>
+                </Column>
+                <Column
+                  header="Image"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Image</span>
+                    <img
+                      :src="
+                        slotProps.data.image
+                          ? getImage(slotProps.data.image)
+                          : imageDefault
+                      "
+                      :alt="'machine'"
+                      class="shadow-2"
+                      width="100"
+                      height="100"
+                    />
+                  </template>
+                </Column>
+                <Column
+                  field="name"
+                  header="Quantity"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
+                >
+                  <template #body="slotProps">
+                    <span class="p-column-title">Quantity</span>
+                    {{ slotProps.data.name }}
+                  </template>
+                </Column>
+                <Column headerStyle="min-width:4rem;">
+                  <template #body="slotProps">
+                    <div style="display: flex; justify-content: end">
+                      <Button
+                        icon="pi pi-angle-double-right"
+                        class="p-button-rounded p-button-info mr-2"
+                        @click="viewArticleTypes(slotProps.data)"
+                      />
+                    </div>
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 md:col-6">
+        <div class="card p-fluid">
+          <h5>Add Spare part inventory / Add Spare part Buy</h5>
+          <div class="grid">
+            <div class="field col-12 sm:col-5">
+              <label for="name1">Serail number</label>
+              <InputText id="name1" type="text" />
+            </div>
+            <div class="field col-12 sm:col-4">
+              <label for="name1">Nombre</label>
+              <InputText id="name1" type="text" />
+            </div>
+            <div class="field col-12 sm:col-3">
+              <label for="name1">Brand</label>
+              <InputText id="name1" type="text" />
+            </div>
+
+            <div class="field col-12 sm:col-5">
+              <label for="name1">Model</label>
+              <InputText id="name1" type="text" />
+            </div>
+            <div class="field col-12 sm:col-3">
+              <label for="quantity">Quantity</label>
+              <InputNumber
+                id="quantity"
+                showButtons
+                :disabled="isView"
+                :min="0"
+                :useGrouping="false"
+                :class="{ 'p-invalid': submitted && !article.quantity }"
+              />
+              <!--v-model="article.quantity"-->
+            </div>
+            <div class="field col-12 sm:col-3">
+              <label for="quantity">Preci</label>
+              <InputNumber
+                id="price"
+                mode="currency"
+                currency="PEN"
+                locale="es-PE"
+                :class="{
+                  'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
+                }"
               />
             </div>
-          </template>
-        </Column>
-      </DataTable>
+            <!--v-model="supplier_ref.price"-->
+            <div class="field col-12 sm:col-1">
+              <Button
+                icon="pi pi-plus"
+                class="p-button-secondary"
+                style="margin-top: 1.8rem"
+                @click="addSpullierRef"
+              ></Button>
+            </div>
+            <div class="field col-12 sm:col-12">
+              <div class="card">
+                <DataTable responsiveLayout="scroll">
+                  <!--:value="article.suppliers"-->
+                  <Column
+                    v-for="col of columns"
+                    :field="col.field"
+                    :header="col.header"
+                    :key="col.field"
+                    style="width: 25%"
+                  >
+                    <template #editor="{ data, field }">
+                      <InputNumber
+                        v-model="data[field]"
+                        mode="currency"
+                        currency="PEN"
+                        locale="es-PE"
+                        autofocus
+                      />
+                    </template>
+                  </Column>
+
+                  <Column v-if="!isView" headerStyle="min-width:4rem;">
+                    <template #body="slotProps">
+                      <div style="display: flex; justify-content: end">
+                        <Button
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger"
+                          @click="removeSupplierRef(slotProps.data)"
+                        />
+                      </div>
+                    </template>
+                  </Column>
+                </DataTable>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-content-end">
+        <Button
+          label="Add"
+          icon="pi pi-download"
+          class="p-button-success mr-2"
+          @click="nextPage"
+        />
+      </div>
     </div>
   </Dialog>
 </template>
