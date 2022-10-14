@@ -30,7 +30,7 @@
         :value="machines"
         dataKey="id"
         :paginator="true"
-        :rows="10"
+        :rows="5"
         :filters="filters"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rowsPerPageOptions="[5, 10, 25]"
@@ -50,7 +50,7 @@
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 /><!--"filters['global'].value"-->
               </span>
@@ -134,7 +134,7 @@
           </template>
         </Column>
 
-        <Column headerStyle="min-width:10rem;">
+        <Column headerStyle="min-width:4rem;">
           <template #body="slotProps">
             <div style="display: flex; justify-content: end">
               <Button
@@ -366,16 +366,16 @@
             <div class="field col-12">
               <DataTable
                 ref="dt"
-                v-model:selection="selectedProducts"
+                :value="articles"
                 dataKey="id"
                 :paginator="true"
-                :rows="10"
+                :rows="2"
                 :filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 25]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Spare Parts"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Articles"
                 responsiveLayout="scroll"
-                :loading="loadingArticlesTypes"
+                :loading="loadingArticles"
                 ><!--:value="articles"-->
                 <template #header>
                   <div
@@ -386,39 +386,53 @@
                       md:align-items-center
                     "
                   >
+                    <div class="field col-12 sm:col-6">
+                      <h5 class="m-0">
+                        Filter by:
+                        <Dropdown
+                          id="state"
+                          v-model="filter"
+                          :options="articleTypeFilterItems"
+                          optionLabel="name"
+                          placeholder="Select One"
+                          :filter="false"
+                          :loading="loadingArticleTypesFilter"
+                          @change="filterByArticleType"
+                        ></Dropdown>
+                      </h5>
+                    </div>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                       <i class="pi pi-search" />
                       <InputText
-                        v-model="filters['global']"
+                        v-model="filters['global'].value"
                         placeholder="Search..."
                       />
                     </span>
                   </div>
                 </template>
-
-                <Column headerStyle="width: 3rem"></Column>
                 <Column
                   field="name"
                   header="Serail Number"
                   :sortable="true"
-                  headerStyle="width:14%; min-width:10rem;"
+                  headerStyle="width:14%; min-width:12rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Serail Number</span>
-                    {{ slotProps.data.name }}
+                    {{ slotProps.data.serie_number }}
                   </template>
                 </Column>
                 <Column
                   field="name"
                   header="Name"
                   :sortable="true"
-                  headerStyle="width:14%; min-width:10rem;"
+                  headerStyle="width:14%; min-width:12rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Name</span>
                     {{ slotProps.data.name }}
                   </template>
                 </Column>
+
                 <Column
                   header="Image"
                   headerStyle="width:14%; min-width:10rem;"
@@ -439,17 +453,17 @@
                   </template>
                 </Column>
                 <Column
-                  field="name"
+                  field="quantity"
                   header="Quantity"
                   :sortable="true"
                   headerStyle="width:14%; min-width:10rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Quantity</span>
-                    {{ slotProps.data.name }}
+                    {{ slotProps.data.quantity }}
                   </template>
                 </Column>
-                <Column headerStyle="min-width:4rem;">
+                <Column headerStyle="min-width:1rem;">
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
@@ -667,6 +681,8 @@
 import ProductService from "./../service/ProductService";
 import { FilterMatchMode } from "primevue/api";
 import MachinesService from "@/service/MachinesService";
+import ArticleTypesService from "../service/ArticleTypesService";
+import ArticlesService from "@/service/ArticlesService";
 
 export default {
   data() {
@@ -677,10 +693,14 @@ export default {
         { name: "Option 3", code: "Option 3" },
       ],
       machines: [],
+      articles: [],
       machineDialog: false,
       addSparePartDialog: false,
       addServiceDialog: false,
       loadingMachines: true,
+      loadingArticles: true,
+      loadingArticleTypesFilter: true,
+      imageDefault: "https://via.placeholder.com/150x180",
       dropdownItem: null,
       minDateValue: new Date(),
       editingRows: [],
@@ -701,13 +721,19 @@ export default {
         quantity: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       },
+      articleTypeFilterItems: null,
     };
   },
   machineService: null,
+  articleService: null,
+  articleTypeService: null,
   productService: null,
   created() {
+    this.initFilters();
     this.productService = new ProductService();
     this.machineService = new MachinesService();
+    this.articleService = new ArticlesService();
+    this.articleTypeService = new ArticleTypesService();
 
     this.columnsDetailGeneral = [
       { field: "code", header: "Serie" },
@@ -729,6 +755,7 @@ export default {
       { field: "quantity", header: "Import" },
     ];
   },
+
   methods: {
     openNewSelectMachine() {
       this.machineDialog = true;
@@ -743,6 +770,23 @@ export default {
       this.product = {};
       this.submitted = false;
       this.addSparePartDialog = true;
+      this.loadingArticles = true;
+      this.articleService.getAll().then((data) => {
+        this.articles = data;
+        this.loadingArticles = false;
+      });
+      this.articleTypeService.getAll().then((data) => {
+        this.articleTypeFilterItems = data;
+        this.articleTypeFilterItems.unshift({
+          id: 1,
+          name: "All",
+        });
+        this.loadingArticleTypesFilter = false;
+        this.filter = {
+          id: 1,
+          name: "All",
+        };
+      });
     },
     openNewAddService() {
       this.product = {};
@@ -794,6 +838,24 @@ export default {
         default:
           return "NA";
       }
+    },
+    getImage(path) {
+      // console.log(path)
+      return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+    },
+    filterByArticleType(data) {
+      let article_type = data.value;
+      this.loadingArticles = true;
+      this.articles = this.articlesAll.filter(
+        (val) => val.article_type.id === article_type.id
+      );
+      if (article_type.id === 1) this.articles = this.articlesAll;
+      this.loadingArticles = false;
+    },
+    initFilters() {
+      this.filters = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
     },
     backPage() {
       this.$router.push(`/maintenance-sheet`);

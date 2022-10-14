@@ -309,7 +309,7 @@ export default {
         items: [
           {
             label: "Machines",
-            icon: "pi pi-fw pi-user-edit",
+            icon: "pi pi-th-large",
             to: "/machines",
             visible: this.permissions.includes("machines"),
           },
@@ -337,7 +337,7 @@ export default {
           },
           {
             label: "Operations",
-            icon: "pi pi-fw pi-bookmark",
+            icon: "pi pi-slack",
             visible:
               this.permissions.includes("maintenance-sheets") ||
               this.permissions.includes("working-sheets"),
@@ -364,7 +364,7 @@ export default {
           },
           {
             label: "Article Types",
-            icon: "pi pi-fw pi-user-edit",
+            icon: "pi pi-bars",
             to: "/article-types",
             visible: this.permissions.includes("article-types"),
           },
@@ -383,13 +383,13 @@ export default {
             items: [
               {
                 label: "Roles",
-                icon: "pi pi-fw pi-user-edit",
+                icon: "pi pi-check-square",
                 to: "/roles",
                 visible: this.permissions.includes("roles"),
               },
               {
                 label: "Users",
-                icon: "pi pi-fw pi-user-edit",
+                icon: "pi pi-user",
                 to: "/users",
                 visible: this.permissions.includes("users"),
               },
