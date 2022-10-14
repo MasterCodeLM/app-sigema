@@ -9,15 +9,160 @@
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
           <h3 class="text-900 font-medium">JEX TECHNOLOGIES</h3>
-          <span class="text-600 font-medium text-lg">Machine Name</span>
+          <Button
+            label="Select Machine"
+            class="p-button-secondary mr-2 mb-2"
+            @click="openNewSelectMachine"
+          />
         </div>
       </div>
     </div>
+    <Dialog
+      v-model:visible="machineDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+      :style="{ width: '40vw' }"
+      header="SELECT MACHINE"
+      :modal="true"
+      class="p-fluid"
+    >
+      <DataTable
+        ref="dt"
+        :value="machines"
+        dataKey="id"
+        :paginator="true"
+        :rows="10"
+        :filters="filters"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        :rowsPerPageOptions="[5, 10, 25]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} machines"
+        responsiveLayout="scroll"
+        :loading="loadingMachines"
+      >
+        <template #header>
+          <div
+            class="
+              flex flex-column
+              md:flex-row md:justify-content-between md:align-items-center
+            "
+          >
+            <h5 class="m-0">Machines</h5>
+            <div class="align right">
+              <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global']"
+                  placeholder="Search..."
+                /><!--"filters['global'].value"-->
+              </span>
+            </div>
+          </div>
+        </template>
+        <Column
+          field="serie_number"
+          header="Serial Number"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
+        >
+          <template #body="slotProps">
+            <span class="p-column-title">Serial Number</span>
+            {{ slotProps.data.serie_number }}
+          </template>
+        </Column>
+        <Column
+          field="name"
+          header="Name"
+          :sortable="true"
+          headerStyle="width:50%; min-width:10rem;"
+        >
+          <template #body="slotProps">
+            <span class="p-column-title">Name</span>
+            {{ slotProps.data.name }}
+          </template>
+        </Column>
+
+        <!--        <Column-->
+        <!--            field="model"-->
+        <!--            header="Model"-->
+        <!--            :sortable="true"-->
+        <!--            headerStyle="width:14%; min-width:10rem;"-->
+        <!--        >-->
+        <!--          <template #body="slotProps">-->
+        <!--            <span class="p-column-title">Model</span>-->
+        <!--            {{ slotProps.data.model }}-->
+        <!--          </template>-->
+        <!--        </Column>-->
+
+        <!--        <Column-->
+        <!--            field="brand"-->
+        <!--            header="Brand"-->
+        <!--            :sortable="true"-->
+        <!--            headerStyle="width:14%; min-width:10rem;"-->
+        <!--        >-->
+        <!--          <template #body="slotProps">-->
+        <!--            <span class="p-column-title">Brand</span>-->
+        <!--            {{ slotProps.data.brand }}-->
+        <!--          </template>-->
+        <!--        </Column>-->
+
+        <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+          <template #body="slotProps">
+            <span class="p-column-title">Image</span>
+            <img
+              :src="
+                slotProps.data.image
+                  ? getImage(slotProps.data.image)
+                  : imageDefault
+              "
+              :alt="'machine'"
+              class="shadow-2"
+              width="100"
+              height="100"
+            />
+          </template>
+        </Column>
+        <Column
+          field="inventoryStatus"
+          header="Status"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
+        >
+          <template #body="slotProps">
+            <span class="p-column-title">Status</span>
+            <span class="product-badge status-instock">{{
+              slotProps.data.status.toLowerCase()
+            }}</span>
+          </template>
+        </Column>
+
+        <Column headerStyle="min-width:10rem;">
+          <template #body="slotProps">
+            <div style="display: flex; justify-content: end">
+              <Button
+                icon="pi pi-angle-double-down"
+                class="p-button-rounded p-button-success mr-2"
+                :disabled="slotProps.data.status !== 'available'"
+                @click="selectMachine(slotProps.data)"
+              />
+              <!--              <Button-->
+              <!--                  icon="pi pi-pencil"-->
+              <!--                  class="p-button-rounded p-button-warning mr-2"-->
+              <!--                  @click="editProduct(slotProps.data)"-->
+              <!--              />-->
+              <!--              <Button-->
+              <!--                  icon="pi pi-trash"-->
+              <!--                  class="p-button-rounded p-button-danger"-->
+              <!--                  @click="confirmDelete(slotProps.data)"-->
+              <!--              />-->
+            </div>
+          </template>
+        </Column>
+      </DataTable>
+    </Dialog>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
         <h5>Information</h5>
         <div class="grid">
-          <div class="field col-12 sm:col-6">
+          <div class="field col-12 sm:col-4">
             <label for="name1">Date</label>
             <Calendar
               :showIcon="true"
@@ -27,7 +172,7 @@
             ></Calendar>
           </div>
 
-          <div class="field col-12 sm:col-6">
+          <div class="field col-12 sm:col-5">
             <label for="state">Maintenance Type</label>
             <Dropdown
               id="state"
@@ -37,9 +182,25 @@
               placeholder="Select One"
             ></Dropdown>
           </div>
-          <div class="field col-12">
+          <div class="field col-12 sm:col-3">
+            <label for="name1">Ref invoice number</label>
+            <InputText id="name1" type="text" />
+          </div>
+          <div class="field col-12 sm:col-9">
             <label for="name1">Responsible</label>
             <InputText id="name1" type="text" />
+          </div>
+          <div class="field col-12 sm:col-3">
+            <label for="quantity">New hours of udefullife</label>
+            <InputNumber
+              id="quantity"
+              showButtons
+              :disabled="isView"
+              :min="0"
+              :useGrouping="false"
+              :class="{ 'p-invalid': submitted && !article.quantity }"
+            />
+            <!--v-model="article.quantity"-->
           </div>
           <div class="field col-12 sm:col-6">
             <label for="state">Supplier</label>
@@ -62,13 +223,47 @@
     </div>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
+        <h5>Machine Data</h5>
+        <div class="grid">
+          <div class="field col-12 sm:col-2">
+            <label for="name1">Serial Number</label>
+            <InputText id="name1" type="text" disabled />
+          </div>
+
+          <div class="field col-12 sm:col-3">
+            <label for="name1">Name</label>
+            <InputText id="name1" type="text" disabled />
+          </div>
+          <div class="field col-12 sm:col-2">
+            <label for="name1">Brand</label>
+            <InputText id="name1" type="text" disabled />
+          </div>
+          <div class="field col-12 sm:col-2">
+            <label for="name1">Model</label>
+            <InputText id="name1" type="text" disabled />
+          </div>
+
+          <div class="field col-12 sm:col-3">
+            <label for="name1">Last Machine Date</label>
+
+            <Calendar
+              disabled
+              :showIcon="true"
+              :showButtonBar="true"
+              v-model="calendarValue"
+              :minDate="minDateValue"
+            ></Calendar>
+          </div>
+        </div>
+      </div>
+      <div class="card p-fluid">
         <h5>Description</h5>
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
             placeholder="Your Message"
             :autoResize="true"
-            rows="12"
+            rows="3"
             cols="30"
           />
         </div>
@@ -83,12 +278,12 @@
               <Button
                 label="Add Article"
                 class="p-button-secondary mr-2 mb-2"
-                @click="openNew"
+                @click="openNewAddSparePart"
               />
               <Button
                 label="Add Service"
                 class="p-button-secondary mr-2 mb-2"
-                @click="openNew"
+                @click="openNewAddService"
               />
             </div>
           </div>
@@ -117,7 +312,7 @@
               responsiveLayout="scroll"
             >
               <Column
-                v-for="col of columns"
+                v-for="col of columnsDetailGeneral"
                 :field="col.field"
                 :header="col.header"
                 :key="col.field"
@@ -156,7 +351,7 @@
     </div>
   </div>
   <Dialog
-    v-model:visible="productDialog"
+    v-model:visible="addSparePartDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
     :style="{ width: '80vw' }"
     header="Add Sapare Parts"
@@ -304,7 +499,7 @@
               <!--v-model="article.quantity"-->
             </div>
             <div class="field col-12 sm:col-3">
-              <label for="quantity">Preci</label>
+              <label for="quantity">Price</label>
               <InputNumber
                 id="price"
                 mode="currency"
@@ -329,7 +524,7 @@
                 <DataTable responsiveLayout="scroll">
                   <!--:value="article.suppliers"-->
                   <Column
-                    v-for="col of columns"
+                    v-for="col of columnsDetailSparePart"
                     :field="col.field"
                     :header="col.header"
                     :key="col.field"
@@ -373,11 +568,105 @@
       </div>
     </div>
   </Dialog>
+
+  <Dialog
+    v-model:visible="addServiceDialog"
+    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    :style="{ width: '50vw' }"
+    header="Add Service"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="col-12 md:col-12">
+      <div class="card p-fluid">
+        <h5>Add Cost Of Service</h5>
+        <div class="grid">
+          <div class="field col-12 sm:col-8">
+            <label for="name1">Description</label>
+            <Textarea
+              placeholder="Your Message"
+              :autoResize="true"
+              rows="1"
+              cols="1"
+            />
+          </div>
+          <div class="field col-12 sm:col-3">
+            <label for="quantity">Price</label>
+            <InputNumber
+              id="price"
+              mode="currency"
+              currency="PEN"
+              locale="es-PE"
+              :class="{
+                'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
+              }"
+            />
+          </div>
+          <!--v-model="supplier_ref.price"-->
+          <div class="field col-12 sm:col-1">
+            <Button
+              icon="pi pi-plus"
+              class="p-button-secondary"
+              style="margin-top: 1.8rem"
+              @click="addSpullierRef"
+            ></Button>
+          </div>
+          <div class="field col-12 sm:col-12">
+            <div class="card">
+              <DataTable responsiveLayout="scroll">
+                <!--:value="article.suppliers"-->
+                <Column
+                  v-for="col of columnsDetailService"
+                  :field="col.field"
+                  :header="col.header"
+                  :key="col.field"
+                  style="width: 25%"
+                >
+                  <template #editor="{ data, field }">
+                    <InputNumber
+                      v-model="data[field]"
+                      mode="currency"
+                      currency="PEN"
+                      locale="es-PE"
+                      autofocus
+                    />
+                  </template>
+                </Column>
+
+                <Column v-if="!isView" headerStyle="min-width:4rem;">
+                  <template #body="slotProps">
+                    <div style="display: flex; justify-content: end">
+                      <Button
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        @click="removeSupplierRef(slotProps.data)"
+                      />
+                    </div>
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field col-12 sm:col-3">
+      <div class="flex justify-content-end">
+        <Button
+          label="Add"
+          icon="pi pi-download"
+          class="p-button-success mr-2"
+          @click="nextPage"
+        />
+      </div>
+    </div>
+  </Dialog>
 </template>
 
 <script>
 import ProductService from "./../service/ProductService";
 import { FilterMatchMode } from "primevue/api";
+import MachinesService from "@/service/MachinesService";
 
 export default {
   data() {
@@ -387,11 +676,17 @@ export default {
         { name: "Option 2", code: "Option 2" },
         { name: "Option 3", code: "Option 3" },
       ],
-      productDialog: false,
+      machines: [],
+      machineDialog: false,
+      addSparePartDialog: false,
+      addServiceDialog: false,
+      loadingMachines: true,
       dropdownItem: null,
       minDateValue: new Date(),
       editingRows: [],
-      columns: null,
+      columnsDetailGeneral: null,
+      columnsDetailSparePart: null,
+      columnsDetailService: null,
       products1: null,
       products2: null,
       products3: null,
@@ -408,23 +703,51 @@ export default {
       },
     };
   },
+  machineService: null,
   productService: null,
   created() {
     this.productService = new ProductService();
+    this.machineService = new MachinesService();
 
-    this.columns = [
+    this.columnsDetailGeneral = [
       { field: "code", header: "Serie" },
       { field: "name", header: "Description" },
-      { field: "price", header: "Price", mode: "currency", currency: "USD" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
       { field: "quantity", header: "Quantity" },
+      { field: "quantity", header: "Import" },
+    ];
+    this.columnsDetailSparePart = [
+      { field: "code", header: "Serie" },
+      { field: "name", header: "Name" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
+      { field: "quantity", header: "Quantity" },
+      { field: "quantity", header: "Import" },
+    ];
+    this.columnsDetailService = [
+      { field: "code", header: "Description" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
       { field: "quantity", header: "Import" },
     ];
   },
   methods: {
-    openNew() {
+    openNewSelectMachine() {
+      this.machineDialog = true;
+      //  SET DATA
+      this.loadingMachines = true;
+      this.machineService.getAll().then((data) => {
+        this.machines = data;
+        this.loadingMachines = false;
+      });
+    },
+    openNewAddSparePart() {
       this.product = {};
       this.submitted = false;
-      this.productDialog = true;
+      this.addSparePartDialog = true;
+    },
+    openNewAddService() {
+      this.product = {};
+      this.submitted = false;
+      this.addServiceDialog = true;
     },
     onCellEditComplete(event) {
       let { data, newValue, field } = event;
@@ -476,7 +799,7 @@ export default {
       this.$router.push(`/maintenance-sheet`);
     },
   },
-  mounted() {
+  /*mounted() {
     this.productService
       .getProductsSmall()
       .then((data) => (this.products1 = data));
@@ -486,6 +809,6 @@ export default {
     this.productService
       .getProductsSmall()
       .then((data) => (this.products3 = data));
-  },
+  },*/
 };
 </script>
