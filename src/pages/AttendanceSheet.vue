@@ -134,7 +134,7 @@
           </Column>
         </DataTable>
 
-        <Dialog v-model:visible="productDialog" :style="{ width: '1600px' }">
+        <Dialog v-model:visible="productDialog" :style="{ width: '1300px' }">
           <div class="content-section introduction">
             <div class="feature-intro">
               <h1>PickList New Attendance</h1>
@@ -149,6 +149,8 @@
                 v-model="employees"
                 listStyle="height:342px"
                 dataKey="id"
+                :showSourceControls="false"
+                :showTargetControls="false"
               >
                 <template #sourceheader>
                   Available
@@ -192,10 +194,11 @@
                       </div>
                     </div>
 
-                    <div class="field col-5">
+                    <div class="field col-4">
                       <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search" />
                         <InputText
+                          style="width: 150px"
                           v-model="filters['global'].value"
                           placeholder="Search..."
                         />
@@ -217,12 +220,17 @@
                             }}
                           </h6>
                         </div>
-                        <div class="col 6">
+                        <div class="col 2">
+                          <h6 class="mb-2">
+                            {{ slotProps.item.document_number }}
+                          </h6>
+                        </div>
+                        <div class="col 2">
                           <h6 class="mb-2">
                             {{ slotProps.item.type }}
                           </h6>
                         </div>
-                        <div class="col 6">
+                        <div class="col 2">
                           <h6 class="mb-2">
                             {{ slotProps.item.turn }}
                           </h6>
