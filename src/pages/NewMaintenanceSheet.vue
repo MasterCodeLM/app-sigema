@@ -244,7 +244,7 @@
           </div>
 
           <div class="field col-12 sm:col-3">
-            <label for="name1">Last Machine Date</label>
+            <label for="name1">Last Maintenance Date</label>
 
             <Calendar
               disabled
