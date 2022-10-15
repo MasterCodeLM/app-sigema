@@ -594,16 +594,12 @@
         <div class="grid">
           <div class="field col-12 sm:col-8">
             <label for="name1">Description</label>
-            <Textarea
-                placeholder="Your Message"
-                :autoResize="true"
-                rows="1"
-                cols="1"
-            />
+            <InputText v-model="service.description" id="name1" type="text"/>
           </div>
           <div class="field col-12 sm:col-3">
             <label for="quantity">Price</label>
             <InputNumber
+                v-model="service.price"
                 id="price"
                 mode="currency"
                 currency="PEN"
@@ -619,19 +615,21 @@
                 icon="pi pi-plus"
                 class="p-button-secondary"
                 style="margin-top: 1.8rem"
-                @click="addSpullierRef"
+                @click="addService()"
             ></Button>
           </div>
           <div class="field col-12 sm:col-12">
             <div class="card">
-              <DataTable responsiveLayout="scroll">
-                <!--:value="article.suppliers"-->
+              <DataTable
+                  :value="listService"
+                  responsiveLayout="scroll">
+                <!--                :value="article.suppliers"-->
                 <Column
                     v-for="col of columnsDetailService"
                     :field="col.field"
                     :header="col.header"
                     :key="col.field"
-                    style="width: 25%"
+                    style="width: 75%"
                 >
                   <template #editor="{ data, field }">
                     <InputNumber
@@ -667,7 +665,7 @@
             label="Add"
             icon="pi pi-download"
             class="p-button-success mr-2"
-            @click="nextPage"
+            @click="addServiceInDetail()"
         />
       </div>
     </div>
@@ -729,6 +727,14 @@ export default {
         quantity: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
         price: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
       },
+
+      service: {
+        description: null,
+        price: null
+      },
+      listService: [],
+
+
       articleTypeFilterItems: null,
 
       supplierItems: null,
@@ -753,7 +759,7 @@ export default {
     this.maintenanceTypeService = new MaintenanceTypeService();
     this.columnsDetailGeneral = [
       {field: "code", header: "Serie"},
-      {field: "name", header: "Description"},
+      {field: "description", header: "Description"},
       {field: "price", header: "Price", mode: "currency", currency: "PEN"},
       {field: "quantity", header: "Quantity"},
       {field: "quantity", header: "Import"},
@@ -766,9 +772,9 @@ export default {
       {field: "quantity", header: "Import"},
     ];
     this.columnsDetailService = [
-      {field: "code", header: "Description"},
+      {field: "description", header: "Description"},
       {field: "price", header: "Price", mode: "currency", currency: "PEN"},
-      {field: "quantity", header: "Import"},
+      // {field: "quantity", header: "Import"},
     ];
   },
   mounted() {
@@ -893,6 +899,18 @@ export default {
     backPage() {
       this.$router.push(`/maintenance-sheet`);
     },
+    addService() {
+      //  TODO:VALIDATE FIELDS EMPTY
+      this.service.quantity = 1;
+      this.listService.push(this.service)
+      this.service = {}
+    },
+    addServiceInDetail() {
+      //  TODO:VALIDATE FIELDS EMPTY TABLE
+      // console.log(this.listService);
+      this.listService.map((service) => (this.maintenanceSheet.detail.push(service)))
+      this.addServiceDialog = false;
+    }
   },
   /*mounted() {
     this.productService
