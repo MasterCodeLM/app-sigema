@@ -167,8 +167,9 @@
             <Calendar
                 :showIcon="true"
                 :showButtonBar="true"
-                v-model="calendarValue"
+                v-model="maintenanceSheet.date"
                 :minDate="minDateValue"
+                dateFormat="yy-mm-dd"
             ></Calendar>
           </div>
 
@@ -176,7 +177,7 @@
             <label for="state">Maintenance Type</label>
             <Dropdown
                 id="state"
-                v-model="dropdownItem"
+                v-model="maintenanceSheet.maintenanceTye"
                 :options="maintenanceTypeItems"
                 optionLabel="name"
                 placeholder="Select One"
@@ -189,12 +190,13 @@
           </div>
           <div class="field col-12 sm:col-9">
             <label for="name1">Responsible</label>
-            <InputText id="name1" type="text"/>
+            <InputText v-model="maintenanceSheet.responsible" id="name1" type="text"/>
           </div>
           <div class="field col-12 sm:col-3">
             <label for="quantity">New hours of udefullife</label>
             <InputNumber
                 id="quantity"
+                v-model="maintenanceSheet.maximum_working_time"
                 showButtons
                 :disabled="isView"
                 :min="0"
@@ -207,7 +209,7 @@
             <label for="state">Supplier</label>
             <Dropdown
                 id="state"
-                v-model="dropdownItem"
+                v-model="maintenanceSheet.supplier"
                 :options="supplierItems"
                 optionLabel="name"
                 placeholder="Select One"
@@ -217,7 +219,7 @@
           </div>
           <div class="field col-12 sm:col-6">
             <label for="name1">Technical</label>
-            <InputText id="name1" type="text"/>
+            <InputText v-model="maintenanceSheet.technical" id="name1" type="text"/>
           </div>
         </div>
       </div>
@@ -228,32 +230,25 @@
         <div class="grid">
           <div class="field col-12 sm:col-2">
             <label for="name1">Serial Number</label>
-            <InputText id="name1" type="text" disabled/>
+            <InputText v-model="maintenanceSheet.machine.serie_number" id="name1" type="text" disabled/>
           </div>
 
           <div class="field col-12 sm:col-3">
             <label for="name1">Name</label>
-            <InputText id="name1" type="text" disabled/>
+            <InputText v-model="maintenanceSheet.machine.name" id="name1" type="text" disabled/>
           </div>
           <div class="field col-12 sm:col-2">
             <label for="name1">Brand</label>
-            <InputText id="name1" type="text" disabled/>
+            <InputText v-model="maintenanceSheet.machine.brand" id="name1" type="text" disabled/>
           </div>
           <div class="field col-12 sm:col-2">
             <label for="name1">Model</label>
-            <InputText id="name1" type="text" disabled/>
+            <InputText v-model="maintenanceSheet.machine.model" id="name1" type="text" disabled/>
           </div>
 
           <div class="field col-12 sm:col-3">
             <label for="name1">Last Maintenance Date</label>
-
-            <Calendar
-                disabled
-                :showIcon="true"
-                :showButtonBar="true"
-                v-model="calendarValue"
-                :minDate="minDateValue"
-            ></Calendar>
+            <InputText v-model="maintenanceSheet.machine.date_last_maintenance" id="name1" type="text" disabled/>
           </div>
         </div>
       </div>
@@ -262,6 +257,7 @@
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
+              v-model="maintenanceSheet.description"
               placeholder="Your Message"
               :autoResize="true"
               rows="3"
@@ -306,7 +302,7 @@
           </div>
           <div class="field col-12">
             <DataTable
-                :value="products1"
+                :value="maintenanceSheet.detail"
                 editMode="cell"
                 @cell-edit-complete="onCellEditComplete"
                 class="editable-cells-table"
@@ -891,7 +887,7 @@ export default {
     selectMachine(value) {
       this.machineService.getOne(value.id).then((data) => {
         this.maintenanceSheet.machine = {...data};
-        this.productDialog = false;
+        this.machineDialog = false;
       });
     },
     backPage() {
