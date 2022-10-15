@@ -12,13 +12,6 @@
                 class="p-button-success mr-2"
                 @click="openNew"
               />
-              <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length"
-              />
             </div>
           </template>
 
@@ -64,20 +57,6 @@
             </div>
           </template>
 
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-
-          <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Name</span>
-              {{ slotProps.data.name }}
-            </template>
-          </Column>
-
           <Column
             field="serie_number"
             header="Serial Number"
@@ -87,6 +66,17 @@
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
               {{ slotProps.data.serie_number }}
+            </template>
+          </Column>
+          <Column
+            field="name"
+            header="Name"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Name</span>
+              {{ slotProps.data.name }}
             </template>
           </Column>
 

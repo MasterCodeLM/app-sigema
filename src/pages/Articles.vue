@@ -77,8 +77,6 @@
               </span>
             </div>
           </template>
-
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
           <Column
             field="name"
             header="Name"

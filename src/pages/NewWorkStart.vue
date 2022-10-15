@@ -25,32 +25,32 @@
             <h5>Information</h5>
             <div class="grid">
               <div class="field col-12">
-                <label>Serie: {{ this.workSheet.machine.serie_number }}</label>
+                <b>> Serial Number: </b>
+                <i> {{ this.workSheet.machine.serie_number }}</i>
               </div>
               <div class="field col-12">
-                <label>Machine: {{ this.workSheet.machine.name }}</label>
+                <b>> Machine: </b>
+                <i>{{ this.workSheet.machine.name }}</i>
               </div>
               <div class="field col-12">
-                <label>Status: {{ this.workSheet.machine.status }}</label>
+                <b>> Status: </b>
+                <i>{{ this.workSheet.machine.status }}</i>
               </div>
               <div class="field col-12">
-                <label
-                  >Last use: {{ this.workSheet.machine.date_last_use }}</label
-                >
+                <b>> Last use: </b>
+                <i>{{ this.workSheet.machine.date_last_use }}</i>
               </div>
               <div class="field col-12">
-                <label
-                  >Last maintenance date:
-                  {{ this.workSheet.machine.date_last_maintenance }}</label
-                >
+                <b>> Last maintenance date: </b>
+                <i>{{ this.workSheet.machine.date_last_maintenance }}</i>
               </div>
               <div class="field col-12">
-                <label
-                  >Total accumulated:
+                <b>> Total accumulated: </b>
+                <i>
                   {{ this.workSheet.machine.total_time_used.hours }} hrs
                   {{ this.workSheet.machine.total_time_used.minutes }} min
                   {{ this.workSheet.machine.total_time_used.seconds }}
-                  sec</label
+                  sec</i
                 >
               </div>
             </div>
@@ -201,11 +201,11 @@
                 <template #body="slotProps">
                   {{
                     slotProps.data.date_time_diff.hours +
-                    "hrs " +
+                    " hrs " +
                     slotProps.data.date_time_diff.minutes +
-                    "min " +
+                    " min " +
                     slotProps.data.date_time_diff.secons +
-                    "sec"
+                    " sec"
                   }}
                 </template>
               </Column>
@@ -228,7 +228,7 @@
       :value="machines"
       dataKey="id"
       :paginator="true"
-      :rows="10"
+      :rows="5"
       :filters="filters"
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       :rowsPerPageOptions="[5, 10, 25]"
@@ -332,7 +332,7 @@
         </template>
       </Column>
 
-      <Column headerStyle="min-width:10rem;">
+      <Column headerStyle="min-width:1rem;">
         <template #body="slotProps">
           <div style="display: flex; justify-content: end">
             <Button
