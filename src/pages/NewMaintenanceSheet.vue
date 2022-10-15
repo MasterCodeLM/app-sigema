@@ -140,7 +140,6 @@
               <Button
                   icon="pi pi-angle-double-down"
                   class="p-button-rounded p-button-success mr-2"
-                  :disabled="slotProps.data.status !== 'available'"
                   @click="selectMachine(slotProps.data)"
               />
               <!--              <Button-->
@@ -177,7 +176,7 @@
             <label for="state">Maintenance Type</label>
             <Dropdown
                 id="state"
-                v-model="maintenanceSheet.maintenanceTye"
+                v-model="maintenanceSheet.maintenance_type"
                 :options="maintenanceTypeItems"
                 optionLabel="name"
                 placeholder="Select One"
@@ -343,7 +342,7 @@
     </div>
     <div class="col-12">
       <div class="flex justify-content-center">
-        <Button label="Submit" class="mr-2 mb-2"></Button>
+        <Button label="Submit" class="mr-2 mb-2" @click="saveMaintenenaceSheet()"></Button>
       </div>
     </div>
   </div>
@@ -684,6 +683,8 @@ import ArticleTypesService from "../service/ArticleTypesService";
 import ArticlesService from "@/service/ArticlesService";
 import SupplierService from "@/service/SupplierService";
 import MaintenanceTypeService from "@/service/MaintenanceTypeService";
+import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
+import moment from "moment";
 
 export default {
   data() {
@@ -692,7 +693,7 @@ export default {
         date: null,
         responsible: null,
         technical: null,
-        maintenanceTye: {},
+        maintenance_type: {},
         supplier: {},
         machine: {},
         detail: []
@@ -763,6 +764,7 @@ export default {
   productService: null,
   supplierService: null,
   maintenanceTypeService: null,
+  maintenanceSheetService: null,
   created() {
     this.initFilters();
     this.productService = new ProductService();
@@ -771,6 +773,7 @@ export default {
     this.articleTypeService = new ArticleTypesService();
     this.supplierService = new SupplierService();
     this.maintenanceTypeService = new MaintenanceTypeService();
+    this.maintenanceSheetService = new MaintenenaceSheetService();
     this.columnsDetailGeneral = [
       {field: "code", header: "Serie"},
       {field: "description", header: "Description"},
@@ -931,6 +934,14 @@ export default {
         name: value.name,
         brand: value.brand,
         model: value.model,
+        description: null,
+      }
+      this.article.article = {
+        id: value.id,
+        serie_number: value.serie_number,
+        name: value.name,
+        brand: value.brand,
+        model: value.model,
       }
     },
     addArticle() {
@@ -944,8 +955,23 @@ export default {
       // console.log(this.listService);
       this.listArticles.map((service) => (this.maintenanceSheet.detail.push(service)))
       this.addSparePartDialog = false;
-    }
-  },
+    },
+    saveMaintenenaceSheet() {
+      //  TODO:VALIDATE
+      this.maintenanceSheet.date = moment(this.maintenanceSheet.date).format("YYYY-MM-DD");
+      const payload = this.maintenanceSheet;
+      // console.log(payload);
+      this.maintenanceSheetService.create(payload).then((data) => {
+        // this.suppliers[this.findIndexById(id)] = data.data;
+        this.$toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: data.message,
+          life: 3000,
+        });
+      });
+    },
+  }
   /*mounted() {
     this.productService
       .getProductsSmall()
