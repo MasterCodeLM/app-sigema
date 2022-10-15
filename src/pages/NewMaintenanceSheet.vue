@@ -466,7 +466,7 @@
                       <Button
                           icon="pi pi-angle-double-right"
                           class="p-button-rounded p-button-info mr-2"
-                          @click="viewArticleTypes(slotProps.data)"
+                          @click="setArticle(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -482,25 +482,26 @@
           <div class="grid">
             <div class="field col-12 sm:col-5">
               <label for="name1">Serail number</label>
-              <InputText id="name1" type="text"/>
+              <InputText v-model="article.serie_number" id="name1" type="text"/>
             </div>
             <div class="field col-12 sm:col-4">
               <label for="name1">Nombre</label>
-              <InputText id="name1" type="text"/>
+              <InputText v-model="article.name" id="name1" type="text"/>
             </div>
             <div class="field col-12 sm:col-3">
               <label for="name1">Brand</label>
-              <InputText id="name1" type="text"/>
+              <InputText v-model="article.brand" id="name1" type="text"/>
             </div>
 
             <div class="field col-12 sm:col-5">
               <label for="name1">Model</label>
-              <InputText id="name1" type="text"/>
+              <InputText v-model="article.model" id="name1" type="text"/>
             </div>
             <div class="field col-12 sm:col-3">
               <label for="quantity">Quantity</label>
               <InputNumber
                   id="quantity"
+                  v-model="article.quantity"
                   showButtons
                   :disabled="isView"
                   :min="0"
@@ -513,6 +514,7 @@
               <label for="quantity">Price</label>
               <InputNumber
                   id="price"
+                  v-model="article.price"
                   mode="currency"
                   currency="PEN"
                   locale="es-PE"
@@ -527,12 +529,14 @@
                   icon="pi pi-plus"
                   class="p-button-secondary"
                   style="margin-top: 1.8rem"
-                  @click="addSpullierRef"
+                  @click="addArticle"
               ></Button>
             </div>
             <div class="field col-12 sm:col-12">
               <div class="card">
-                <DataTable responsiveLayout="scroll">
+                <DataTable
+                    :value="listArticles"
+                    responsiveLayout="scroll">
                   <!--:value="article.suppliers"-->
                   <Column
                       v-for="col of columnsDetailSparePart"
@@ -574,7 +578,7 @@
             label="Add"
             icon="pi pi-download"
             class="p-button-success mr-2"
-            @click="nextPage"
+            @click="addArticleInDetail"
         />
       </div>
     </div>
@@ -734,6 +738,16 @@ export default {
       },
       listService: [],
 
+      article: {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        quantity: null,
+        price: null,
+      },
+      listArticles: [],
+
 
       articleTypeFilterItems: null,
 
@@ -765,7 +779,7 @@ export default {
       {field: "quantity", header: "Import"},
     ];
     this.columnsDetailSparePart = [
-      {field: "code", header: "Serie"},
+      {field: "serie_number", header: "Serie"},
       {field: "name", header: "Name"},
       {field: "price", header: "Price", mode: "currency", currency: "PEN"},
       {field: "quantity", header: "Quantity"},
@@ -910,6 +924,26 @@ export default {
       // console.log(this.listService);
       this.listService.map((service) => (this.maintenanceSheet.detail.push(service)))
       this.addServiceDialog = false;
+    },
+    setArticle(value) {
+      this.article = {
+        serie_number: value.serie_number,
+        name: value.name,
+        brand: value.brand,
+        model: value.model,
+      }
+    },
+    addArticle() {
+      //  TODO:VALIDATE FIELDS EMPTY
+      // this.service.quantity = 1;
+      this.listArticles.push(this.article)
+      this.article = {}
+    },
+    addArticleInDetail() {
+      //  TODO:VALIDATE FIELDS EMPTY TABLE
+      // console.log(this.listService);
+      this.listArticles.map((service) => (this.maintenanceSheet.detail.push(service)))
+      this.addSparePartDialog = false;
     }
   },
   /*mounted() {
