@@ -501,7 +501,7 @@
                     <div style="display: flex; justify-content: end">
                       <Button
                         icon="pi pi-angle-double-right"
-                        class="p-button-rounded p-button-info mr-2"
+                        class="p-button-rounded p-button-success mr-2"
                         @click="setArticle(slotProps.data)"
                       />
                     </div>
