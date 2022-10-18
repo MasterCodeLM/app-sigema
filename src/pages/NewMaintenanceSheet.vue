@@ -328,7 +328,9 @@
             <div
                 class="flex flex-column justify-content-center align-items-center"
             >
-              <h3 class="text-900 text-5xl font-medium p-0 m-0">S/00.00</h3>
+              <h3 class="text-900 text-5xl font-medium p-0 m-0">
+                S/{{ totalDetailImport }}
+              </h3>
               <span class="text-600 text-md font-medium p-0">Total</span>
             </div>
           </div>
@@ -822,6 +824,16 @@ export default {
       this.maintenanceTypeItems = data;
       this.maintenanceTypeItemsLoading = false;
     });
+  },
+  computed: {
+    totalDetailImport() {
+      let total = 0;
+      for (let item of this.maintenanceSheet.detail) {
+        total += item.price * item.quantity
+      }
+      return total.toFixed(2);
+    }
+
   },
   methods: {
     openNewSelectMachine() {
