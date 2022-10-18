@@ -856,6 +856,7 @@ export default {
       this.loadingArticles = true;
       this.articleService.getAll().then((data) => {
         this.articles = data;
+        this.articlesAll = data;
         this.loadingArticles = false;
       });
       this.articleTypeService.getAll().then((data) => {
