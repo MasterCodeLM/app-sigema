@@ -1024,15 +1024,11 @@ export default {
     },
     removeItemDetail(data) {
       const index = this.maintenanceSheet.detail.indexOf(data);
-      if (index > -1) {
-        // only splice array when item is found
-        this.maintenanceSheet.detail.splice(index, 1); // 2nd parameter means remove one item only
-      }
-
-      /*
-      this.maintenanceSheet.detail = this.maintenanceSheet.detail.filter(
-        (val) => val.id !== data.id
-      );*/
+      const indexService = this.listService.indexOf(data);
+      const indexArticles = this.listArticles.indexOf(data);
+      if (index > -1) this.maintenanceSheet.detail.splice(index, 1);
+      if (indexService > -1) this.listService.splice(indexService, 1);
+      if (indexArticles > -1) this.listArticles.splice(indexArticles, 1);
     },
     addArticleInDetail() {
       //  TODO:VALIDATE FIELDS EMPTY TABLE
