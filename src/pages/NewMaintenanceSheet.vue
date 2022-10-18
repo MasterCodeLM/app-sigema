@@ -620,7 +620,7 @@
             label="Add"
             icon="pi pi-download"
             class="p-button-success mr-2"
-            @click="addArticleInDetail"
+            @click="addArticleInDetail()"
         />
       </div>
     </div>
@@ -960,12 +960,20 @@ export default {
       this.listService.push(this.service);
       this.service = {};
     },
+    pushDistinct() {
+      const distinct = (value, index, self) => {
+        return self.indexOf(value) === index;
+      }
+      this.maintenanceSheet.detail = this.maintenanceSheet.detail.filter(distinct)
+    },
     addServiceInDetail() {
       //  TODO:VALIDATE FIELDS EMPTY TABLE
       // console.log(this.listService);
       this.listService.map((service) =>
           this.maintenanceSheet.detail.push(service)
       );
+      this.pushDistinct();
+
       this.addServiceDialog = false;
     },
     setArticle(value) {
@@ -1032,6 +1040,7 @@ export default {
       this.listArticles.map((service) =>
           this.maintenanceSheet.detail.push(service)
       );
+      this.pushDistinct();
       this.addSparePartDialog = false;
     },
     saveMaintenenaceSheet() {
