@@ -349,11 +349,19 @@
                 </template>
               </Column>
               <Column field="price" header="Price">
+
+                <template #editor="{ data, field }">
+                  <InputNumber v-model="data[field]" mode="currency" currency="PEN" locale="es-PE" autofocus/>
+                </template>
                 <template #body="slotProps">
                   S/ {{ (slotProps.data.price).toFixed(2) }}
                 </template>
               </Column>
-              <Column field="quantity" header="Quantity"></Column>
+              <Column field="quantity" header="Quantity">
+                <template #editor="{ data, field }">
+                  <InputNumber v-model="data[field]" :min="1" showButtons :useGrouping="false" autofocus/>
+                </template>
+              </Column>
               <Column field="import" header="Import">
                 <template #body="slotProps">
                   S/ {{ ((slotProps.data.price) * (slotProps.data.quantity)).toFixed(2) }}
@@ -546,7 +554,7 @@
                   v-model="article.quantity"
                   showButtons
                   :disabled="isView"
-                  :min="0"
+                  :min="1"
                   :useGrouping="false"
                   :class="{ 'p-invalid': submitted && !article.quantity }"
               />
