@@ -340,21 +340,21 @@
                 class="editable-cells-table"
                 responsiveLayout="scroll"
             >
-              <Column
-                  v-for="col of columnsDetailGeneral"
-                  :field="col.field"
-                  :header="col.header"
-                  :key="col.field"
-                  style="width: 25%"
-              >
-                <template #editor="{ data, field }">
-                  <InputNumber
-                      v-model="data[field]"
-                      mode="currency"
-                      currency="USD"
-                      locale="en-US"
-                      autofocus
-                  />
+              <Column field="serie_number" header="Serie"></Column>
+              <Column field="name" header="Name">
+                <template #body="slotProps">
+                  {{ (slotProps.data.name) ? slotProps.data.name : slotProps.data.description }}
+                </template>
+              </Column>
+              <Column field="price" header="Price">
+                <template #body="slotProps">
+                  S/ {{ (slotProps.data.price).toFixed(2) }}
+                </template>
+              </Column>
+              <Column field="quantity" header="Quantity"></Column>
+              <Column field="import" header="Import">
+                <template #body="slotProps">
+                  S/ {{ ((slotProps.data.price) * (slotProps.data.quantity)).toFixed(2) }}
                 </template>
               </Column>
               <Column headerStyle="min-width:10rem;">
