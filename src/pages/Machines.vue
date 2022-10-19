@@ -79,6 +79,17 @@
               {{ slotProps.data.name }}
             </template>
           </Column>
+          <Column
+            field="brand"
+            header="Brand"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Brand</span>
+              {{ slotProps.data.brand }}
+            </template>
+          </Column>
 
           <Column
             field="model"
@@ -89,18 +100,6 @@
             <template #body="slotProps">
               <span class="p-column-title">Model</span>
               {{ slotProps.data.model }}
-            </template>
-          </Column>
-
-          <Column
-            field="brand"
-            header="Brand"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Brand</span>
-              {{ slotProps.data.brand }}
             </template>
           </Column>
 
@@ -231,22 +230,6 @@
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="model">Model</label>
-                    <InputText
-                      id="model"
-                      v-model.trim="machine.model"
-                      required="true"
-                      autofocus
-                      :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
-                      autocomplete="off"
-                    />
-                    <small class="p-invalid" v-if="submitted && !machine.name"
-                      >Model is required.</small
-                    >
-                  </div>
-
-                  <div class="field col">
                     <label for="brand">Brand</label>
                     <InputText
                       id="barnd"
@@ -259,6 +242,21 @@
                     />
                     <small class="p-invalid" v-if="submitted && !machine.name"
                       >Brand is required.</small
+                    >
+                  </div>
+                  <div class="field col">
+                    <label for="model">Model</label>
+                    <InputText
+                      id="model"
+                      v-model.trim="machine.model"
+                      required="true"
+                      autofocus
+                      :class="{ 'p-invalid': submitted && !machine.name }"
+                      :disabled="isView"
+                      autocomplete="off"
+                    />
+                    <small class="p-invalid" v-if="submitted && !machine.name"
+                      >Model is required.</small
                     >
                   </div>
                 </div>

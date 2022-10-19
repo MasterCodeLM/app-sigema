@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div class="grid">
     <div class="col-12">
       <Button
@@ -20,7 +21,7 @@
     <Dialog
       v-model:visible="machineDialog"
       :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-      :style="{ width: '40vw' }"
+      :style="{ width: '45vw' }"
       header="SELECT MACHINE"
       :modal="true"
       class="p-fluid"
@@ -159,29 +160,103 @@
     </Dialog>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
-        <h5>Information</h5>
         <div class="grid">
-          <div class="field col-12 sm:col-4">
-            <label for="name1">Date</label>
-            <Calendar
-              :showIcon="true"
-              :showButtonBar="true"
-              v-model="maintenanceSheet.date"
-              :maxDate="minDateValue"
-              dateFormat="yy-mm-dd"
+          <div class="col-6">
+            <h5>Machine Data</h5>
+            <div class="grid">
+              <div class="field col-12">
+                <b>> Serial Number: </b>
+                <i> {{ this.maintenanceSheet.machine.serie_number }}</i>
+              </div>
+              <div class="field col-12">
+                <b>> Machine: </b>
+                <i>{{ this.maintenanceSheet.machine.name }}</i>
+              </div>
+              <div class="field col-12">
+                <b>> Brand: </b>
+                <i>{{ this.maintenanceSheet.machine.brand }}</i>
+              </div>
+              <div class="field col-12">
+                <b>> Model: </b>
+                <i>{{ this.maintenanceSheet.machine.model }}</i>
+              </div>
+              <div class="field col-12">
+                <b>> Last maintenance date: </b>
+                <i>{{ this.maintenanceSheet.machine.date_last_maintenance }}</i>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="grid h-full">
+              <div
+                class="
+                  field
+                  col-12
+                  flex
+                  justify-content-center
+                  align-items-center
+                "
+              >
+                <img
+                  :src="
+                    this.maintenanceSheet.machine.image
+                      ? getImage(this.maintenanceSheet.machine.image)
+                      : imageDefault
+                  "
+                  :alt="'machine'"
+                  class="shadow-2"
+                  width="180"
+                  height="200"
+                />
+              </div>
+            </div>
+          </div>
+          <h6>Description of Maintenance</h6>
+          <div class="field col-12">
+            <!--          <label for="name1">Description</label>-->
+            <Textarea
+              v-model="maintenanceSheet.description"
+              placeholder="Your Message"
+              :autoResize="true"
+              rows="5"
+              cols="67"
               :class="{
                 'p-invalid':
-                  submittedMaintenanceSheet && !maintenanceSheet.date,
+                  submittedMaintenanceSheet && !maintenanceSheet.description,
               }"
-            ></Calendar>
+            />
             <small
               class="p-invalid"
-              v-if="submittedMaintenanceSheet && !maintenanceSheet.date"
-              >Date is required.</small
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
+              >Description is required.</small
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="card p-fluid">
+        <h5>Information</h5>
+        <div class="grid">
+          <div class="field col-12">
+            <label for="name1">Responsible</label>
+            <InputText
+              v-model="maintenanceSheet.responsible"
+              id="name1"
+              type="text"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.responsible,
+              }"
+            />
+            <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.responsible"
+              >Responsible is required.</small
             >
           </div>
 
-          <div class="field col-12 sm:col-5">
+          <div class="field col-12 sm:col-6">
             <label for="state">Maintenance Type</label>
             <Dropdown
               id="state"
@@ -204,38 +279,27 @@
               >Maintenance type is required.</small
             >
           </div>
-          <div class="field col-12 sm:col-3">
-            <label for="name1">Ref invoice number</label>
-            <InputText id="name1" type="text" />
-            <!--
+          <div class="field col-12 sm:col-6">
+            <label for="name1">Date</label>
+            <Calendar
+              :showIcon="true"
+              :showButtonBar="true"
+              v-model="maintenanceSheet.date"
+              :maxDate="minDateValue"
+              dateFormat="yy-mm-dd"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.date,
               }"
-              <small
+            ></Calendar>
+            <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.date"
               >Date is required.</small
-            >-->
-          </div>
-          <div class="field col-12 sm:col-9">
-            <label for="name1">Responsible</label>
-            <InputText
-              v-model="maintenanceSheet.responsible"
-              id="name1"
-              type="text"
-              :class="{
-                'p-invalid':
-                  submittedMaintenanceSheet && !maintenanceSheet.responsible,
-              }"
-            />
-            <small
-              class="p-invalid"
-              v-if="submittedMaintenanceSheet && !maintenanceSheet.responsible"
-              >Responsible is required.</small
             >
           </div>
-          <div class="field col-12 sm:col-3">
+
+          <div class="field col-12 sm:col-6">
             <label for="quantity">New hours of udefullife</label>
             <InputNumber
               id="quantity"
@@ -261,6 +325,28 @@
             <!--v-model="article.quantity"-->
           </div>
           <div class="field col-12 sm:col-6">
+            <label for="name1">Ref invoice number</label>
+            <InputText
+              id="name1"
+              type="text"
+              v-model="maintenanceSheet.refInvoiceNumber"
+            />
+            <!--
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet &&
+                  !maintenanceSheet.refInvoiceNumber,
+              }"
+              <small
+              class="p-invalid"
+              v-if="
+                submittedMaintenanceSheet && !maintenanceSheet.refInvoiceNumber
+              "
+              >Invoice number is required.</small
+            >
+            -->
+          </div>
+          <div class="field col-12">
             <label for="state">Supplier</label>
             <Dropdown
               id="state"
@@ -281,93 +367,27 @@
               >Supplier is required.</small
             >
           </div>
-          <div class="field col-12 sm:col-6">
+          <div class="field col-12">
             <label for="name1">Technical</label>
             <InputText
               v-model="maintenanceSheet.technical"
               id="name1"
               type="text"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.technical,
+              }"
             />
+            <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.technical"
+              >Technical is required.</small
+            >
           </div>
         </div>
       </div>
     </div>
-    <div class="col-12 md:col-6">
-      <div class="card p-fluid">
-        <h5>Machine Data</h5>
-        <div class="grid">
-          <div class="field col-12 sm:col-2">
-            <label for="name1">Serial Number</label>
-            <InputText
-              v-model="maintenanceSheet.machine.serie_number"
-              id="name1"
-              type="text"
-              disabled
-            />
-          </div>
 
-          <div class="field col-12 sm:col-3">
-            <label for="name1">Name</label>
-            <InputText
-              v-model="maintenanceSheet.machine.name"
-              id="name1"
-              type="text"
-              disabled
-            />
-          </div>
-          <div class="field col-12 sm:col-2">
-            <label for="name1">Brand</label>
-            <InputText
-              v-model="maintenanceSheet.machine.brand"
-              id="name1"
-              type="text"
-              disabled
-            />
-          </div>
-          <div class="field col-12 sm:col-2">
-            <label for="name1">Model</label>
-            <InputText
-              v-model="maintenanceSheet.machine.model"
-              id="name1"
-              type="text"
-              disabled
-            />
-          </div>
-
-          <div class="field col-12 sm:col-3">
-            <label for="name1">Last Maintenance Date</label>
-            <InputText
-              v-model="maintenanceSheet.machine.date_last_maintenance"
-              id="name1"
-              type="text"
-              disabled
-            />
-          </div>
-        </div>
-      </div>
-      <div class="card p-fluid">
-        <h5>Description</h5>
-        <div class="field">
-          <!--          <label for="name1">Description</label>-->
-          <Textarea
-            v-model="maintenanceSheet.description"
-            placeholder="Your Message"
-            :autoResize="true"
-            rows="3"
-            cols="30"
-            :class="{
-              'p-invalid':
-                submittedMaintenanceSheet && !maintenanceSheet.description,
-            }"
-          />
-          <small
-            class="p-invalid"
-            v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
-            >Description is required.</small
-          >
-        </div>
-      </div>
-    </div>
     <div class="col-12">
       <div class="card">
         <h5>Details</h5>
@@ -484,7 +504,7 @@
   <Dialog
     v-model:visible="addSparePartDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '80vw' }"
+    :style="{ width: '90vw' }"
     header="Add Sapare Parts"
     :modal="true"
     class="p-fluid"
@@ -500,7 +520,7 @@
                 :value="articles"
                 dataKey="id"
                 :paginator="true"
-                :rows="2"
+                :rows="1"
                 :filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 25]"
@@ -545,7 +565,7 @@
                   field="name"
                   header="Serail Number"
                   :sortable="true"
-                  headerStyle="width:14%; min-width:12rem;"
+                  headerStyle="width:14%; min-width:10rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Serail Number</span>
@@ -556,7 +576,7 @@
                   field="name"
                   header="Name"
                   :sortable="true"
-                  headerStyle="width:14%; min-width:12rem;"
+                  headerStyle="width:14%; min-width:8rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Name</span>
@@ -587,7 +607,7 @@
                   field="quantity"
                   header="Quantity"
                   :sortable="true"
-                  headerStyle="width:14%; min-width:10rem;"
+                  headerStyle="width:14%; min-width:5rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Quantity</span>
@@ -675,10 +695,12 @@
                 mode="currency"
                 currency="PEN"
                 locale="es-PE"
+                :min="0"
                 :class="{
                   'p-invalid': submittedAddArticle && !article.price,
                 }"
               />
+
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.price"
@@ -779,6 +801,7 @@
               mode="currency"
               currency="PEN"
               locale="es-PE"
+              :min="0"
               :class="{
                 'p-invalid': submittedAddService && !service.price,
               }"
@@ -864,6 +887,7 @@ export default {
         maximum_working_time: null,
         description: null,
         maintenance_type: null,
+        refInvoiceNumber: null,
         supplier: null,
         machine: {},
         detail: [],
@@ -1200,28 +1224,9 @@ export default {
       this.addSparePartDialog = false;
     },
     saveMaintenenaceSheet() {
-      this.submittedMaintenanceSheet = true;
-      //  TODO:VALIDATE
-      if (this.validateMaintenanceSheet()) {
-        this.maintenanceSheet.date = moment(this.maintenanceSheet.date).format(
-          "YYYY-MM-DD"
-        );
-        const payload = this.maintenanceSheet;
-        // console.log(payload);
-        this.maintenanceSheetService.create(payload).then((data) => {
-          // this.suppliers[this.findIndexById(id)] = data.data;
-          this.$toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: data.message,
-            life: 3000,
-          });
-        });
-      }
-      /*
-      this.submittedMaintenanceSheet = true;
       //  TODO:VALIDATE
       if (this.maintenanceSheet.machine.id) {
+        this.submittedMaintenanceSheet = true;
         if (this.validateMaintenanceSheet()) {
           this.maintenanceSheet.date = moment(
             this.maintenanceSheet.date
@@ -1236,7 +1241,11 @@ export default {
               detail: data.message,
               life: 3000,
             });
+            this.$router.push(`/maintenance-sheet`);
           });
+
+          this.defaultObjects();
+          this.submittedMaintenanceSheet = false;
         }
       } else {
         this.$toast.add({
@@ -1246,23 +1255,45 @@ export default {
           life: 3000,
         });
       }
-      
-      
-      
-      
-      */
     },
     validateMaintenanceSheet() {
-      return true;
-      /*
+      /*return true;*/
+
       return (
         this.maintenanceSheet.date &&
         this.maintenanceSheet.responsible &&
         this.maintenanceSheet.maintenance_type &&
         this.maintenanceSheet.supplier &&
         this.maintenanceSheet.description &&
+        //this.maintenanceSheet.refInvoiceNumber &&
         this.maintenanceSheet.maximum_working_time
-      );*/
+      );
+    },
+    defaultObjects() {
+      this.maintenanceSheet = {
+        date: null,
+        responsible: null,
+        technical: null,
+        maximum_working_time: null,
+        description: null,
+        maintenance_type: null,
+        refInvoiceNumber: null,
+        supplier: null,
+        machine: {},
+        detail: [],
+      };
+      this.service = {
+        description: null,
+        price: null,
+      };
+      this.article = {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        quantity: null,
+        price: null,
+      };
     },
   },
   /*mounted() {

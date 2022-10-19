@@ -95,7 +95,7 @@
             field="date"
             header="Date"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Date</span>
@@ -160,7 +160,7 @@
             field="maintenance_type.name"
             header="Maintenance Type"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:9rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Maintenance Type</span>
