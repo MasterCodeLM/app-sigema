@@ -983,3 +983,5 @@ export default {
 <style scoped lang="scss">
 @import "../assets/demo/badges.scss";
 </style>
+
+

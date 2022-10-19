@@ -2,45 +2,45 @@
   <div class="grid">
     <div class="col-12">
       <Button
-          icon="pi pi-arrow-left"
-          class="p-button-rounded mr-2 mb-2"
-          @click="backPage"
+        icon="pi pi-arrow-left"
+        class="p-button-rounded mr-2 mb-2"
+        @click="backPage"
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
           <h3 class="text-900 font-medium">MAINTENANCE SHEET</h3>
           <Button
-              label="Select Machine"
-              class="p-button-secondary mr-2 mb-2"
-              @click="openNewSelectMachine"
+            label="Select Machine"
+            class="p-button-secondary mr-2 mb-2"
+            @click="openNewSelectMachine"
           />
         </div>
       </div>
     </div>
     <Dialog
-        v-model:visible="machineDialog"
-        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-        :style="{ width: '40vw' }"
-        header="SELECT MACHINE"
-        :modal="true"
-        class="p-fluid"
+      v-model:visible="machineDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+      :style="{ width: '40vw' }"
+      header="SELECT MACHINE"
+      :modal="true"
+      class="p-fluid"
     >
       <DataTable
-          ref="dt"
-          :value="machines"
-          dataKey="id"
-          :paginator="true"
-          :rows="5"
-          :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} machines"
-          responsiveLayout="scroll"
-          :loading="loadingMachines"
+        ref="dt"
+        :value="machines"
+        dataKey="id"
+        :paginator="true"
+        :rows="5"
+        :filters="filters"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        :rowsPerPageOptions="[5, 10, 25]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} machines"
+        responsiveLayout="scroll"
+        :loading="loadingMachines"
       >
         <template #header>
           <div
-              class="
+            class="
               flex flex-column
               md:flex-row md:justify-content-between md:align-items-center
             "
@@ -48,20 +48,20 @@
             <h5 class="m-0">Machines</h5>
             <div class="align right">
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                <i class="pi pi-search"/>
+                <i class="pi pi-search" />
                 <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Search..."
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
                 /><!--"filters['global'].value"-->
               </span>
             </div>
           </div>
         </template>
         <Column
-            field="serie_number"
-            header="Serial Number"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+          field="serie_number"
+          header="Serial Number"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
         >
           <template #body="slotProps">
             <span class="p-column-title">Serial Number</span>
@@ -69,10 +69,10 @@
           </template>
         </Column>
         <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            headerStyle="width:50%; min-width:10rem;"
+          field="name"
+          header="Name"
+          :sortable="true"
+          headerStyle="width:50%; min-width:10rem;"
         >
           <template #body="slotProps">
             <span class="p-column-title">Name</span>
@@ -108,29 +108,29 @@
           <template #body="slotProps">
             <span class="p-column-title">Image</span>
             <img
-                :src="
+              :src="
                 slotProps.data.image
                   ? getImage(slotProps.data.image)
                   : imageDefault
               "
-                :alt="'machine'"
-                class="shadow-2"
-                width="100"
-                height="100"
+              :alt="'machine'"
+              class="shadow-2"
+              width="100"
+              height="100"
             />
           </template>
         </Column>
         <Column
-            field="inventoryStatus"
-            header="Status"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+          field="inventoryStatus"
+          header="Status"
+          :sortable="true"
+          headerStyle="width:14%; min-width:10rem;"
         >
           <template #body="slotProps">
             <span class="p-column-title">Status</span>
             <span class="product-badge status-instock">{{
-                slotProps.data.status.toLowerCase()
-              }}</span>
+              slotProps.data.status.toLowerCase()
+            }}</span>
           </template>
         </Column>
 
@@ -138,9 +138,9 @@
           <template #body="slotProps">
             <div style="display: flex; justify-content: end">
               <Button
-                  icon="pi pi-angle-double-down"
-                  class="p-button-rounded p-button-success mr-2"
-                  @click="selectMachine(slotProps.data)"
+                icon="pi pi-angle-double-down"
+                class="p-button-rounded p-button-success mr-2"
+                @click="selectMachine(slotProps.data)"
               />
               <!--              <Button-->
               <!--                  icon="pi pi-pencil"-->
@@ -164,68 +164,129 @@
           <div class="field col-12 sm:col-4">
             <label for="name1">Date</label>
             <Calendar
-                :showIcon="true"
-                :showButtonBar="true"
-                v-model="maintenanceSheet.date"
-                :maxDate="minDateValue"
-                dateFormat="yy-mm-dd"
+              :showIcon="true"
+              :showButtonBar="true"
+              v-model="maintenanceSheet.date"
+              :maxDate="minDateValue"
+              dateFormat="yy-mm-dd"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.date,
+              }"
             ></Calendar>
+            <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.date"
+              >Date is required.</small
+            >
           </div>
 
           <div class="field col-12 sm:col-5">
             <label for="state">Maintenance Type</label>
             <Dropdown
-                id="state"
-                v-model="maintenanceSheet.maintenance_type"
-                :options="maintenanceTypeItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :loading="maintenanceTypeItemsLoading"
+              id="state"
+              v-model="maintenanceSheet.maintenance_type"
+              :options="maintenanceTypeItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :loading="maintenanceTypeItemsLoading"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet &&
+                  !maintenanceSheet.maintenance_type,
+              }"
             ></Dropdown>
+            <small
+              class="p-invalid"
+              v-if="
+                submittedMaintenanceSheet && !maintenanceSheet.maintenance_type
+              "
+              >Maintenance type is required.</small
+            >
           </div>
           <div class="field col-12 sm:col-3">
             <label for="name1">Ref invoice number</label>
-            <InputText id="name1" type="text"/>
+            <InputText id="name1" type="text" />
+            <!--
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.date,
+              }"
+              <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.date"
+              >Date is required.</small
+            >-->
           </div>
           <div class="field col-12 sm:col-9">
             <label for="name1">Responsible</label>
             <InputText
-                v-model="maintenanceSheet.responsible"
-                id="name1"
-                type="text"
+              v-model="maintenanceSheet.responsible"
+              id="name1"
+              type="text"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.responsible,
+              }"
             />
+            <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.responsible"
+              >Responsible is required.</small
+            >
           </div>
           <div class="field col-12 sm:col-3">
             <label for="quantity">New hours of udefullife</label>
             <InputNumber
-                id="quantity"
-                v-model="maintenanceSheet.maximum_working_time"
-                showButtons
-                :disabled="isView"
-                :min="0"
-                :useGrouping="false"
-                :class="{ 'p-invalid': submitted && !article.quantity }"
+              id="quantity"
+              v-model="maintenanceSheet.maximum_working_time"
+              showButtons
+              :disabled="isView"
+              :min="0"
+              :useGrouping="false"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet &&
+                  !maintenanceSheet.maximum_working_time,
+              }"
             />
+            <small
+              class="p-invalid"
+              v-if="
+                submittedMaintenanceSheet &&
+                !maintenanceSheet.maximum_working_time
+              "
+              >New hours is required.</small
+            >
             <!--v-model="article.quantity"-->
           </div>
           <div class="field col-12 sm:col-6">
             <label for="state">Supplier</label>
             <Dropdown
-                id="state"
-                v-model="maintenanceSheet.supplier"
-                :options="supplierItems"
-                optionLabel="name"
-                placeholder="Select One"
-                :filter="true"
-                :loading="supplierItemsLoading"
+              id="state"
+              v-model="maintenanceSheet.supplier"
+              :options="supplierItems"
+              optionLabel="name"
+              placeholder="Select One"
+              :filter="true"
+              :loading="supplierItemsLoading"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.supplier,
+              }"
             ></Dropdown>
+            <small
+              class="p-invalid"
+              v-if="submittedMaintenanceSheet && !maintenanceSheet.supplier"
+              >Supplier is required.</small
+            >
           </div>
           <div class="field col-12 sm:col-6">
             <label for="name1">Technical</label>
             <InputText
-                v-model="maintenanceSheet.technical"
-                id="name1"
-                type="text"
+              v-model="maintenanceSheet.technical"
+              id="name1"
+              type="text"
             />
           </div>
         </div>
@@ -238,48 +299,48 @@
           <div class="field col-12 sm:col-2">
             <label for="name1">Serial Number</label>
             <InputText
-                v-model="maintenanceSheet.machine.serie_number"
-                id="name1"
-                type="text"
-                disabled
+              v-model="maintenanceSheet.machine.serie_number"
+              id="name1"
+              type="text"
+              disabled
             />
           </div>
 
           <div class="field col-12 sm:col-3">
             <label for="name1">Name</label>
             <InputText
-                v-model="maintenanceSheet.machine.name"
-                id="name1"
-                type="text"
-                disabled
+              v-model="maintenanceSheet.machine.name"
+              id="name1"
+              type="text"
+              disabled
             />
           </div>
           <div class="field col-12 sm:col-2">
             <label for="name1">Brand</label>
             <InputText
-                v-model="maintenanceSheet.machine.brand"
-                id="name1"
-                type="text"
-                disabled
+              v-model="maintenanceSheet.machine.brand"
+              id="name1"
+              type="text"
+              disabled
             />
           </div>
           <div class="field col-12 sm:col-2">
             <label for="name1">Model</label>
             <InputText
-                v-model="maintenanceSheet.machine.model"
-                id="name1"
-                type="text"
-                disabled
+              v-model="maintenanceSheet.machine.model"
+              id="name1"
+              type="text"
+              disabled
             />
           </div>
 
           <div class="field col-12 sm:col-3">
             <label for="name1">Last Maintenance Date</label>
             <InputText
-                v-model="maintenanceSheet.machine.date_last_maintenance"
-                id="name1"
-                type="text"
-                disabled
+              v-model="maintenanceSheet.machine.date_last_maintenance"
+              id="name1"
+              type="text"
+              disabled
             />
           </div>
         </div>
@@ -289,12 +350,21 @@
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
-              v-model="maintenanceSheet.description"
-              placeholder="Your Message"
-              :autoResize="true"
-              rows="3"
-              cols="30"
+            v-model="maintenanceSheet.description"
+            placeholder="Your Message"
+            :autoResize="true"
+            rows="3"
+            cols="30"
+            :class="{
+              'p-invalid':
+                submittedMaintenanceSheet && !maintenanceSheet.description,
+            }"
           />
+          <small
+            class="p-invalid"
+            v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
+            >Description is required.</small
+          >
         </div>
       </div>
     </div>
@@ -305,19 +375,19 @@
           <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
             <div class="flex flex-column sm:flex-row">
               <Button
-                  label="Add Article"
-                  class="p-button-secondary mr-2 mb-2"
-                  @click="openNewAddSparePart"
+                label="Add Article"
+                class="p-button-secondary mr-2 mb-2"
+                @click="openNewAddSparePart"
               />
               <Button
-                  label="Add Service"
-                  class="p-button-secondary mr-2 mb-2"
-                  @click="openNewAddService"
+                label="Add Service"
+                class="p-button-secondary mr-2 mb-2"
+                @click="openNewAddService"
               />
             </div>
           </div>
           <div
-              class="
+            class="
               field
               col-12
               md:col-6
@@ -326,7 +396,7 @@
             "
           >
             <div
-                class="flex flex-column justify-content-center align-items-center"
+              class="flex flex-column justify-content-center align-items-center"
             >
               <h3 class="text-900 text-5xl font-medium p-0 m-0">
                 S/{{ totalDetailImport }}
@@ -336,44 +406,62 @@
           </div>
           <div class="field col-12">
             <DataTable
-                :value="maintenanceSheet.detail"
-                editMode="cell"
-                @cell-edit-complete="onCellEditComplete"
-                class="editable-cells-table"
-                responsiveLayout="scroll"
+              :value="maintenanceSheet.detail"
+              editMode="cell"
+              @cell-edit-complete="onCellEditComplete"
+              class="editable-cells-table"
+              responsiveLayout="scroll"
             >
               <Column field="serie_number" header="Serie"></Column>
               <Column field="name" header="Name">
                 <template #body="slotProps">
-                  {{ (slotProps.data.name) ? slotProps.data.name : slotProps.data.description }}
+                  {{
+                    slotProps.data.name
+                      ? slotProps.data.name
+                      : slotProps.data.description
+                  }}
                 </template>
               </Column>
               <Column field="price" header="Price">
-
                 <template #editor="{ data, field }">
-                  <InputNumber v-model="data[field]" mode="currency" currency="PEN" locale="es-PE" autofocus/>
+                  <InputNumber
+                    v-model="data[field]"
+                    mode="currency"
+                    currency="PEN"
+                    locale="es-PE"
+                    autofocus
+                  />
                 </template>
                 <template #body="slotProps">
-                  S/ {{ (slotProps.data.price).toFixed(2) }}
+                  S/ {{ slotProps.data.price.toFixed(2) }}
                 </template>
               </Column>
               <Column field="quantity" header="Quantity">
                 <template #editor="{ data, field }">
-                  <InputNumber v-model="data[field]" :min="1" showButtons :useGrouping="false" autofocus/>
+                  <InputNumber
+                    v-model="data[field]"
+                    :min="1"
+                    showButtons
+                    :useGrouping="false"
+                    autofocus
+                  />
                 </template>
               </Column>
               <Column field="import" header="Import">
                 <template #body="slotProps">
-                  S/ {{ ((slotProps.data.price) * (slotProps.data.quantity)).toFixed(2) }}
+                  S/
+                  {{
+                    (slotProps.data.price * slotProps.data.quantity).toFixed(2)
+                  }}
                 </template>
               </Column>
               <Column headerStyle="min-width:10rem;">
                 <template #body="slotProps">
                   <div style="display: flex; justify-content: end">
                     <Button
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger"
-                        @click="removeItemDetail(slotProps.data)"
+                      icon="pi pi-trash"
+                      class="p-button-rounded p-button-danger"
+                      @click="removeItemDetail(slotProps.data)"
                     />
                   </div>
                 </template>
@@ -386,20 +474,20 @@
     <div class="col-12">
       <div class="flex justify-content-center">
         <Button
-            label="Submit"
-            class="mr-2 mb-2"
-            @click="saveMaintenenaceSheet()"
+          label="Submit"
+          class="mr-2 mb-2"
+          @click="saveMaintenenaceSheet()"
         ></Button>
       </div>
     </div>
   </div>
   <Dialog
-      v-model:visible="addSparePartDialog"
-      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-      :style="{ width: '80vw' }"
-      header="Add Sapare Parts"
-      :modal="true"
-      class="p-fluid"
+    v-model:visible="addSparePartDialog"
+    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    :style="{ width: '80vw' }"
+    header="Add Sapare Parts"
+    :modal="true"
+    class="p-fluid"
   >
     <div class="grid">
       <div class="col-12 md:col-6">
@@ -408,21 +496,21 @@
           <div class="grid">
             <div class="field col-12">
               <DataTable
-                  ref="dt"
-                  :value="articles"
-                  dataKey="id"
-                  :paginator="true"
-                  :rows="2"
-                  :filters="filters"
-                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                  :rowsPerPageOptions="[5, 10, 25]"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Articles"
-                  responsiveLayout="scroll"
-                  :loading="loadingArticles"
-              ><!--:value="articles"-->
+                ref="dt"
+                :value="articles"
+                dataKey="id"
+                :paginator="true"
+                :rows="2"
+                :filters="filters"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[5, 10, 25]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Articles"
+                responsiveLayout="scroll"
+                :loading="loadingArticles"
+                ><!--:value="articles"-->
                 <template #header>
                   <div
-                      class="
+                    class="
                       flex flex-column
                       md:flex-row
                       md:justify-content-between
@@ -433,31 +521,31 @@
                       <h5 class="m-0">
                         Filter by:
                         <Dropdown
-                            id="state"
-                            v-model="filter"
-                            :options="articleTypeFilterItems"
-                            optionLabel="name"
-                            placeholder="Select One"
-                            :filter="false"
-                            :loading="loadingArticleTypesFilter"
-                            @change="filterByArticleType"
+                          id="state"
+                          v-model="filter"
+                          :options="articleTypeFilterItems"
+                          optionLabel="name"
+                          placeholder="Select One"
+                          :filter="false"
+                          :loading="loadingArticleTypesFilter"
+                          @change="filterByArticleType"
                         ></Dropdown>
                       </h5>
                     </div>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
-                      <i class="pi pi-search"/>
+                      <i class="pi pi-search" />
                       <InputText
-                          v-model="filters['global'].value"
-                          placeholder="Search..."
+                        v-model="filters['global'].value"
+                        placeholder="Search..."
                       />
                     </span>
                   </div>
                 </template>
                 <Column
-                    field="name"
-                    header="Serail Number"
-                    :sortable="true"
-                    headerStyle="width:14%; min-width:12rem;"
+                  field="name"
+                  header="Serail Number"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:12rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Serail Number</span>
@@ -465,10 +553,10 @@
                   </template>
                 </Column>
                 <Column
-                    field="name"
-                    header="Name"
-                    :sortable="true"
-                    headerStyle="width:14%; min-width:12rem;"
+                  field="name"
+                  header="Name"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:12rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Name</span>
@@ -477,29 +565,29 @@
                 </Column>
 
                 <Column
-                    header="Image"
-                    headerStyle="width:14%; min-width:10rem;"
+                  header="Image"
+                  headerStyle="width:14%; min-width:10rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Image</span>
                     <img
-                        :src="
+                      :src="
                         slotProps.data.image
                           ? getImage(slotProps.data.image)
                           : imageDefault
                       "
-                        :alt="'machine'"
-                        class="shadow-2"
-                        width="100"
-                        height="100"
+                      :alt="'machine'"
+                      class="shadow-2"
+                      width="100"
+                      height="100"
                     />
                   </template>
                 </Column>
                 <Column
-                    field="quantity"
-                    header="Quantity"
-                    :sortable="true"
-                    headerStyle="width:14%; min-width:10rem;"
+                  field="quantity"
+                  header="Quantity"
+                  :sortable="true"
+                  headerStyle="width:14%; min-width:10rem;"
                 >
                   <template #body="slotProps">
                     <span class="p-column-title">Quantity</span>
@@ -510,9 +598,9 @@
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
-                          icon="pi pi-angle-double-right"
-                          class="p-button-rounded p-button-success mr-2"
-                          @click="setArticle(slotProps.data)"
+                        icon="pi pi-angle-double-right"
+                        class="p-button-rounded p-button-success mr-2"
+                        @click="setArticle(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -529,57 +617,81 @@
             <div class="field col-12 sm:col-5">
               <label for="name1">Serail number</label>
               <InputText
-                  v-model="article.serie_number"
-                  id="name1"
-                  type="text"
+                v-model="article.serie_number"
+                id="name1"
+                type="text"
               />
             </div>
             <div class="field col-12 sm:col-4">
               <label for="name1">Nombre</label>
-              <InputText v-model="article.name" id="name1" type="text"/>
+              <InputText
+                v-model="article.name"
+                id="name1"
+                type="text"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.name,
+                }"
+              />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.name"
+                >Name is required.</small
+              >
             </div>
             <div class="field col-12 sm:col-3">
               <label for="name1">Brand</label>
-              <InputText v-model="article.brand" id="name1" type="text"/>
+              <InputText v-model="article.brand" id="name1" type="text" />
             </div>
 
             <div class="field col-12 sm:col-5">
               <label for="name1">Model</label>
-              <InputText v-model="article.model" id="name1" type="text"/>
+              <InputText v-model="article.model" id="name1" type="text" />
             </div>
             <div class="field col-12 sm:col-3">
               <label for="quantity">Quantity</label>
               <InputNumber
-                  id="quantity"
-                  v-model="article.quantity"
-                  showButtons
-                  :disabled="isView"
-                  :min="1"
-                  :useGrouping="false"
-                  :class="{ 'p-invalid': submitted && !article.quantity }"
+                id="quantity"
+                v-model="article.quantity"
+                showButtons
+                :disabled="isView"
+                :min="1"
+                :useGrouping="false"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.quantity,
+                }"
               />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.quantity"
+                >Quantity is required.</small
+              >
               <!--v-model="article.quantity"-->
             </div>
             <div class="field col-12 sm:col-3">
               <label for="quantity">Price</label>
               <InputNumber
-                  id="price"
-                  v-model="article.price"
-                  mode="currency"
-                  currency="PEN"
-                  locale="es-PE"
-                  :class="{
-                  'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
+                id="price"
+                v-model="article.price"
+                mode="currency"
+                currency="PEN"
+                locale="es-PE"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.price,
                 }"
               />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.price"
+                >Price is required.</small
+              >
             </div>
             <!--v-model="supplier_ref.price"-->
             <div class="field col-12 sm:col-1">
               <Button
-                  icon="pi pi-plus"
-                  class="p-button-secondary"
-                  style="margin-top: 1.8rem"
-                  @click="addArticle"
+                icon="pi pi-plus"
+                class="p-button-secondary"
+                style="margin-top: 1.8rem"
+                @click="addArticle"
               ></Button>
             </div>
             <div class="field col-12 sm:col-12">
@@ -589,22 +701,27 @@
                   <Column field="name" header="Name"></Column>
                   <Column field="price" header="Price">
                     <template #body="slotProps">
-                      S/ {{ (slotProps.data.price).toFixed(2) }}
+                      S/ {{ slotProps.data.price.toFixed(2) }}
                     </template>
                   </Column>
                   <Column field="quantity" header="Quantity"></Column>
                   <Column field="import" header="Import">
                     <template #body="slotProps">
-                      S/ {{ ((slotProps.data.price) * (slotProps.data.quantity)).toFixed(2) }}
+                      S/
+                      {{
+                        (
+                          slotProps.data.price * slotProps.data.quantity
+                        ).toFixed(2)
+                      }}
                     </template>
                   </Column>
                   <Column v-if="!isView" headerStyle="min-width:4rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
                         <Button
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            @click="removeAddArticle(slotProps.data)"
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger"
+                          @click="removeAddArticle(slotProps.data)"
                         />
                       </div>
                     </template>
@@ -617,22 +734,22 @@
       </div>
       <div class="flex justify-content-end">
         <Button
-            label="Add"
-            icon="pi pi-download"
-            class="p-button-success mr-2"
-            @click="addArticleInDetail()"
+          label="Add"
+          icon="pi pi-download"
+          class="p-button-success mr-2"
+          @click="addArticleInDetail()"
         />
       </div>
     </div>
   </Dialog>
 
   <Dialog
-      v-model:visible="addServiceDialog"
-      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-      :style="{ width: '50vw' }"
-      header="Add Service"
-      :modal="true"
-      class="p-fluid"
+    v-model:visible="addServiceDialog"
+    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    :style="{ width: '50vw' }"
+    header="Add Service"
+    :modal="true"
+    class="p-fluid"
   >
     <div class="col-12 md:col-12">
       <div class="card p-fluid">
@@ -640,38 +757,59 @@
         <div class="grid">
           <div class="field col-12 sm:col-8">
             <label for="name1">Description</label>
-            <InputText v-model="service.description" id="name1" type="text"/>
+            <InputText
+              v-model="service.description"
+              id="name1"
+              type="text"
+              :class="{
+                'p-invalid': submittedAddService && !service.description,
+              }"
+            />
+            <small
+              class="p-invalid"
+              v-if="submittedAddService && !service.description"
+              >Descriptión is required.</small
+            >
           </div>
           <div class="field col-12 sm:col-3">
             <label for="quantity">Price</label>
             <InputNumber
-                v-model="service.price"
-                id="price"
-                mode="currency"
-                currency="PEN"
-                locale="es-PE"
-                :class="{
-                'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
+              v-model="service.price"
+              id="price"
+              mode="currency"
+              currency="PEN"
+              locale="es-PE"
+              :class="{
+                'p-invalid': submittedAddService && !service.price,
               }"
             />
+            <small
+              class="p-invalid"
+              v-if="submittedAddService && !service.price"
+              >Price is required.</small
+            >
           </div>
           <!--v-model="supplier_ref.price"-->
           <div class="field col-12 sm:col-1">
             <Button
-                icon="pi pi-plus"
-                class="p-button-secondary"
-                style="margin-top: 1.8rem"
-                @click="addService()"
+              icon="pi pi-plus"
+              class="p-button-secondary"
+              style="margin-top: 1.8rem"
+              @click="addService()"
             ></Button>
           </div>
           <div class="field col-12 sm:col-12">
             <div class="card">
               <DataTable :value="listService" responsiveLayout="scroll">
                 <!--                :value="article.suppliers"-->
-                <Column field="description" header="Description" style="width:70%"></Column>
+                <Column
+                  field="description"
+                  header="Description"
+                  style="width: 70%"
+                ></Column>
                 <Column field="price" header="Price">
                   <template #body="slotProps">
-                    S/ {{ (slotProps.data.price).toFixed(2) }}
+                    S/ {{ slotProps.data.price.toFixed(2) }}
                   </template>
                 </Column>
 
@@ -679,9 +817,9 @@
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
-                          icon="pi pi-trash"
-                          class="p-button-rounded p-button-danger"
-                          @click="removeAddService(slotProps.data)"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        @click="removeAddService(slotProps.data)"
                       />
                     </div>
                   </template>
@@ -695,10 +833,10 @@
     <div class="field col-12 sm:col-3">
       <div class="flex justify-content-end">
         <Button
-            label="Add"
-            icon="pi pi-download"
-            class="p-button-success mr-2"
-            @click="addServiceInDetail()"
+          label="Add"
+          icon="pi pi-download"
+          class="p-button-success mr-2"
+          @click="addServiceInDetail()"
         />
       </div>
     </div>
@@ -707,7 +845,7 @@
 
 <script>
 import ProductService from "./../service/ProductService";
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import MachinesService from "@/service/MachinesService";
 import ArticleTypesService from "../service/ArticleTypesService";
 import ArticlesService from "@/service/ArticlesService";
@@ -723,15 +861,18 @@ export default {
         date: null,
         responsible: null,
         technical: null,
-        maintenance_type: {},
-        supplier: {},
+        maximum_working_time: null,
+        description: null,
+        maintenance_type: null,
+        supplier: null,
         machine: {},
         detail: [],
       },
+      submittedMaintenanceSheet: false,
       dropdownItems: [
-        {name: "Option 1", code: "Option 1"},
-        {name: "Option 2", code: "Option 2"},
-        {name: "Option 3", code: "Option 3"},
+        { name: "Option 1", code: "Option 1" },
+        { name: "Option 2", code: "Option 2" },
+        { name: "Option 3", code: "Option 3" },
       ],
       machines: [],
       articles: [],
@@ -752,21 +893,22 @@ export default {
       products2: null,
       products3: null,
       statuses: [
-        {label: "In Stock", value: "INSTOCK"},
-        {label: "Low Stock", value: "LOWSTOCK"},
-        {label: "Out of Stock", value: "OUTOFSTOCK"},
+        { label: "In Stock", value: "INSTOCK" },
+        { label: "Low Stock", value: "LOWSTOCK" },
+        { label: "Out of Stock", value: "OUTOFSTOCK" },
       ],
       filters: {
-        code: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
-        name: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
-        quantity: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
-        price: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+        code: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        quantity: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       },
 
       service: {
         description: null,
         price: null,
       },
+      submittedAddService: false,
       listService: [],
 
       article: {
@@ -777,6 +919,7 @@ export default {
         quantity: null,
         price: null,
       },
+      submittedAddArticle: false,
       listArticles: [],
 
       articleTypeFilterItems: null,
@@ -804,26 +947,27 @@ export default {
     this.maintenanceTypeService = new MaintenanceTypeService();
     this.maintenanceSheetService = new MaintenenaceSheetService();
     this.columnsDetailGeneral = [
-      {field: "serie_number", header: "Serie"},
-      {field: "description", header: "Description"},
-      {field: "price", header: "Price", mode: "currency", currency: "PEN"},
-      {field: "quantity", header: "Quantity"},
-      {field: "quantity", header: "Import"},
+      { field: "serie_number", header: "Serie" },
+      { field: "description", header: "Description" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
+      { field: "quantity", header: "Quantity" },
+      { field: "quantity", header: "Import" },
     ];
     this.columnsDetailSparePart = [
-      {field: "serie_number", header: "Serie"},
-      {field: "name", header: "Name"},
-      {field: "price", header: "Price", mode: "currency", currency: "PEN"},
-      {field: "quantity", header: "Quantity"},
-      {field: "import", header: "Import"},
+      { field: "serie_number", header: "Serie" },
+      { field: "name", header: "Name" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
+      { field: "quantity", header: "Quantity" },
+      { field: "import", header: "Import" },
     ];
     this.columnsDetailService = [
-      {field: "description", header: "Description"},
-      {field: "price", header: "Price", mode: "currency", currency: "PEN"},
+      { field: "description", header: "Description" },
+      { field: "price", header: "Price", mode: "currency", currency: "PEN" },
       // {field: "quantity", header: "Import"},
     ];
   },
   mounted() {
+    this.submittedMaintenanceSheet = false;
     this.supplierService.getAll().then((data) => {
       this.supplierItems = data;
       this.supplierItemsLoading = false;
@@ -837,11 +981,10 @@ export default {
     totalDetailImport() {
       let total = 0;
       for (let item of this.maintenanceSheet.detail) {
-        total += item.price * item.quantity
+        total += item.price * item.quantity;
       }
       return total.toFixed(2);
-    }
-
+    },
   },
   methods: {
     openNewSelectMachine() {
@@ -856,6 +999,7 @@ export default {
     openNewAddSparePart() {
       this.product = {};
       this.submitted = false;
+      this.submittedAddArticle = false;
       this.addSparePartDialog = true;
       this.loadingArticles = true;
       this.articleService.getAll().then((data) => {
@@ -877,12 +1021,13 @@ export default {
       });
     },
     openNewAddService() {
+      this.submittedAddService = false;
       this.product = {};
       this.submitted = false;
       this.addServiceDialog = true;
     },
     onCellEditComplete(event) {
-      let {data, newValue, field} = event;
+      let { data, newValue, field } = event;
 
       switch (field) {
         case "quantity":
@@ -908,7 +1053,7 @@ export default {
       return n !== Infinity && String(n) === str && n >= 0;
     },
     onRowEditSave(event) {
-      let {newData, index} = event;
+      let { newData, index } = event;
 
       this.products2[index] = newData;
     },
@@ -935,19 +1080,19 @@ export default {
       let article_type = data.value;
       this.loadingArticles = true;
       this.articles = this.articlesAll.filter(
-          (val) => val.article_type.id === article_type.id
+        (val) => val.article_type.id === article_type.id
       );
       if (article_type.id === 1) this.articles = this.articlesAll;
       this.loadingArticles = false;
     },
     initFilters() {
       this.filters = {
-        global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
     selectMachine(value) {
       this.machineService.getOne(value.id).then((data) => {
-        this.maintenanceSheet.machine = {...data};
+        this.maintenanceSheet.machine = { ...data };
         this.machineDialog = false;
       });
     },
@@ -955,22 +1100,30 @@ export default {
       this.$router.push(`/maintenance-sheet`);
     },
     addService() {
+      this.submittedAddService = true;
       //  TODO:VALIDATE FIELDS EMPTY
-      this.service.quantity = 1;
-      this.listService.push(this.service);
-      this.service = {};
+      if (this.validateAddService()) {
+        this.service.quantity = 1;
+        this.listService.push(this.service);
+        this.service = {};
+        this.submittedAddService = false;
+      }
+    },
+    validateAddService() {
+      return this.service.description && this.service.price;
     },
     pushDistinct() {
       const distinct = (value, index, self) => {
         return self.indexOf(value) === index;
-      }
-      this.maintenanceSheet.detail = this.maintenanceSheet.detail.filter(distinct)
+      };
+      this.maintenanceSheet.detail =
+        this.maintenanceSheet.detail.filter(distinct);
     },
     addServiceInDetail() {
       //  TODO:VALIDATE FIELDS EMPTY TABLE
       // console.log(this.listService);
       this.listService.map((service) =>
-          this.maintenanceSheet.detail.push(service)
+        this.maintenanceSheet.detail.push(service)
       );
       this.pushDistinct();
 
@@ -993,10 +1146,17 @@ export default {
       };
     },
     addArticle() {
+      this.submittedAddArticle = true;
       //  TODO:VALIDATE FIELDS EMPTY
-      // this.service.quantity = 1;
-      this.listArticles.push(this.article);
-      this.article = {};
+      if (this.validateAddArticle()) {
+        // this.service.quantity = 1;
+        this.listArticles.push(this.article);
+        this.article = {};
+        this.submittedAddArticle = false;
+      }
+    },
+    validateAddArticle() {
+      return this.article.name && this.article.quantity && this.article.price;
     },
     removeAddArticle(data) {
       /*console.log(data);
@@ -1034,27 +1194,75 @@ export default {
       //  TODO:VALIDATE FIELDS EMPTY TABLE
       // console.log(this.listService);
       this.listArticles.map((service) =>
-          this.maintenanceSheet.detail.push(service)
+        this.maintenanceSheet.detail.push(service)
       );
       this.pushDistinct();
       this.addSparePartDialog = false;
     },
     saveMaintenenaceSheet() {
+      this.submittedMaintenanceSheet = true;
       //  TODO:VALIDATE
-      this.maintenanceSheet.date = moment(this.maintenanceSheet.date).format(
+      if (this.validateMaintenanceSheet()) {
+        this.maintenanceSheet.date = moment(this.maintenanceSheet.date).format(
           "YYYY-MM-DD"
-      );
-      const payload = this.maintenanceSheet;
-      // console.log(payload);
-      this.maintenanceSheetService.create(payload).then((data) => {
-        // this.suppliers[this.findIndexById(id)] = data.data;
+        );
+        const payload = this.maintenanceSheet;
+        // console.log(payload);
+        this.maintenanceSheetService.create(payload).then((data) => {
+          // this.suppliers[this.findIndexById(id)] = data.data;
+          this.$toast.add({
+            severity: "success",
+            summary: "Successful",
+            detail: data.message,
+            life: 3000,
+          });
+        });
+      }
+      /*
+      this.submittedMaintenanceSheet = true;
+      //  TODO:VALIDATE
+      if (this.maintenanceSheet.machine.id) {
+        if (this.validateMaintenanceSheet()) {
+          this.maintenanceSheet.date = moment(
+            this.maintenanceSheet.date
+          ).format("YYYY-MM-DD");
+          const payload = this.maintenanceSheet;
+          // console.log(payload);
+          this.maintenanceSheetService.create(payload).then((data) => {
+            // this.suppliers[this.findIndexById(id)] = data.data;
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: data.message,
+              life: 3000,
+            });
+          });
+        }
+      } else {
         this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          severity: "error",
+          summary: "Warning",
+          detail: "make sure you have Selected a Machine",
           life: 3000,
         });
-      });
+      }
+      
+      
+      
+      
+      */
+    },
+    validateMaintenanceSheet() {
+      return true;
+      /*
+      return (
+        this.maintenanceSheet.date &&
+        this.maintenanceSheet.responsible &&
+        this.maintenanceSheet.maintenance_type &&
+        this.maintenanceSheet.supplier &&
+        this.maintenanceSheet.description &&
+        this.maintenanceSheet.maximum_working_time
+      );*/
     },
   },
   /*mounted() {
