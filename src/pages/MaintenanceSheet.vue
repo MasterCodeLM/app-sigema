@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">MAINTENANCES</h3>
+          <h3 class="text-900 font-medium">MAINTENANCES SHETTS</h3>
         </div>
       </div>
     </div>
@@ -516,12 +516,8 @@ export default {
         this.defaultObjects();
       }
     },
-    viewMachine(machine) {
-      this.isView = true;
-      this.machinesService.getOne(machine.id).then((data) => {
-        this.machine = { ...data };
-        this.productDialog = true;
-      });
+    viewMachine(maintenanaceSheet) {
+      this.$router.push(`/new-maintenance-sheet/${maintenanaceSheet.id}`);
     },
     editProduct(machine) {
       this.isView = false;

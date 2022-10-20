@@ -329,22 +329,22 @@
             <InputText
               id="name1"
               type="text"
-              v-model="maintenanceSheet.refInvoiceNumber"
-            />
-            <!--
+              v-model="maintenanceSheet.ref_invoice_number"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
-                  !maintenanceSheet.refInvoiceNumber,
+                  !maintenanceSheet.ref_invoice_number,
               }"
-              <small
+            />
+
+            <small
               class="p-invalid"
               v-if="
-                submittedMaintenanceSheet && !maintenanceSheet.refInvoiceNumber
+                submittedMaintenanceSheet &&
+                !maintenanceSheet.ref_invoice_number
               "
               >Invoice number is required.</small
             >
-            -->
           </div>
           <div class="field col-12">
             <label for="state">Supplier</label>
@@ -432,7 +432,7 @@
               class="editable-cells-table"
               responsiveLayout="scroll"
             >
-              <Column field="serie_number" header="Serie"></Column>
+              <Column field="article.serie_number" header="Serie"></Column>
               <Column field="name" header="Name">
                 <template #body="slotProps">
                   {{
@@ -697,13 +697,13 @@
                 locale="es-PE"
                 :min="0"
                 :class="{
-                  'p-invalid': submittedAddArticle && !article.price,
+                  'p-invalid': submittedAddArticle && !article.price >= 0,
                 }"
               />
 
               <small
                 class="p-invalid"
-                v-if="submittedAddArticle && !article.price"
+                v-if="submittedAddArticle && !article.price >= 0"
                 >Price is required.</small
               >
             </div>
@@ -887,7 +887,7 @@ export default {
         maximum_working_time: null,
         description: null,
         maintenance_type: null,
-        refInvoiceNumber: null,
+        ref_invoice_number: null,
         supplier: null,
         machine: {},
         detail: [],
@@ -991,6 +991,15 @@ export default {
     ];
   },
   mounted() {
+    let sheet = this.$route.params;
+    // console.log(sheet);
+    if (sheet.id) {
+      this.maintenanceSheetService.getOne(sheet.id).then((data) => {
+        this.maintenanceSheet = data;
+        // console.log(this.workSheet);
+      });
+    }
+
     this.submittedMaintenanceSheet = false;
     this.supplierService.getAll().then((data) => {
       this.supplierItems = data;
@@ -1174,13 +1183,19 @@ export default {
       //  TODO:VALIDATE FIELDS EMPTY
       if (this.validateAddArticle()) {
         // this.service.quantity = 1;
+        if (!this.article.id) {
+          this.article.description = this.article.name;
+        }
         this.listArticles.push(this.article);
         this.article = {};
         this.submittedAddArticle = false;
       }
     },
     validateAddArticle() {
-      return this.article.name && this.article.quantity && this.article.price;
+      console.log(this.article.price);
+      return (
+        this.article.name && this.article.quantity && this.article.price >= 0
+      );
     },
     removeAddArticle(data) {
       /*console.log(data);
@@ -1265,7 +1280,7 @@ export default {
         this.maintenanceSheet.maintenance_type &&
         this.maintenanceSheet.supplier &&
         this.maintenanceSheet.description &&
-        //this.maintenanceSheet.refInvoiceNumber &&
+        this.maintenanceSheet.ref_invoice_number &&
         this.maintenanceSheet.maximum_working_time
       );
     },
@@ -1277,7 +1292,7 @@ export default {
         maximum_working_time: null,
         description: null,
         maintenance_type: null,
-        refInvoiceNumber: null,
+        ref_invoice_number: null,
         supplier: null,
         machine: {},
         detail: [],

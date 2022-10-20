@@ -670,6 +670,7 @@ export default {
     async saveProduct() {
       this.submitted = true;
       if (this.validateFormMachine()) {
+        this.productDialog = false;
         if (this.machine.id) {
           //UPLOAD IMAGES
           // console.log(this.machine)
@@ -748,7 +749,7 @@ export default {
             });
           });
         }
-        this.productDialog = false;
+
         this.defaultObjects();
       }
     },
