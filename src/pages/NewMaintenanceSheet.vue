@@ -351,7 +351,13 @@
               <Column field="price" header="Price">
 
                 <template #editor="{ data, field }">
-                  <InputNumber v-model="data[field]" mode="currency" currency="PEN" locale="es-PE" autofocus/>
+                  <InputNumber v-model="data[field]"
+                               mode="currency"
+                               currency="PEN"
+                               locale="es-PE"
+                               :min="0"
+                               :useGrouping="false"
+                  />
                 </template>
                 <template #body="slotProps">
                   S/ {{ (slotProps.data.price).toFixed(2) }}
@@ -568,6 +574,8 @@
                   mode="currency"
                   currency="PEN"
                   locale="es-PE"
+                  :min="0"
+                  :useGrouping="false"
                   :class="{
                   'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
                 }"
@@ -650,6 +658,8 @@
                 mode="currency"
                 currency="PEN"
                 locale="es-PE"
+                :min="0"
+                :useGrouping="false"
                 :class="{
                 'p-invalid': submittedAddSuppliersRef && !supplier_ref.price,
               }"
@@ -887,8 +897,7 @@ export default {
       switch (field) {
         case "quantity":
         case "price":
-          if (this.isPositiveInteger(newValue)) data[field] = newValue;
-          else event.preventDefault();
+          data[field] = newValue;
           break;
 
         default:
