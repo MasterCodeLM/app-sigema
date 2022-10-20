@@ -218,7 +218,7 @@
               v-model="maintenanceSheet.description"
               placeholder="Your Message"
               :autoResize="true"
-              rows="5"
+              rows="7"
               cols="67"
               :class="{
                 'p-invalid':
