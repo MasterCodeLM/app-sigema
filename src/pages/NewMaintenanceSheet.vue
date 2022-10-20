@@ -1244,7 +1244,7 @@ export default {
         if (this.validateMaintenanceSheet()) {
           this.maintenanceSheet.date = moment(
             this.maintenanceSheet.date
-          ).format("YYYY-MM-DD");
+          ).format("YYYY-MM-DD HH:mm:ss");
           const payload = this.maintenanceSheet;
           // console.log(payload);
           this.maintenanceSheetService.create(payload).then((data) => {
