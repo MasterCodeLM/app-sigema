@@ -1065,8 +1065,7 @@ export default {
       switch (field) {
         case "quantity":
         case "price":
-          if (this.isPositiveInteger(newValue)) data[field] = newValue;
-          else event.preventDefault();
+          data[field] = newValue;
           break;
 
         default:
