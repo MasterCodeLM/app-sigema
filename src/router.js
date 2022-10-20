@@ -196,7 +196,7 @@ const routes = [
                 component: () => import('./pages/MaintenanceSheet.vue')
             },
             {
-                path: '/new-maintenance-sheet/:id',
+                path: '/new-maintenance-sheet/:id?',
                 name: 'new-maintenance-sheet',
                 component: () => import('./pages/NewMaintenanceSheet.vue')
             },

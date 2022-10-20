@@ -61,7 +61,7 @@
             field="name"
             header="Name"
             :sortable="true"
-            headerStyle="width:22%; min-width:10rem;"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
@@ -72,7 +72,7 @@
             field="lastname"
             header="Last Name"
             :sortable="true"
-            headerStyle="width:22%; min-width:10rem;"
+            headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Last Name</span>
@@ -120,7 +120,7 @@
             field="position.name"
             header="Title"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:9rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Title</span>
@@ -132,7 +132,7 @@
             field="phone"
             header="Telephone"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
@@ -152,7 +152,7 @@
             </template>
           </Column>
 
-          <Column
+          <!--<Column
             field="personal_email"
             header="Email"
             :sortable="true"
@@ -162,7 +162,7 @@
               <span class="p-column-title">Email</span>
               {{ slotProps.data.personal_email }}
             </template>
-          </Column>
+          </Column>-->
 
           <!--          <Column-->
           <!--              field="inventoryStatus"-->

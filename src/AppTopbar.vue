@@ -1,16 +1,27 @@
 <template>
   <div class="layout-topbar">
     <router-link to="/" class="layout-topbar-logo">
-      <img alt="Logo" :src="topbarImage()" style="height:4rem;"/>
+      <img alt="Logo" :src="topbarImage()" style="height: 4rem" />
       <!--      <span>JEX</span>-->
     </router-link>
-    <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle">
+    <button
+      class="p-link layout-menu-button layout-topbar-button"
+      @click="onMenuToggle"
+    >
       <i class="pi pi-bars"></i>
     </button>
 
-    <button class="p-link layout-topbar-menu-button layout-topbar-button"
-            v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein',
-			leaveToClass: 'hidden', leaveActiveClass: 'fadeout', hideOnOutsideClick: true}">
+    <button
+      class="p-link layout-topbar-menu-button layout-topbar-button"
+      v-styleclass="{
+        selector: '@next',
+        enterClass: 'hidden',
+        enterActiveClass: 'scalein',
+        leaveToClass: 'hidden',
+        leaveActiveClass: 'fadeout',
+        hideOnOutsideClick: true,
+      }"
+    >
       <i class="pi pi-ellipsis-v"></i>
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
@@ -31,24 +42,32 @@
           <i class="pi pi-bell p-text-secondary" v-badge="2"></i>
           <span>Notifications</span>
         </button>
-        <OverlayPanel ref="op" appendTo="body" :showCloseIcon="false" style="width:25rem">
+        <OverlayPanel
+          ref="op"
+          appendTo="body"
+          :showCloseIcon="false"
+          style="width: 25rem"
+        >
           <ScrollPanel style="width: 100%; height: 300px">
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
-                error repudiandae
-                numquam deserunt</p>
+              <p class="text-700">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Inventore sed consequuntur error repudiandae numquam deserunt
+              </p>
               <span class="text-500">ago 12 Hours</span>
             </div>
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
-                error repudiandae
-                numquam deserunt</p>
+              <p class="text-700">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Inventore sed consequuntur error repudiandae numquam deserunt
+              </p>
               <span class="text-500">ago 12 Hours</span>
             </div>
             <div class="card mb-2">
-              <p class="text-700">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur
-                error repudiandae
-                numquam deserunt</p>
+              <p class="text-700">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Inventore sed consequuntur error repudiandae numquam deserunt
+              </p>
               <span class="text-500">ago 12 Hours</span>
             </div>
           </ScrollPanel>
@@ -59,7 +78,7 @@
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </button>
-        <Menu ref="menu" :model="items" :popup="true"/>
+        <Menu ref="menu" :model="items" :popup="true" />
       </li>
       <!--      <Button type="button" label="Image"  class="p-button-success"/>-->
 
@@ -76,18 +95,23 @@ export default {
     return {
       items: [
         {
-          label: 'Profile',
-          icon: 'pi pi-refresh',
+          label: "Profile",
+          icon: "pi pi-refresh",
           command: () => {
-            this.$toast.add({severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000});
-          }
+            this.$toast.add({
+              severity: "success",
+              summary: "Updated",
+              detail: "Data Updated",
+              life: 3000,
+            });
+          },
         },
         {
-          label: 'Logout',
-          icon: 'pi pi-refresh',
+          label: "Logout",
+          icon: "pi pi-refresh",
           command: () => {
             this.logout();
-          }
+          },
         },
         // {
         //   label: 'Delete',
@@ -106,8 +130,8 @@ export default {
         //   icon: 'pi pi-upload',
         //   to: '/fileupload'
         // }
-      ]
-    }
+      ],
+    };
   },
   authService: null,
   created() {
@@ -120,13 +144,12 @@ export default {
         // console.log(data)
         if (data.message) {
           //  ELIMINAR LOCAL
-          localStorage.removeItem('userLogged')
-          localStorage.removeItem('token')
+          localStorage.removeItem("userLogged");
+          localStorage.removeItem("token");
           //  REDIRECIONAR
-          this.$router.push({name: 'login'})
-
+          this.$router.push({ name: "login" });
         }
-      })
+      });
     },
     toggle(event) {
       this.$refs.menu.toggle(event);
@@ -135,22 +158,22 @@ export default {
       this.$refs.op.toggle(event);
     },
     onMenuToggle(event) {
-      this.$emit('menu-toggle', event);
+      this.$emit("menu-toggle", event);
     },
     onTopbarMenuToggle(event) {
-      this.$emit('topbar-menu-toggle', event);
+      this.$emit("topbar-menu-toggle", event);
     },
     topbarImage() {
       // return this.$appState.darkTheme ? 'images/logo-white.svg' : 'images/logo-dark.svg';
-      return 'images/JEX24.png'
-    }
+      return "images/JEX24.png";
+    },
   },
   computed: {
     darkTheme() {
       return this.$appState.darkTheme;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped>
 </style>
