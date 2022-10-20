@@ -273,12 +273,13 @@
                       showButtons
                       mode="decimal"
                       :disabled="isView"
+                      :min="0"
+                      :max="24"
+                      :useGrouping="false"
                       :class="{
                         'p-invalid':
                           submitted && !machine.maximum_working_time_per_day,
                       }"
-                      :min="0"
-                      :useGrouping="false"
                     />
                     <small
                       class="p-invalid"
