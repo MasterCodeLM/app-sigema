@@ -220,6 +220,7 @@
               :autoResize="true"
               rows="7"
               cols="67"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.description,
@@ -244,6 +245,7 @@
               v-model="maintenanceSheet.responsible"
               id="name1"
               type="text"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.responsible,
@@ -265,6 +267,7 @@
               optionLabel="name"
               placeholder="Select One"
               :loading="maintenanceTypeItemsLoading"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
@@ -286,7 +289,9 @@
               :showButtonBar="true"
               v-model="maintenanceSheet.date"
               :maxDate="minDateValue"
-              dateFormat="yy-mm-dd"
+              :showTime="true"
+              :showSeconds="true"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.date,
@@ -305,9 +310,9 @@
               id="quantity"
               v-model="maintenanceSheet.maximum_working_time"
               showButtons
-              :disabled="isView"
               :min="0"
               :useGrouping="false"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
@@ -330,6 +335,7 @@
               id="name1"
               type="text"
               v-model="maintenanceSheet.ref_invoice_number"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
@@ -356,6 +362,7 @@
               placeholder="Select One"
               :filter="true"
               :loading="supplierItemsLoading"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.supplier,
@@ -373,6 +380,7 @@
               v-model="maintenanceSheet.technical"
               id="name1"
               type="text"
+              :disabled="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.technical,
@@ -393,7 +401,10 @@
         <h5>Details</h5>
         <div class="p-fluid formgrid grid">
           <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
-            <div class="flex flex-column sm:flex-row">
+            <div
+              v-if="!this.maintenanceSheet.id"
+              class="flex flex-column sm:flex-row"
+            >
               <Button
                 label="Add Article"
                 class="p-button-secondary mr-2 mb-2"
@@ -450,6 +461,7 @@
                     currency="PEN"
                     locale="es-PE"
                     autofocus
+                    :disabled="this.maintenanceSheet.id"
                   />
                 </template>
                 <template #body="slotProps">
@@ -464,6 +476,7 @@
                     showButtons
                     :useGrouping="false"
                     autofocus
+                    :disabled="this.maintenanceSheet.id"
                   />
                 </template>
               </Column>
@@ -477,7 +490,10 @@
               </Column>
               <Column headerStyle="min-width:10rem;">
                 <template #body="slotProps">
-                  <div style="display: flex; justify-content: end">
+                  <div
+                    v-if="!this.maintenanceSheet.id"
+                    style="display: flex; justify-content: end"
+                  >
                     <Button
                       icon="pi pi-trash"
                       class="p-button-rounded p-button-danger"
@@ -492,7 +508,7 @@
       </div>
     </div>
     <div class="col-12">
-      <div class="flex justify-content-center">
+      <div v-if="!this.maintenanceSheet.id" class="flex justify-content-center">
         <Button
           label="Submit"
           class="mr-2 mb-2"
@@ -1239,7 +1255,10 @@ export default {
     },
     saveMaintenenaceSheet() {
       //  TODO:VALIDATE
-      if (this.maintenanceSheet.machine.id) {
+      if (
+        this.maintenanceSheet.machine.id &&
+        this.maintenanceSheet.detail.length > 0
+      ) {
         this.submittedMaintenanceSheet = true;
         if (this.validateMaintenanceSheet()) {
           this.maintenanceSheet.date = moment(
@@ -1265,7 +1284,8 @@ export default {
         this.$toast.add({
           severity: "error",
           summary: "Warning",
-          detail: "make sure you have Selected a Machine",
+          detail:
+            "make sure you have Selected a Machine and add at least one detail",
           life: 3000,
         });
       }
