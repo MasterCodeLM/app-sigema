@@ -656,7 +656,15 @@
                 v-model="article.serie_number"
                 id="name1"
                 type="text"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.serie_number,
+                }"
               />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.serie_number"
+                >Serial number is required.</small
+              >
             </div>
             <div class="field col-12 sm:col-4">
               <label for="name1">Nombre</label>
@@ -676,12 +684,36 @@
             </div>
             <div class="field col-12 sm:col-3">
               <label for="name1">Brand</label>
-              <InputText v-model="article.brand" id="name1" type="text" />
+              <InputText
+                v-model="article.brand"
+                id="name1"
+                type="text"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.brand,
+                }"
+              />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.brand"
+                >Brand is required.</small
+              >
             </div>
 
             <div class="field col-12 sm:col-5">
               <label for="name1">Model</label>
-              <InputText v-model="article.model" id="name1" type="text" />
+              <InputText
+                v-model="article.model"
+                id="name1"
+                type="text"
+                :class="{
+                  'p-invalid': submittedAddArticle && !article.model,
+                }"
+              />
+              <small
+                class="p-invalid"
+                v-if="submittedAddArticle && !article.model"
+                >Model is required.</small
+              >
             </div>
             <div class="field col-12 sm:col-3">
               <label for="quantity">Quantity</label>
@@ -1191,6 +1223,7 @@ export default {
         name: value.name,
         brand: value.brand,
         model: value.model,
+        quantity: value.quantity,
       };
     },
     addArticle() {
@@ -1201,15 +1234,36 @@ export default {
         if (!this.article.id) {
           this.article.description = this.article.name;
         }
-        this.listArticles.push(this.article);
-        this.article = {};
+        if (this.article.article) {
+          if (this.article.quantity <= this.article.article.quantity) {
+            //console.log(this.article);
+            this.listArticles.push(this.article);
+            this.article = {};
+          } else {
+            this.$toast.add({
+              severity: "error",
+              summary: "Warning",
+              detail: "the quantity is greater than the available stock",
+              life: 3000,
+            });
+          }
+        } else {
+          this.listArticles.push(this.article);
+          this.article = {};
+        }
+
         this.submittedAddArticle = false;
       }
     },
     validateAddArticle() {
       console.log(this.article.price);
       return (
-        this.article.name && this.article.quantity && this.article.price >= 0
+        this.article.serie_number &&
+        this.article.name &&
+        this.article.brand &&
+        this.article.model &&
+        this.article.quantity &&
+        this.article.price >= 0
       );
     },
     removeAddArticle(data) {
