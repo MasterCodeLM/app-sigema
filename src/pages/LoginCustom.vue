@@ -46,9 +46,9 @@
         >
           <div class="col-12 mt-5 xl:mt-0 text-center">
             <img
-              src="images/pestaña.png"
+              src="images/NuevoLogoPestaña.png"
               class="mb-9"
-              style="width: 60px; height: 60px"
+              style="width: 120px; height: 80px"
             />
           </div>
           <div class="text-center mb-5">
