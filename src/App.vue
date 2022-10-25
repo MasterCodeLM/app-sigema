@@ -400,9 +400,10 @@ export default {
             icon: "pi pi-folder-open",
             items: [
               {
-                label: "Report 01",
+                label: "Maintenances",
                 icon: "pi pi-fw pi-file",
-                //to: "/roles",
+                to: "/r-maintenances",
+                visible: this.permissions.includes("maintenance-sheets"),
               },
               {
                 label: "Report 02",
