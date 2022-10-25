@@ -1,5 +1,5 @@
 <template>
-  <Toast />
+  <Toast/>
   <div class="grid">
     <div class="col-12">
       <div class="card p-fluid">
@@ -14,33 +14,34 @@
         <div class="field">
           <label>From the: </label>
           <Calendar
-            :showIcon="true"
-            :showButtonBar="false"
-            v-model="start_date"
-            :maxDate="minDateValue"
-            dateFormat="yy-mm-dd"
+              :showIcon="true"
+              :showButtonBar="false"
+              v-model="start_date"
+              :maxDate="minDateValue"
+              dateFormat="yy-mm-dd"
           ></Calendar>
         </div>
         <div class="field">
           <label> Until the: </label>
           <Calendar
-            :showIcon="true"
-            :showButtonBar="false"
-            v-model="end_date"
-            :maxDate="minDateValue"
-            dateFormat="yy-mm-dd"
+              :showIcon="true"
+              :showButtonBar="false"
+              v-model="end_date"
+              :maxDate="minDateValue"
+              dateFormat="yy-mm-dd"
           ></Calendar>
         </div>
         <div class="field">
           <label> Type: </label>
           <Dropdown
-            id="state"
-            :disabled="isView"
-            :filter="false"
-            :options="dropdownReportType"
-            optionLabel="name"
-            optionValue="value"
-            placeholder="Select One"
+              id="state"
+              v-model="typeItem"
+              :disabled="isView"
+              :filter="false"
+              :options="dropdownReportType"
+              optionLabel="name"
+              optionValue="value"
+              placeholder="Select One"
           ></Dropdown>
           <!--v-model="employee.native_language"
           <small
@@ -54,47 +55,47 @@
           <h5>Order by</h5>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order1"
-              name="N° Serie"
-              value="serie_number"
+                v-model="order"
+                inputId="order1"
+                name="N° Serie"
+                value="serie_number"
             />
             <label for="city1">Serieal Number</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order2"
-              name="Machine"
-              value="machine"
+                v-model="order"
+                inputId="order2"
+                name="Machine"
+                value="machine"
             />
             <label for="city1">Machine</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order2"
-              name="Amount"
-              value="amount"
+                v-model="order"
+                inputId="order2"
+                name="Amount"
+                value="amount"
             />
             <label for="city1">Amount</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order1"
-              name="N° of maintenances"
-              value="maintenances_number"
+                v-model="order"
+                inputId="order1"
+                name="N° of maintenances"
+                value="maintenances_number"
             />
             <label for="city1">N° of maintenances</label>
           </div>
         </div>
         <div class="field">
           <Button
-            label="Generate report"
-            icon="pi pi-file-pdf"
-            class="p-button-outlined p-button-danger"
-            @click="openNew"
+              label="Generate report"
+              icon="pi pi-file-pdf"
+              class="p-button-outlined p-button-danger"
+              @click="generate"
           />
         </div>
       </div>
@@ -103,8 +104,8 @@
       <div class="card p-fluid h-full">
         <h5>REPORT</h5>
         <div
-          class="col-12"
-          style="
+            class="col-12"
+            style="
             border-top: 1px solid silver;
             border-right: 1px solid silver;
             border-bottom: 1px solid silver;
@@ -120,6 +121,8 @@
 
 <script>
 import moment from "moment";
+import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
+
 export default {
   data() {
     return {
@@ -127,16 +130,16 @@ export default {
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
-        { name: "Abstarct", value: "abstarct" },
-        { name: "Detailed", value: "detailed" },
+        {name: "Abstarct", value: "abstarct"},
+        {name: "Detailed", value: "detailed"},
       ],
       dropdownTypePersonalItems: [
-        { name: "Permanent", value: "permanent" },
-        { name: "Relay", value: "relay" },
+        {name: "Permanent", value: "permanent"},
+        {name: "Relay", value: "relay"},
       ],
       dropdownTurnEntryItems: [
-        { name: "Day", value: "day" },
-        { name: "Night", value: "night" },
+        {name: "Day", value: "day"},
+        {name: "Night", value: "night"},
       ],
       dropdownItem: null,
       employees: null,
@@ -163,9 +166,9 @@ export default {
       message: null,
       //loading: false,
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
 
       documentTypeItem: null,
@@ -177,5 +180,25 @@ export default {
       isView: false,
     };
   },
+  maintenenaceSheetService: null,
+  created() {
+    this.maintenenaceSheetService = new MaintenenaceSheetService();
+  },
+  methods: {
+    generate() {
+      let payload = {
+        start_date: '2022-10-20',
+        end_date: '2022-10-24',
+        type: 'resumen',
+        sort_by: 'serie_number',
+        order_by: 'desc',
+
+      }
+      this.maintenenaceSheetService.report(payload).then((data) => {
+        this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`
+        console.log(this.urlPDF)
+      })
+    }
+  }
 };
 </script>
