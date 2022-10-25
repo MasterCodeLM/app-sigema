@@ -356,7 +356,7 @@
                     'p-invalid': submittedAddBank && !bank.account_number,
                   }"
                   autocomplete="off"
-                  @keypress="isNumber($event)"
+                  @keypress="isNumberBank($event)"
                 />
                 <small
                   class="p-invalid"
@@ -377,7 +377,7 @@
                       submittedAddBank && !bank.interbank_account_number,
                   }"
                   autocomplete="off"
-                  @keypress="isNumber($event)"
+                  @keypress="isNumberBank($event)"
                 />
                 <small
                   class="p-invalid"
@@ -767,6 +767,21 @@ export default {
         return true;
       }
     },
+
+    isNumberBank(evt) {
+      evt = evt ? evt : window.event;
+      let charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 45
+      ) {
+        evt.preventDefault();
+      } else {
+        return true;
+      }
+    },
+
     isEmail() {
       return /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(
         this.supplier.email

@@ -200,11 +200,7 @@ const routes = [
                 name: 'new-maintenance-sheet',
                 component: () => import('./pages/NewMaintenanceSheet.vue')
             },
-            // {
-            //     path: '/new-maintenance-sheet',
-            //     name: 'new-maintenance-sheet',
-            //     component: () => import('./pages/NewMaintenanceSheet.vue')
-            // },
+            
             {
                 path: '/work-sheet',
                 name: 'work-sheet',
@@ -215,6 +211,11 @@ const routes = [
                 path: '/new-work-start/:id?',
                 name: 'new-work-start',
                 component: () => import('./pages/NewWorkStart.vue')
+            },
+            {
+                path: '/r-maintenances',
+                name: 'r-maintenances',
+                component: () => import('./pages/R-Maintenances.vue')
             }
 
         ]
@@ -269,6 +270,9 @@ function hasAccess(name) {
             return permissions.includes('maintenance-sheets')
 
         case 'new-maintenance-sheet':
+            return permissions.includes('maintenance-sheets')
+
+        case 'r-maintenances':
             return permissions.includes('maintenance-sheets')
 
         case 'work-sheet':

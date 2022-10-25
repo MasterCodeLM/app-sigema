@@ -44,6 +44,13 @@
             );
           "
         >
+          <div class="col-12 mt-5 xl:mt-0 text-center">
+            <img
+              src="images/NuevoLogoPestaña.png"
+              class="mb-9"
+              style="width: 120px; height: 80px"
+            />
+          </div>
           <div class="text-center mb-5">
             <!--            <img src="layout/images/avatar.png" alt="Image" height="50" class="mb-3">-->
             <div class="text-900 text-3xl font-medium mb-3">SIGEMA</div>
