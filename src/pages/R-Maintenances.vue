@@ -33,16 +33,34 @@
         </div>
         <div class="field">
           <label> Type: </label>
-          <Dropdown
-              id="state"
-              v-model="typeItem"
-              :disabled="isView"
-              :filter="false"
-              :options="dropdownReportType"
-              optionLabel="name"
-              optionValue="value"
-              placeholder="Select One"
-          ></Dropdown>
+          <div class="field-radiobutton">
+            <RadioButton
+                v-model="type"
+                inputId="order1"
+                name="General"
+                value="resumen"
+            />
+            <label for="city1">General</label>
+          </div>
+          <div class="field-radiobutton">
+            <RadioButton
+                v-model="type"
+                inputId="order1"
+                name="Detail"
+                value="detail"
+            />
+            <label for="city1">Detail</label>
+          </div>
+          <!--          <Dropdown-->
+          <!--              id="state"-->
+          <!--              v-model="typeItem"-->
+          <!--              :disabled="isView"-->
+          <!--              :filter="false"-->
+          <!--              :options="dropdownReportType"-->
+          <!--              optionLabel="name"-->
+          <!--              optionValue="value"-->
+          <!--              placeholder="Select One"-->
+          <!--          ></Dropdown>-->
           <!--v-model="employee.native_language"
           <small
                 class="p-invalid"
@@ -67,7 +85,7 @@
                 v-model="order"
                 inputId="order2"
                 name="Machine"
-                value="machine"
+                value="name"
             />
             <label for="city1">Machine</label>
           </div>
@@ -85,7 +103,7 @@
                 v-model="order"
                 inputId="order1"
                 name="N° of maintenances"
-                value="maintenances_number"
+                value="maintenance_count"
             />
             <label for="city1">N° of maintenances</label>
           </div>
@@ -104,16 +122,21 @@
       <div class="card p-fluid h-full">
         <h5>REPORT</h5>
         <div
+            v-if="urlPDF"
             class="col-12"
-            style="
-            border-top: 1px solid silver;
-            border-right: 1px solid silver;
-            border-bottom: 1px solid silver;
-            border-left: 1px solid silver;
-            height: 92%;
-            width: 100%;
-          "
-        ></div>
+        >
+          <PDFViewer
+              :source="this.urlPDF"
+              :controls="[
+                'download',
+                'print',
+                'rotate',
+                'zoom',
+                'switchPage',
+                ]"
+              style="height: 75vh; width: 100%"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -122,11 +145,13 @@
 <script>
 import moment from "moment";
 import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
+import PDFViewer from 'pdf-viewer-vue'
 
 export default {
   data() {
     return {
       order: null,
+      type: null,
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
@@ -178,7 +203,11 @@ export default {
       documentTypeItems: null,
       loadingEmployees: true,
       isView: false,
+      urlPDF: null
     };
+  },
+  components: {
+    PDFViewer,
   },
   maintenenaceSheetService: null,
   created() {
@@ -187,16 +216,17 @@ export default {
   methods: {
     generate() {
       let payload = {
-        start_date: '2022-10-20',
-        end_date: '2022-10-24',
-        type: 'resumen',
-        sort_by: 'serie_number',
+        start_date: moment(this.start_date).format('YYYY-MM-DD'),
+        end_date: moment(this.end_date).format('YYYY-MM-DD'),
+        type: this.type,
+        sort_by: this.order,
         order_by: 'desc',
-
       }
+      console.log(payload);
       this.maintenenaceSheetService.report(payload).then((data) => {
-        this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`
-        console.log(this.urlPDF)
+        if (data.path) {
+          this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`
+        }
       })
     }
   }

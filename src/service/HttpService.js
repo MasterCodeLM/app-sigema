@@ -77,7 +77,6 @@ export default class HttpService {
         }).then(res => res.json())
             .then(d => d);
     }
-
     async login(uri, payload) {
         return await httpService(`${apiHost}/${uri}`, {
             headers: {
