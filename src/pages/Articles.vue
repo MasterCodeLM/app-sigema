@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">INVENTORY</h3>
+          <h3 class="text-900 font-medium">{{ $t("pages") }}</h3>
         </div>
       </div>
     </div>

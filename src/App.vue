@@ -305,6 +305,7 @@ export default {
 
       {
         label: "Pages",
+        //label: '$t("pages")',
         icon: "pi pi-fw pi-search",
         items: [
           {
