@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -46,12 +46,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Article Types</h5>
+              <h5 class="m-0">{{ $t("article_type") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -59,7 +59,7 @@
 
           <Column
             field="name"
-            header="Name"
+            :header="$t('name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -96,16 +96,16 @@
           :style="{ width: '450px' }"
           :header="
             !resource.id
-              ? 'New Article Type'
+              ? $t('new_article_type')
               : !isView
-              ? 'Edit Article Type'
-              : 'Info Article Type'
+              ? $t('edit_article_type')
+              : $t('inf_article_type')
           "
           :modal="true"
           class="p-fluid"
         >
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name">{{ $t("name") }}</label>
             <InputText
               id="name"
               v-model.trim="resource.name"
@@ -114,20 +114,20 @@
               :disabled="isView"
               :class="{ 'p-invalid': submitted && !resource.name }"
             />
-            <small class="p-invalid" v-if="submitted && !resource.name"
-              >Name is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !resource.name">{{
+              $t("name_alert")
+            }}</small>
           </div>
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
               v-if="!isView"
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -138,7 +138,7 @@
         <Dialog
           v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -147,7 +147,7 @@
               style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >{{ $t("delete") }} <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -159,7 +159,7 @@
               @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
+              :label="$t('yes')"
               icon="pi pi-check"
               class="p-button-text"
               @click="deleteResource"

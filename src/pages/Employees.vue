@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -46,12 +46,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Employees</h5>
+              <h5 class="m-0">{{ $t("employees") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -59,7 +59,7 @@
 
           <Column
             field="name"
-            header="Name"
+            :header="$t('names')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -70,7 +70,7 @@
           </Column>
           <Column
             field="lastname"
-            header="Last Name"
+            :header="$t('last_names')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -82,7 +82,7 @@
 
           <Column
             field="document_type.name"
-            header="Document Type"
+            :header="$t('document_type')"
             :sortable="true"
             headerStyle="width:5%; min-width:3rem;"
           >
@@ -94,7 +94,7 @@
 
           <Column
             field="document_number"
-            header="Document Number"
+            :header="$t('document_number')"
             :sortable="true"
             headerStyle="width:8%; min-width:3rem;"
           >
@@ -118,7 +118,7 @@
 
           <Column
             field="position.name"
-            header="Title"
+            :header="$t('title')"
             :sortable="true"
             headerStyle="width:14%; min-width:9rem;"
           >
@@ -130,7 +130,7 @@
 
           <Column
             field="phone"
-            header="Telephone"
+            :header="$t('telephone')"
             :sortable="true"
             headerStyle="width:14%; min-width:8rem;"
           >
@@ -142,7 +142,7 @@
 
           <Column
             field="address"
-            header="Address"
+            :header="$t('address')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -212,23 +212,23 @@
           :style="{ width: '600px' }"
           :header="
             !employee.id
-              ? 'New Employee'
+              ? $t('new_employee')
               : !isView
-              ? 'Edit Employee'
-              : 'Info Employee'
+              ? $t('edit_employee')
+              : $t('inf_employee')
           "
           :modal="true"
           class="p-fluid"
         >
           <div class="formgrid grid">
             <div class="field col">
-              <label for="doccumentType">Document Type</label>
+              <label for="doccumentType">{{ $t("document_type") }}</label>
               <Dropdown
                 id="doccumentType"
                 v-model="employee.document_type"
                 :options="documentTypeItems"
                 optionLabel="name"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !employee.document_type }"
@@ -239,12 +239,12 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.document_type"
-                >Document Type is required.</small
+                >{{ $t("document_type_alert") }}</small
               >
             </div>
 
             <div class="field col">
-              <label for="document_number">Document Number</label>
+              <label for="document_number">{{ $t("document_number") }}</label>
               <InputText
                 id="document_number"
                 v-model.trim="employee.document_number"
@@ -262,7 +262,7 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.document_number"
-                >Document Number is required.</small
+                >{{ $t("document_number_alert_one") }}</small
               >
               <br />
               <small
@@ -272,14 +272,14 @@
                   employee.document_number &&
                   employee.document_number.length < 8
                 "
-                >The document number must be at least 8 characters.</small
+                >{{ $t("document_number_alert_two") }}</small
               >
             </div>
           </div>
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="name">Name</label>
+              <label for="name">{{ $t("names") }}</label>
               <InputText
                 id="name"
                 v-model.trim="employee.name"
@@ -289,13 +289,13 @@
                 :disabled="isView"
                 autocomplete="off"
               />
-              <small class="p-invalid" v-if="submitted && !employee.name"
-                >Name is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.name">{{
+                $t("names_alert")
+              }}</small>
             </div>
 
             <div class="field col">
-              <label for="lastname">Last Name</label>
+              <label for="lastname">{{ $t("last_names") }}</label>
               <InputText
                 id="name"
                 v-model.trim="employee.lastname"
@@ -305,9 +305,9 @@
                 :disabled="isView"
                 autocomplete="off"
               />
-              <small class="p-invalid" v-if="submitted && !employee.lastname"
-                >Last Name is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.lastname">{{
+                $t("last_names_alert")
+              }}</small>
             </div>
           </div>
 
@@ -326,28 +326,28 @@
             <!--            </div>-->
 
             <div class="field col">
-              <label for="position">Title</label>
+              <label for="position">{{ $t("title") }}</label>
               <Dropdown
                 id="position"
                 v-model="employee.position"
                 :options="positionItems"
                 optionLabel="name"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :disabled="isView"
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !employee.position }"
               >
               </Dropdown>
-              <small class="p-invalid" v-if="submitted && !employee.position"
-                >Title is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.position">{{
+                $t("title_alert")
+              }}</small>
             </div>
           </div>
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="phone">Telephone</label>
+              <label for="phone">{{ $t("telephone") }}</label>
               <InputText
                 id="phone"
                 v-model.trim="employee.phone"
@@ -362,18 +362,18 @@
                 autocomplete="off"
                 @keypress="isNumber($event)"
               />
-              <small class="p-invalid" v-if="submitted && !employee.phone"
-                >Telephone is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.phone">{{
+                $t("telephone_alert_one")
+              }}</small>
               <small
                 class="p-invalid"
                 v-if="submitted && employee.phone && employee.phone.length < 9"
-                >The Telephone must be at least 9 characters.</small
+                >{{ $t("telephone_alert_two") }}</small
               >
             </div>
 
             <div class="field col">
-              <label for="personal_email">Email</label>
+              <label for="personal_email">{{ $t("email") }}</label>
               <InputText
                 id="personal_email"
                 v-model.trim="employee.personal_email"
@@ -390,17 +390,17 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.personal_email"
-                >Email is required.</small
+                >{{ $t("email_alert_one") }}</small
               >
               <small
                 class="p-invalid"
                 v-if="submitted && employee.personal_email && !isEmail()"
-                >The email must be a valid email address.</small
+                >{{ $t("email_alert_two") }}</small
               >
             </div>
           </div>
           <div class="field">
-            <label for="address">Address</label>
+            <label for="address">{{ $t("address") }}</label>
             <InputText
               id="address"
               v-model.trim="employee.address"
@@ -409,14 +409,14 @@
               :disabled="isView"
               :class="{ 'p-invalid': submitted && !employee.address }"
             />
-            <small class="p-invalid" v-if="submitted && !employee.address"
-              >Address is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !employee.address">{{
+              $t("address_alert")
+            }}</small>
           </div>
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="state">Native Language</label>
+              <label for="state">{{ $t("native_lenguage") }}</label>
               <Dropdown
                 id="state"
                 v-model="employee.native_language"
@@ -424,17 +424,17 @@
                 :options="dropdownLenguageItems"
                 optionLabel="name"
                 optionValue="value"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :class="{ 'p-invalid': submitted && !employee.native_language }"
               ></Dropdown>
               <small
                 class="p-invalid"
                 v-if="submitted && !employee.native_language"
-                >Native language is required.</small
+                >{{ $t("native_lenguage_alert") }}</small
               >
             </div>
             <div class="field col">
-              <label for="state">Type Personal</label>
+              <label for="state">{{ $t("personal_type") }}</label>
               <Dropdown
                 id="state"
                 v-model="employee.type"
@@ -442,15 +442,15 @@
                 :options="dropdownTypePersonalItems"
                 optionLabel="name"
                 optionValue="value"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :class="{ 'p-invalid': submitted && !employee.type }"
               ></Dropdown>
-              <small class="p-invalid" v-if="submitted && !employee.type"
-                >Type personal is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.type">{{
+                $t("personal_type_alert")
+              }}</small>
             </div>
             <div class="field col">
-              <label for="state">Turn of Entry</label>
+              <label for="state">{{ $t("work_shift") }}</label>
               <Dropdown
                 id="state"
                 v-model="employee.turn"
@@ -458,25 +458,25 @@
                 :options="dropdownTurnEntryItems"
                 optionLabel="name"
                 optionValue="value"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :class="{ 'p-invalid': submitted && !employee.turn }"
               ></Dropdown>
-              <small class="p-invalid" v-if="submitted && !employee.turn"
-                >Turn of entry is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !employee.turn">{{
+                $t("work_shift_alert")
+              }}</small>
             </div>
           </div>
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
               v-if="!isView"
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -487,7 +487,7 @@
         <Dialog
           v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -496,7 +496,7 @@
               style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >{{ $t("delete") }} <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -508,7 +508,7 @@
               @click="deleteDialog = false"
             />
             <Button
-              label="Yes"
+              :label="$t('yes')"
               icon="pi pi-check"
               class="p-button-text"
               @click="deleteResource"

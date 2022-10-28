@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -46,12 +46,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Roles</h5>
+              <h5 class="m-0">{{ $t("roles") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -59,7 +59,7 @@
 
           <Column
             field="name"
-            header="Name"
+            :header="$t('name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -71,6 +71,11 @@
           <Column headerStyle="min-width:10rem;">
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
+                <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-info mr-2"
+                  @click="viewProduct(slotProps.data)"
+                />
                 <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-warning mr-2"
@@ -89,33 +94,40 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '450px' }"
-          header="Role details"
+          :header="
+            !role.id
+              ? $t('new_role')
+              : !isView
+              ? $t('edit_role')
+              : $t('inf_role')
+          "
           :modal="true"
           class="p-fluid"
         >
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name">{{ $t("name") }}</label>
             <InputText
               id="name"
               v-model.trim="role.name"
               required="true"
               autofocus
+              :disabled="isView"
               :class="{ 'p-invalid': submitted && !role.name }"
             />
-            <small class="p-invalid" v-if="submitted && !role.name"
-              >Name is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !role.name">{{
+              $t("name_alert")
+            }}</small>
           </div>
 
           <div class="card">
-            <h5>Select Permissions</h5>
+            <h5>{{ $t("select_permissions") }}</h5>
             <div class="grid">
               <div
                 class="col-12"
                 v-show="submitted && !role.permissions.length > 0"
               >
                 <InlineMessage severity="error"
-                  >you must select at least 1 permission
+                  >{{ $t("select_permissions_alert") }}
                 </InlineMessage>
               </div>
               <div class="col-12">
@@ -128,6 +140,7 @@
                     v-model="role.permissions"
                     name="permission"
                     :value="permission"
+                    :disabled="isView"
                   />
                   <label :for="permission.id">{{ permission.name }}</label>
                 </div>
@@ -137,13 +150,14 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
-              label="Save"
+              v-if="!isView"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -163,7 +177,7 @@
               style="font-size: 2rem"
             />
             <span v-if="product"
-              >Are you sure you want to delete <b>{{ role.name }}</b
+              >{{ $t("delete") }} <b>{{ role.name }}</b
               >?</span
             >
           </div>
@@ -175,7 +189,7 @@
               @click="deleteProductDialog = false"
             />
             <Button
-              label="Yes"
+              :label="$t('yes')"
               icon="pi pi-check"
               class="p-button-text"
               @click="deleteProduct"
@@ -255,6 +269,7 @@ export default {
       loadingRoles: true,
 
       selectedPermissions: [],
+      isView: false,
     };
   },
   //productService: null,
@@ -287,6 +302,7 @@ export default {
       return;
     },
     openNew() {
+      this.isView = false;
       this.defaultObjects();
       this.submitted = false;
       this.productDialog = true;
@@ -331,7 +347,13 @@ export default {
       return this.role.name && this.role.permissions.length > 0;
       //this.machine.serie_number && this.machine.name;
     },
+    viewProduct(role) {
+      this.isView = true;
+      this.role = { ...role };
+      this.productDialog = true;
+    },
     editProduct(role) {
+      this.isView = false;
       this.role = { ...role };
       this.productDialog = true;
     },

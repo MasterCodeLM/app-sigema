@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">{{ $t("pages") }}</h3>
+          <h3 class="text-900 font-medium">{{ $t("inventory") }}</h3>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -54,32 +54,32 @@
               "
             >
               <div class="field col-12 sm:col-6">
-                <h5 class="m-0">
-                  Filter by:
+                <h6 class="m-0">
+                  {{ $t("filter_by") }}
                   <Dropdown
                     id="state"
                     v-model="filter"
                     :options="articleTypeFilterItems"
                     optionLabel="name"
-                    placeholder="Select One"
+                    :placeholder="$t('select_one')"
                     :filter="false"
                     :loading="loadingArticleTypesFilter"
                     @change="filterByArticleType"
                   ></Dropdown>
-                </h5>
+                </h6>
               </div>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
           </template>
           <Column
             field="name"
-            header="Name"
+            :header="$t('name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -91,7 +91,7 @@
 
           <Column
             field="serie_number"
-            header="Serie Number"
+            :header="$t('serial_number')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -102,7 +102,7 @@
           </Column>
           <Column
             field="model"
-            header="Model"
+            :header="$t('model')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -113,7 +113,7 @@
           </Column>
           <Column
             field="brand"
-            header="Brand"
+            :header="$t('brand')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -122,7 +122,10 @@
               {{ slotProps.data.brand }}
             </template>
           </Column>
-          <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+          <Column
+            :header="$t('image')"
+            headerStyle="width:14%; min-width:10rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
@@ -140,7 +143,7 @@
           </Column>
           <Column
             field="quantity"
-            header="Quantity"
+            :header="$t('quantity')"
             :sortable="true"
             headerStyle="width:14%; min-width:8rem;"
           >
@@ -152,7 +155,7 @@
 
           <Column
             field="article_type.name"
-            header="Article Type"
+            :header="$t('article_type')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -190,10 +193,10 @@
           :style="{ width: '1000px' }"
           :header="
             !article.id
-              ? 'New Article'
+              ? $t('new_article')
               : !isView
-              ? 'Edit Article'
-              : 'Info Article'
+              ? $t('edit_article')
+              : $t('inf_article')
           "
           :modal="true"
           class="p-fluid"
@@ -203,7 +206,7 @@
               <div class="card mb-4">
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="serialNumber">Serie Number</label>
+                    <label for="serialNumber">{{ $t("serial_number") }}</label>
                     <InputText
                       id="serialNumber"
                       v-model.trim="article.serie_number"
@@ -217,12 +220,12 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !article.serie_number"
-                      >Serial Number is required.</small
+                      >{{ $t("serial_number_alert") }}</small
                     >
                   </div>
 
                   <div class="field col">
-                    <label for="name">Name</label>
+                    <label for="name">{{ $t("name") }}</label>
                     <InputText
                       id="name"
                       v-model.trim="article.name"
@@ -232,15 +235,17 @@
                       autocomplete="off"
                       :class="{ 'p-invalid': submitted && !article.name }"
                     />
-                    <small class="p-invalid" v-if="submitted && !article.name"
-                      >Name is required.</small
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !article.name"
+                      >{{ $t("name_alert") }}</small
                     >
                   </div>
                 </div>
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="brand">Brand</label>
+                    <label for="brand">{{ $t("brand") }}</label>
                     <InputText
                       id="brand"
                       v-model.trim="article.brand"
@@ -249,13 +254,15 @@
                       :disabled="isView"
                       :class="{ 'p-invalid': submitted && !article.brand }"
                     />
-                    <small class="p-invalid" v-if="submitted && !article.brand"
-                      >Brand is required.</small
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !article.brand"
+                      >{{ $t("brand_alert") }}</small
                     >
                   </div>
 
                   <div class="field col">
-                    <label for="model">Model</label>
+                    <label for="model">{{ $t("model") }}</label>
                     <InputText
                       id="model"
                       v-model.trim="article.model"
@@ -264,15 +271,17 @@
                       :disabled="isView"
                       :class="{ 'p-invalid': submitted && !article.model }"
                     />
-                    <small class="p-invalid" v-if="submitted && !article.model"
-                      >Model is required.</small
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !article.model"
+                      >{{ $t("model_alert") }}</small
                     >
                   </div>
                 </div>
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="quantity">Quantity</label>
+                    <label for="quantity">{{ $t("quantity") }}</label>
                     <InputNumber
                       id="quantity"
                       v-model="article.quantity"
@@ -285,18 +294,18 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !article.quantity"
-                      >Quantity is required.</small
+                      >{{ $t("quantity_alert") }}</small
                     >
                   </div>
 
                   <div class="field col">
-                    <label for="articleType">Article Type</label>
+                    <label for="articleType">{{ $t("article_type") }}</label>
                     <Dropdown
                       id="articleType"
                       v-model="article.article_type"
                       :options="articleTypeItems"
                       optionLabel="name"
-                      placeholder="Select One"
+                      :placeholder="$t('select_one')"
                       :disabled="isView"
                       :filter="true"
                       :loading="loadingArticleTypes"
@@ -307,7 +316,7 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !article.article_type"
-                      >Article Type is required.</small
+                      >{{ $t("article_type_alert") }}</small
                     >
                   </div>
                 </div>
@@ -315,13 +324,13 @@
               <div class="card m-0">
                 <div v-if="!isView" class="formgrid grid">
                   <div class="field col-7">
-                    <label for="supplierRef">Suppliers</label>
+                    <label for="supplierRef">{{ $t("supplier") }}</label>
                     <Dropdown
                       id="supplierRef"
                       v-model="supplierRefItem"
                       :options="supplierRefItems"
                       optionLabel="name"
-                      placeholder="Select One"
+                      :placeholder="$t('select_one')"
                       :filter="true"
                       :loading="loadingSuppliers"
                       :class="{
@@ -332,12 +341,12 @@
                     <small
                       class="p-invalid"
                       v-if="submittedAddSuppliersRef && !supplierRefItem"
-                      >Supplier Ref is required.</small
+                      >{{ $t("supplier_alert") }}</small
                     >
                   </div>
 
                   <div class="field col-3">
-                    <label for="price">Price</label>
+                    <label for="price">{{ $t("price") }}</label>
                     <InputNumber
                       id="price"
                       v-model="supplier_ref.price"
@@ -352,7 +361,7 @@
                     <small
                       class="p-invalid"
                       v-if="submittedAddSuppliersRef && !supplier_ref.price"
-                      >Price is required.</small
+                      >{{ $t("price_alert") }}</small
                     >
                   </div>
                   <div
@@ -413,7 +422,7 @@
             <div class="col-4">
               <div class="card w-full h-full m-0">
                 <div class="mb-4">
-                  <h5>Imagen</h5>
+                  <h5>{{ $t("image") }}</h5>
                   <div
                     class="
                       flex flex-column
@@ -451,13 +460,13 @@
                   </div>
                 </div>
                 <div class="">
-                  <h5>Technical Sheet</h5>
+                  <h5>{{ $t("technical_sheet") }}</h5>
                   <div
                     v-if="article.id && isView && article.technical_sheet"
                     class="w-full mb-2"
                   >
                     <Button
-                      label="View PDF"
+                      :label="$t('view_pdf')"
                       icon="pi pi-arrow-up-right"
                       class="p-button-info mr-2"
                       @click="viewPDF"
@@ -467,9 +476,9 @@
                     v-if="article.id && isView && !article.technical_sheet"
                     class="w-full mb-2"
                   >
-                    <Message severity="info" :closable="false"
-                      >Without PDF</Message
-                    >
+                    <Message severity="info" :closable="false">{{
+                      $t("without_pdf")
+                    }}</Message>
                   </div>
                   <div v-if="!isView" class="w-full">
                     <FileUpload
@@ -488,14 +497,14 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
               v-if="!isView"
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -506,7 +515,7 @@
         <Dialog
           v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -515,7 +524,7 @@
               style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >{{ $t("delete") }} <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -575,6 +584,7 @@ import { FilterMatchMode } from "primevue/api";
 import ArticlesService from "../service/ArticlesService";
 import ArticleTypesService from "../service/ArticleTypesService";
 import SupplierService from "../service/SupplierService";
+
 import ImageService from "@/service/ImageService";
 import FileService from "@/service/FileService";
 
@@ -637,6 +647,7 @@ export default {
       imageDefault: "https://via.placeholder.com/450x450",
     };
   },
+
   articlesService: null,
   articleTypeService: null,
   supplierRefService: null,
@@ -697,9 +708,11 @@ export default {
       this.resource = {};
       this.submitted = false;
       this.productDialog = true;
+      this.submittedAddSuppliersRef = false;
     },
     hideDialog() {
       this.defaultObjects();
+      this.submittedAddSuppliersRef = false;
       this.productDialog = false;
       this.submitted = false;
     },
@@ -975,6 +988,12 @@ export default {
         article_type: null,
         suppliers: [],
       };
+      this.supplier_ref = {
+        id: null,
+        name: null,
+        price: null,
+      };
+      this.supplierRefItem = null;
     },
   },
 };

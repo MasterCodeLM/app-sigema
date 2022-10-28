@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -47,12 +47,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Users</h5>
+              <h5 class="m-0">{{ $t("users") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -61,25 +61,33 @@
           <!--          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>-->
           <Column
             field="employee.name"
-            header="Name"
+            :header="$t('names')"
             :sortable="true"
             headerStyle="width:18%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
+              {{ slotProps.data.employee ? slotProps.data.employee.name : " " }}
+            </template>
+          </Column>
+
+          <Column
+            field="employee.lastname"
+            :header="$t('last_names')"
+            :sortable="true"
+            headerStyle="width:18%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Last Name</span>
               {{
-                slotProps.data.employee
-                  ? slotProps.data.employee.name +
-                    " " +
-                    slotProps.data.employee.lastname
-                  : " "
+                slotProps.data.employee ? slotProps.data.employee.lastname : " "
               }}
             </template>
           </Column>
 
           <Column
             field="email"
-            header="User"
+            :header="$t('user')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -90,7 +98,7 @@
           </Column>
           <Column
             field="role"
-            header="Role"
+            :header="$t('role')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -132,12 +140,12 @@
         <Dialog
           v-model:visible="productDialog"
           :style="{ width: '500px' }"
-          :header="!user.id ? 'New User' : 'Edit User'"
+          :header="!user.id ? $t('new_user') : $t('edit_user')"
           :modal="true"
           class="p-fluid"
         >
           <div class="field">
-            <label for="employee" class="mb-3">Employee</label>
+            <label for="employee" class="mb-3">{{ $t("employee") }}</label>
             <Dropdown
               id="employee"
               v-model="user.employee"
@@ -149,12 +157,12 @@
               :loading="loadingEmployee"
               :class="{ 'p-invalid': submitted && !user.employee }"
             ></Dropdown>
-            <small class="p-invalid" v-if="submitted && !user.employee"
-              >Employee is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !user.employee">{{
+              $t("employee_alert")
+            }}</small>
           </div>
           <div class="field">
-            <label for="role" class="mb-3">Role</label>
+            <label for="role" class="mb-3">{{ $t("role") }}</label>
             <Dropdown
               id="role"
               v-model="user.role"
@@ -165,13 +173,13 @@
               :loading="loadingRole"
               :class="{ 'p-invalid': submitted && !user.role }"
             ></Dropdown>
-            <small class="p-invalid" v-if="submitted && !user.role"
-              >Role is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !user.role">{{
+              $t("role_alert")
+            }}</small>
           </div>
           <div class="formgrid grid">
             <div class="field col-12">
-              <label for="user">User</label>
+              <label for="user">{{ $t("user") }}</label>
               <InputText
                 id="user"
                 v-model.trim="user.email"
@@ -199,13 +207,13 @@
           </div>
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
