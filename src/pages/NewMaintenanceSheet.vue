@@ -9,9 +9,9 @@
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">MAINTENANCE SHEET</h3>
+          <h3 class="text-900 font-medium">{{ $t("maintenance_sheet") }}</h3>
           <Button
-            label="Select Machine"
+            :label="$t('select_machine_btn')"
             class="p-button-secondary mr-2 mb-2"
             @click="openNewSelectMachine"
           />
@@ -22,7 +22,7 @@
       v-model:visible="machineDialog"
       :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
       :style="{ width: '45vw' }"
-      header="SELECT MACHINE"
+      :header="$t('select_machine')"
       :modal="true"
       class="p-fluid"
     >
@@ -46,23 +46,23 @@
               md:flex-row md:justify-content-between md:align-items-center
             "
           >
-            <h5 class="m-0">Machines</h5>
+            <h5 class="m-0">{{ $t("machines") }}</h5>
             <div class="align right">
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 /><!--"filters['global'].value"-->
               </span>
             </div>
           </div>
         </template>
         <Column
-          field="serie_number"
-          header="Serial Number"
+          field="serial_number"
+          :header="$t('serial_number')"
           :sortable="true"
-          headerStyle="width:14%; min-width:10rem;"
+          headerStyle="width:25%; min-width:10rem;"
         >
           <template #body="slotProps">
             <span class="p-column-title">Serial Number</span>
@@ -71,9 +71,9 @@
         </Column>
         <Column
           field="name"
-          header="Name"
+          :header="$t('name')"
           :sortable="true"
-          headerStyle="width:50%; min-width:10rem;"
+          headerStyle="width:30%; min-width:10rem;"
         >
           <template #body="slotProps">
             <span class="p-column-title">Name</span>
@@ -105,7 +105,7 @@
         <!--          </template>-->
         <!--        </Column>-->
 
-        <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+        <Column :header="$t('image')" headerStyle="width:14%; min-width:10rem;">
           <template #body="slotProps">
             <span class="p-column-title">Image</span>
             <img
@@ -123,7 +123,7 @@
         </Column>
         <Column
           field="inventoryStatus"
-          header="Status"
+          :header="$t('status')"
           :sortable="true"
           headerStyle="width:14%; min-width:10rem;"
         >
@@ -162,26 +162,26 @@
       <div class="card p-fluid">
         <div class="grid">
           <div class="col-6">
-            <h5>Machine Data</h5>
+            <h5>{{ $t("machine_data") }}</h5>
             <div class="grid">
               <div class="field col-12">
-                <b>> Serial Number: </b>
+                <b>> {{ $t("serial_number") }}: </b>
                 <i> {{ this.maintenanceSheet.machine.serie_number }}</i>
               </div>
               <div class="field col-12">
-                <b>> Machine: </b>
+                <b>> {{ $t("name") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.name }}</i>
               </div>
               <div class="field col-12">
-                <b>> Brand: </b>
+                <b>> {{ $t("brand") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.brand }}</i>
               </div>
               <div class="field col-12">
-                <b>> Model: </b>
+                <b>> {{ $t("model") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.model }}</i>
               </div>
               <div class="field col-12">
-                <b>> Last maintenance date: </b>
+                <b>> {{ $t("last_maintenance_date") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.date_last_maintenance }}</i>
               </div>
             </div>
@@ -211,12 +211,12 @@
               </div>
             </div>
           </div>
-          <h6>Description of Maintenance</h6>
+          <h6>{{ $t("description_of_maintenance") }}</h6>
           <div class="field col-12">
             <!--          <label for="name1">Description</label>-->
             <Textarea
               v-model="maintenanceSheet.description"
-              placeholder="Your Message"
+              :placeholder="$t('your_message')"
               :autoResize="true"
               rows="7"
               cols="67"
@@ -229,7 +229,7 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
-              >Description is required.</small
+              >{{ $t("descriptio_alert") }}</small
             >
           </div>
         </div>
@@ -237,10 +237,10 @@
     </div>
     <div class="col-12 md:col-6">
       <div class="card p-fluid">
-        <h5>Information</h5>
+        <h5>{{ $t("information") }}</h5>
         <div class="grid">
           <div class="field col-12">
-            <label for="name1">Responsible</label>
+            <label for="name1">{{ $t("responsible") }}</label>
             <InputText
               v-model="maintenanceSheet.responsible"
               id="name1"
@@ -254,18 +254,18 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.responsible"
-              >Responsible is required.</small
+              >{{ $t("responsible_alert") }}</small
             >
           </div>
 
           <div class="field col-12 sm:col-6">
-            <label for="state">Maintenance Type</label>
+            <label for="state">{{ $t("maintenance_type") }}</label>
             <Dropdown
               id="state"
               v-model="maintenanceSheet.maintenance_type"
               :options="maintenanceTypeItems"
               optionLabel="name"
-              placeholder="Select One"
+              :placeholder="$t('select_one')"
               :loading="maintenanceTypeItemsLoading"
               :disabled="this.maintenanceSheet.id"
               :class="{
@@ -279,11 +279,11 @@
               v-if="
                 submittedMaintenanceSheet && !maintenanceSheet.maintenance_type
               "
-              >Maintenance type is required.</small
+              >{{ $t("maintenance_type_alert") }}</small
             >
           </div>
           <div class="field col-12 sm:col-6">
-            <label for="name1">Date</label>
+            <label for="name1">{{ $t("date_maintenance") }}</label>
             <Calendar
               :showIcon="true"
               :showButtonBar="true"
@@ -300,12 +300,12 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.date"
-              >Date is required.</small
+              >{{ $t("date_maintenance_alert") }}</small
             >
           </div>
 
           <div class="field col-12 sm:col-6">
-            <label for="quantity">New hours of udefullife</label>
+            <label for="quantity">{{ $t("new_hours_of_useful_life") }}</label>
             <InputNumber
               id="quantity"
               v-model="maintenanceSheet.maximum_working_time"
@@ -325,12 +325,12 @@
                 submittedMaintenanceSheet &&
                 !maintenanceSheet.maximum_working_time
               "
-              >New hours is required.</small
+              >{{ $t("new_hours_of_useful_life_alert") }}</small
             >
             <!--v-model="article.quantity"-->
           </div>
           <div class="field col-12 sm:col-6">
-            <label for="name1">Ref invoice number</label>
+            <label for="name1">{{ $t("ref_invoice_number") }}</label>
             <InputText
               id="name1"
               type="text"
@@ -349,17 +349,17 @@
                 submittedMaintenanceSheet &&
                 !maintenanceSheet.ref_invoice_number
               "
-              >Invoice number is required.</small
+              >{{ $t("ref_invoice_number_alert") }}</small
             >
           </div>
           <div class="field col-12">
-            <label for="state">Supplier</label>
+            <label for="state">{{ $t("supplier") }}</label>
             <Dropdown
               id="state"
               v-model="maintenanceSheet.supplier"
               :options="supplierItems"
               optionLabel="name"
-              placeholder="Select One"
+              :placeholder="$t('select_one')"
               :filter="true"
               :loading="supplierItemsLoading"
               :disabled="this.maintenanceSheet.id"
@@ -371,11 +371,11 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.supplier"
-              >Supplier is required.</small
+              >{{ $t("supplier_alert") }}</small
             >
           </div>
           <div class="field col-12">
-            <label for="name1">Technical</label>
+            <label for="name1">{{ $t("technical") }}</label>
             <InputText
               v-model="maintenanceSheet.technical"
               id="name1"
@@ -389,7 +389,7 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.technical"
-              >Technical is required.</small
+              >{{ $t("technical_alert") }}</small
             >
           </div>
         </div>
@@ -398,7 +398,7 @@
 
     <div class="col-12">
       <div class="card">
-        <h5>Details</h5>
+        <h5>{{ $t("details") }}</h5>
         <div class="p-fluid formgrid grid">
           <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
             <div
@@ -406,12 +406,12 @@
               class="flex flex-column sm:flex-row"
             >
               <Button
-                label="Add Article"
+                :label="$t('add_articles')"
                 class="p-button-secondary mr-2 mb-2"
                 @click="openNewAddSparePart"
               />
               <Button
-                label="Add Service"
+                :label="$t('add_servicio')"
                 class="p-button-secondary mr-2 mb-2"
                 @click="openNewAddService"
               />
@@ -443,8 +443,11 @@
               class="editable-cells-table"
               responsiveLayout="scroll"
             >
-              <Column field="article.serie_number" header="Serie"></Column>
-              <Column field="name" header="Name">
+              <Column
+                field="article.serie_number"
+                :header="$t('serial_number')"
+              ></Column>
+              <Column field="name" :header="$t('name')">
                 <template #body="slotProps">
                   {{
                     slotProps.data.name
@@ -453,7 +456,7 @@
                   }}
                 </template>
               </Column>
-              <Column field="price" header="Price">
+              <Column field="price" :header="$t('price')">
                 <template #editor="{ data, field }">
                   <InputNumber
                     v-model="data[field]"
@@ -468,7 +471,7 @@
                   S/ {{ slotProps.data.price.toFixed(2) }}
                 </template>
               </Column>
-              <Column field="quantity" header="Quantity">
+              <Column field="quantity" :header="$t('quantity')">
                 <template #editor="{ data, field }">
                   <InputNumber
                     v-model="data[field]"
@@ -480,7 +483,7 @@
                   />
                 </template>
               </Column>
-              <Column field="import" header="Import">
+              <Column field="import" :header="$t('import')">
                 <template #body="slotProps">
                   S/
                   {{
@@ -510,7 +513,7 @@
     <div class="col-12">
       <div v-if="!this.maintenanceSheet.id" class="flex justify-content-center">
         <Button
-          label="Submit"
+          :label="$t('save')"
           class="mr-2 mb-2"
           @click="saveMaintenenaceSheet()"
         ></Button>
@@ -521,14 +524,14 @@
     v-model:visible="addSparePartDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
     :style="{ width: '90vw' }"
-    header="Add Sapare Parts"
+    :header="$t('add_articles')"
     :modal="true"
     class="p-fluid"
   >
     <div class="grid">
       <div class="col-12 md:col-6">
         <div class="card p-fluid">
-          <h5>Search spare part in inventory</h5>
+          <h5>{{ $t("sub_title_one") }}</h5>
           <div class="grid">
             <div class="field col-12">
               <DataTable
@@ -555,13 +558,13 @@
                   >
                     <div class="field col-12 sm:col-6">
                       <h5 class="m-0">
-                        Filter by:
+                        {{ $t("filter_by") }}
                         <Dropdown
                           id="state"
                           v-model="filter"
                           :options="articleTypeFilterItems"
                           optionLabel="name"
-                          placeholder="Select One"
+                          :placeholder="$t('select_one')"
                           :filter="false"
                           :loading="loadingArticleTypesFilter"
                           @change="filterByArticleType"
@@ -572,14 +575,14 @@
                       <i class="pi pi-search" />
                       <InputText
                         v-model="filters['global'].value"
-                        placeholder="Search..."
+                        :placeholder="$t('search')"
                       />
                     </span>
                   </div>
                 </template>
                 <Column
                   field="name"
-                  header="Serail Number"
+                  :header="$t('serial_number')"
                   :sortable="true"
                   headerStyle="width:14%; min-width:10rem;"
                 >
@@ -590,7 +593,7 @@
                 </Column>
                 <Column
                   field="name"
-                  header="Name"
+                  :header="$t('name')"
                   :sortable="true"
                   headerStyle="width:14%; min-width:8rem;"
                 >
@@ -601,7 +604,7 @@
                 </Column>
 
                 <Column
-                  header="Image"
+                  :header="$t('image')"
                   headerStyle="width:14%; min-width:10rem;"
                 >
                   <template #body="slotProps">
@@ -621,7 +624,7 @@
                 </Column>
                 <Column
                   field="quantity"
-                  header="Quantity"
+                  :header="$t('quantity')"
                   :sortable="true"
                   headerStyle="width:14%; min-width:5rem;"
                 >
@@ -648,10 +651,10 @@
       </div>
       <div class="col-12 md:col-6">
         <div class="card p-fluid">
-          <h5>Add Spare part inventory / Add Spare part Buy</h5>
+          <h5>{{ $t("sub_title_two") }}</h5>
           <div class="grid">
             <div class="field col-12 sm:col-5">
-              <label for="name1">Serail number</label>
+              <label for="name1">{{ $t("serial_number") }}</label>
               <InputText
                 v-model="article.serie_number"
                 id="name1"
@@ -663,11 +666,11 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.serie_number"
-                >Serial number is required.</small
+                >{{ $t("serial_number_alert") }}</small
               >
             </div>
             <div class="field col-12 sm:col-4">
-              <label for="name1">Nombre</label>
+              <label for="name1">{{ $t("name") }}</label>
               <InputText
                 v-model="article.name"
                 id="name1"
@@ -679,11 +682,11 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.name"
-                >Name is required.</small
+                >{{ $t("name_alert") }}</small
               >
             </div>
             <div class="field col-12 sm:col-3">
-              <label for="name1">Brand</label>
+              <label for="name1">{{ $t("brand") }}</label>
               <InputText
                 v-model="article.brand"
                 id="name1"
@@ -695,12 +698,12 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.brand"
-                >Brand is required.</small
+                >{{ $t("brand_alert") }}</small
               >
             </div>
 
             <div class="field col-12 sm:col-5">
-              <label for="name1">Model</label>
+              <label for="name1">{{ $t("model") }}</label>
               <InputText
                 v-model="article.model"
                 id="name1"
@@ -712,11 +715,11 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.model"
-                >Model is required.</small
+                >{{ $t("model_Alert") }}</small
               >
             </div>
             <div class="field col-12 sm:col-3">
-              <label for="quantity">Quantity</label>
+              <label for="quantity">{{ $t("quantity") }}</label>
               <InputNumber
                 id="quantity"
                 v-model="article.quantity"
@@ -731,12 +734,12 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.quantity"
-                >Quantity is required.</small
+                >{{ $t("quantity_alert") }}</small
               >
               <!--v-model="article.quantity"-->
             </div>
             <div class="field col-12 sm:col-3">
-              <label for="quantity">Price</label>
+              <label for="quantity">{{ $t("price") }}</label>
               <InputNumber
                 id="price"
                 v-model="article.price"
@@ -752,7 +755,7 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.price >= 0"
-                >Price is required.</small
+                >{{ $t("price_alert") }}</small
               >
             </div>
             <!--v-model="supplier_ref.price"-->
@@ -767,15 +770,18 @@
             <div class="field col-12 sm:col-12">
               <div class="card">
                 <DataTable :value="listArticles" responsiveLayout="scroll">
-                  <Column field="serie_number" header="Serie"></Column>
-                  <Column field="name" header="Name"></Column>
-                  <Column field="price" header="Price">
+                  <Column
+                    field="serie_number"
+                    :header="$t('serial_number')"
+                  ></Column>
+                  <Column field="name" :header="$t('name')"></Column>
+                  <Column field="price" :header="$t('price')">
                     <template #body="slotProps">
                       S/ {{ slotProps.data.price.toFixed(2) }}
                     </template>
                   </Column>
-                  <Column field="quantity" header="Quantity"></Column>
-                  <Column field="import" header="Import">
+                  <Column field="quantity" :header="$t('quantity')"></Column>
+                  <Column field="import" :header="$t('import')">
                     <template #body="slotProps">
                       S/
                       {{
@@ -804,7 +810,7 @@
       </div>
       <div class="flex justify-content-end">
         <Button
-          label="Add"
+          :label="$t('add')"
           icon="pi pi-download"
           class="p-button-success mr-2"
           @click="addArticleInDetail()"
@@ -817,16 +823,16 @@
     v-model:visible="addServiceDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
     :style="{ width: '50vw' }"
-    header="Add Service"
+    :header="$t('add_service')"
     :modal="true"
     class="p-fluid"
   >
     <div class="col-12 md:col-12">
       <div class="card p-fluid">
-        <h5>Add Cost Of Service</h5>
+        <h5>{{ $t("add_cost_of_servicio") }}</h5>
         <div class="grid">
           <div class="field col-12 sm:col-8">
-            <label for="name1">Description</label>
+            <label for="name1">{{ $t("description") }}</label>
             <InputText
               v-model="service.description"
               id="name1"
@@ -838,11 +844,11 @@
             <small
               class="p-invalid"
               v-if="submittedAddService && !service.description"
-              >Descriptión is required.</small
+              >{{ $t("description_alert") }}</small
             >
           </div>
           <div class="field col-12 sm:col-3">
-            <label for="quantity">Price</label>
+            <label for="quantity">{{ $t("price") }}</label>
             <InputNumber
               v-model="service.price"
               id="price"
@@ -857,7 +863,7 @@
             <small
               class="p-invalid"
               v-if="submittedAddService && !service.price"
-              >Price is required.</small
+              >{{ $t("price_alert") }}</small
             >
           </div>
           <!--v-model="supplier_ref.price"-->
@@ -875,10 +881,10 @@
                 <!--                :value="article.suppliers"-->
                 <Column
                   field="description"
-                  header="Description"
+                  :header="$t('description')"
                   style="width: 70%"
                 ></Column>
-                <Column field="price" header="Price">
+                <Column field="price" :header="$t('price')">
                   <template #body="slotProps">
                     S/ {{ slotProps.data.price.toFixed(2) }}
                   </template>
@@ -904,7 +910,7 @@
     <div class="field col-12 sm:col-3">
       <div class="flex justify-content-end">
         <Button
-          label="Add"
+          :label="$t('add')"
           icon="pi pi-download"
           class="p-button-success mr-2"
           @click="addServiceInDetail()"

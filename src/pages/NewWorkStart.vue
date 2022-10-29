@@ -9,9 +9,9 @@
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">OPERATION CONTROL</h3>
+          <h3 class="text-900 font-medium">{{ $t("operation_control") }}</h3>
           <Button
-            label="Select Machine"
+            :label="$t('select_machine_btn')"
             class="p-button-secondary mr-2 mb-2"
             @click="openNew"
             :disabled="!workSheet.is_open || workSheet.id"
@@ -23,30 +23,30 @@
       <div class="card p-fluid h-full">
         <div class="grid">
           <div class="col-6">
-            <h5>Information</h5>
+            <h5>{{ $t("machine_data") }}</h5>
             <div class="grid">
               <div class="field col-12">
-                <b>> Serial Number: </b>
+                <b>> {{ $t("serial_number") }}: </b>
                 <i> {{ this.workSheet.machine.serie_number }}</i>
               </div>
               <div class="field col-12">
-                <b>> Machine: </b>
+                <b>> {{ $t("name") }}: </b>
                 <i>{{ this.workSheet.machine.name }}</i>
               </div>
               <div class="field col-12">
-                <b>> Status: </b>
+                <b>> {{ $t("status") }}: </b>
                 <i>{{ this.workSheet.machine.status }}</i>
               </div>
               <div class="field col-12">
-                <b>> Last use: </b>
+                <b>> {{ $t("last_use") }}: </b>
                 <i>{{ this.workSheet.machine.date_last_use }}</i>
               </div>
               <div class="field col-12">
-                <b>> Last maintenance date: </b>
+                <b>> {{ $t("last_maintenance_date") }}: </b>
                 <i>{{ this.workSheet.machine.date_last_maintenance }}</i>
               </div>
               <div class="field col-12">
-                <b>> Total accumulated: </b>
+                <b>> {{ $t("total_acumulate") }}: </b>
                 <i>
                   {{ this.workSheet.machine.total_time_used.hours }} hrs
                   {{ this.workSheet.machine.total_time_used.minutes }} min
@@ -89,13 +89,13 @@
     </div>
     <div class="col-12 md:col-6">
       <div class="card p-fluid h-full">
-        <h5>Pre-check description</h5>
+        <h5>{{ $t("precheck_description") }}</h5>
         <div class="field">
           <!--          <label for="name1">Description</label>-->
           <Textarea
             id="description"
             v-model.trim="workSheet.description"
-            placeholder="Your Message"
+            :placeholder="$t('your_message_precheck')"
             :autoResize="true"
             rows="10"
             cols="30"
@@ -107,7 +107,7 @@
 
     <div class="col-12">
       <div class="card p-fluid">
-        <h5 style="text-align: center">OPERATION</h5>
+        <h5 style="text-align: center">{{ $t("operation") }}</h5>
 
         <div class="grid">
           <div class="col-12 grid">
@@ -115,7 +115,7 @@
               <Button
                 icon="pi pi-play"
                 @click="startWork()"
-                label="START"
+                :label="$t('start')"
                 class="p-button-success mr-2"
               />
             </div>
@@ -126,7 +126,7 @@
               <Button
                 icon="pi pi-pause"
                 @click="pauseWork()"
-                label="PAUSE"
+                :label="$t('pause')"
                 class="p-button-warning mr-2"
               />
             </div>
@@ -138,7 +138,7 @@
               <Button
                 icon="pi pi-reply"
                 @click="restartWork()"
-                label="RESTART"
+                :label="$t('restart')"
                 class="p-button-success"
               />
             </div>
@@ -146,7 +146,7 @@
               <Button
                 icon="pi pi-stop"
                 @click="stopWork()"
-                label="STOP"
+                :label="$t('stop')"
                 class="p-button-danger"
                 :disabled="!workSheet.id"
               />
@@ -170,7 +170,7 @@
                     md:flex-row md:justify-content-between md:align-items-center
                   "
                 >
-                  <h5 class="m-0">Times</h5>
+                  <h5 class="m-0">{{ $t("times") }}</h5>
                   <span class="block mt-2 md:mt-0 p-input-icon-left"> </span>
                 </div>
               </template>
@@ -179,7 +179,7 @@
 
               <Column
                 field="date_time_start"
-                header="Data time start"
+                :header="$t('date_time_start')"
                 headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
@@ -189,7 +189,7 @@
 
               <Column
                 field="date_time_end"
-                header="Data time end"
+                :header="$t('date_time_end')"
                 headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
@@ -199,7 +199,7 @@
 
               <Column
                 field="date_time_diff"
-                header="Cumulative hours"
+                :header="$t('cumulative_hours')"
                 headerStyle="width:45%; min-width:10rem;"
               >
                 <template #body="slotProps">
@@ -223,7 +223,7 @@
     v-model:visible="productDialog"
     :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
     :style="{ width: '45vw' }"
-    header="SELECT MACHINE"
+    :header="$t('select_machine')"
     :modal="true"
     class="p-fluid"
   >
@@ -247,13 +247,13 @@
             md:flex-row md:justify-content-between md:align-items-center
           "
         >
-          <h5 class="m-0">Machines</h5>
+          <h5 class="m-0">{{ $t("machines") }}</h5>
           <div class="align right">
             <span class="block mt-2 md:mt-0 p-input-icon-left">
               <i class="pi pi-search" />
               <InputText
                 v-model="filters['global'].value"
-                placeholder="Search..."
+                :placeholder="$t('search')"
               />
             </span>
           </div>
@@ -261,9 +261,9 @@
       </template>
       <Column
         field="serie_number"
-        header="Serial Number"
+        :header="$t('serial_number')"
         :sortable="true"
-        headerStyle="width:14%; min-width:10rem;"
+        headerStyle="width:25%; min-width:10rem;"
       >
         <template #body="slotProps">
           <span class="p-column-title">Serial Number</span>
@@ -272,9 +272,9 @@
       </Column>
       <Column
         field="name"
-        header="Name"
+        :header="$t('name')"
         :sortable="true"
-        headerStyle="width:50%; min-width:10rem;"
+        headerStyle="width30%; min-width:10rem;"
       >
         <template #body="slotProps">
           <span class="p-column-title">Name</span>
@@ -306,7 +306,7 @@
       <!--          </template>-->
       <!--        </Column>-->
 
-      <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+      <Column :header="$t('image')" headerStyle="width:14%; min-width:10rem;">
         <template #body="slotProps">
           <span class="p-column-title">Image</span>
           <img
@@ -324,7 +324,7 @@
       </Column>
       <Column
         field="inventoryStatus"
-        header="Status"
+        :header="$t('status')"
         :sortable="true"
         headerStyle="width:14%; min-width:10rem;"
       >

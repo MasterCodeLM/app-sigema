@@ -16,7 +16,7 @@
     ></Button>
 
     <div class="layout-config-content">
-      <h5 class="mt-0">Component Scale</h5>
+      <h5 class="mt-0">{{ $t("component_scale") }}</h5>
       <div class="config-scale">
         <Button
           icon="pi pi-minus"
@@ -68,7 +68,7 @@
         @update:modelValue="changeRipple"
       />-->
 
-      <h5>Menu Type</h5>
+      <h5>{{ $t("menu_type") }}</h5>
       <div class="p-formgroup-inline">
         <div class="field-radiobutton">
           <RadioButton
@@ -78,7 +78,7 @@
             v-model="d_layoutMode"
             @change="changeLayout($event, 'static')"
           />
-          <label for="static">Static</label>
+          <label for="static">{{ $t("static") }}</label>
         </div>
         <div class="field-radiobutton">
           <RadioButton
@@ -88,11 +88,11 @@
             v-model="d_layoutMode"
             @change="changeLayout($event, 'overlay')"
           />
-          <label for="overlay">Overlay</label>
+          <label for="overlay">{{ $t("overlay") }}</label>
         </div>
       </div>
 
-      <h5>Themes</h5>
+      <h5>{{ $t("themes") }}</h5>
       <!--
 			<h6 class="mt-0">Bootstrap</h6>
 			<div class="grid free-themes">
@@ -229,7 +229,7 @@
 			</div>
 			-->
 
-      <h6>PrimeOne Design - 2021</h6>
+      <!--<h6>PrimeOne Design - 2021</h6>-->
       <div class="grid free-themes">
         <!--
 				<div class="col-3 text-center">

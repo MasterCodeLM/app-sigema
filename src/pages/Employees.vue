@@ -132,7 +132,7 @@
             field="phone"
             :header="$t('telephone')"
             :sortable="true"
-            headerStyle="width:14%; min-width:8rem;"
+            headerStyle="width:10%; min-width:6rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Telephone</span>
