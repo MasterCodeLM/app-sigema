@@ -8,7 +8,7 @@
       />
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">ASSIST CONTROL</h3>
+          <h3 class="text-900 font-medium">{{ $t("assist_control") }}</h3>
         </div>
       </div>
     </div>
@@ -19,14 +19,14 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="Check in"
+                :label="$t('check_in')"
                 class="p-button-success mr-2 mb-2"
                 @click="checkIn"
                 :disabled="disabledButtonCheckIn"
               />
 
               <Button
-                label="Check out"
+                :label="$t('check_out')"
                 class="p-button-danger mr-2 mb-2"
                 @click="checkOut"
                 :disabled="disabledButtonCheckOut"
@@ -36,7 +36,7 @@
 
           <template v-slot:end>
             <Button
-              label="Close Record"
+              :label="$t('close_record')"
               class="mr-2 mb-2"
               @click="closeSheet"
               :disabled="disabledButtonClose"
@@ -64,12 +64,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">List</h5>
+              <h5 class="m-0">{{ $t("list") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -79,21 +79,33 @@
 
           <Column
             field="name"
-            header="Name"
+            :header="$t('names')"
             :sortable="true"
-            headerStyle="width:60%; min-width:10rem;"
+            headerStyle="width:21%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
-              {{ slotProps.data.lastname + " " + slotProps.data.name }}
+              {{ slotProps.data.name }}
+            </template>
+          </Column>
+
+          <Column
+            field="lastname"
+            :header="$t('last_names')"
+            :sortable="true"
+            headerStyle="width:21%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Last Name</span>
+              {{ slotProps.data.lastname }}
             </template>
           </Column>
 
           <Column
             field="check_in"
-            header="Check in time"
+            :header="$t('check_in_time')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:20%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Check in time</span>
@@ -102,9 +114,9 @@
           </Column>
           <Column
             field="check_out"
-            header="Check out time"
+            :header="$t('check_out_time')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:20%; min-width:1rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Check out time</span>

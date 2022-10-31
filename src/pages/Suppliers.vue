@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -46,20 +46,20 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Suppliers</h5>
+              <h5 class="m-0">{{ $t("suppliers") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
           </template>
 
           <Column
-            field=""
-            header="Document Type"
+            field="document_type.name"
+            :header="$t('document_type')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -70,7 +70,7 @@
           </Column>
           <Column
             field="document_number"
-            header="Document Number"
+            :header="$t('document_number')"
             :sortable="true"
             headerStyle="width:10%; min-width:10rem;"
           >
@@ -82,7 +82,7 @@
 
           <Column
             field="name"
-            header="Name"
+            :header="$t('business_name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -92,8 +92,8 @@
             </template>
           </Column>
           <Column
-            field=""
-            header="Email"
+            field="email"
+            :header="$t('email')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -103,8 +103,8 @@
             </template>
           </Column>
           <Column
-            field=""
-            header="Telephone"
+            field="phone"
+            :header="$t('telephone')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -114,8 +114,8 @@
             </template>
           </Column>
           <Column
-            field=""
-            header="Address"
+            field="address"
+            :header="$t('address')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -152,10 +152,10 @@
           :style="{ width: '700px' }"
           :header="
             !supplier.id
-              ? 'New Supplier'
+              ? $t('new_supplier')
               : !isView
-              ? 'Edit Supplier'
-              : 'Info Supplier'
+              ? $t('edit_supplier')
+              : $t('inf_supplier')
           "
           :modal="true"
           class="p-fluid"
@@ -164,13 +164,13 @@
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="documentType">Document Type</label>
+              <label for="documentType">{{ $t("document_type") }}</label>
               <Dropdown
                 id="documentType"
                 v-model="supplier.document_type"
                 :options="documentTypeItems"
                 optionLabel="name"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !supplier.document_type }"
@@ -180,11 +180,11 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !supplier.document_type"
-                >Document Type is required.</small
+                >{{ $t("document_type_alert") }}</small
               >
             </div>
             <div class="field col">
-              <label for="ruc">Document Number</label>
+              <label for="ruc">{{ $t("document_number") }}</label>
               <InputText
                 id="ruc"
                 v-model.trim="supplier.document_number"
@@ -202,7 +202,7 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !supplier.document_number"
-                >Document Number is required.</small
+                >{{ $t("document_number_alert_one") }}</small
               >
               <br />
               <small
@@ -212,12 +212,12 @@
                   supplier.document_number &&
                   supplier.document_number.length < 8
                 "
-                >The document number must be at least 8 characters.</small
+                >{{ $t("document_number_alert_two") }}</small
               >
             </div>
           </div>
           <div class="field">
-            <label for="businessName">Business Name</label>
+            <label for="businessName">{{ $t("business_name") }}</label>
             <InputText
               id="businessName"
               v-model.trim="supplier.name"
@@ -227,16 +227,16 @@
               :disabled="isView"
               autocomplete="off"
             />
-            <small class="p-invalid" v-if="submitted && !supplier.name"
-              >Business Name is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !supplier.name">{{
+              $t("business_name_alert")
+            }}</small>
           </div>
 
           <!-- </div> -->
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="telephone">Telephone</label>
+              <label for="telephone">{{ $t("telephone") }}</label>
               <InputText
                 id="telephone"
                 v-model.trim="supplier.phone"
@@ -251,19 +251,19 @@
                 autocomplete="off"
                 @keypress="isNumber($event)"
               />
-              <small class="p-invalid" v-if="submitted && !supplier.phone"
-                >Telephone is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !supplier.phone">{{
+                $t("telephone_alert_one")
+              }}</small>
               <br />
               <small
                 class="p-invalid"
                 v-if="submitted && supplier.phone && supplier.phone.length < 9"
-                >The Telephone must be at least 9 characters.</small
+                >{{ $t("telephone_alert_two") }}</small
               >
             </div>
 
             <div class="field col">
-              <label for="email">Email</label>
+              <label for="email">{{ $t("email") }}</label>
               <InputText
                 id="email"
                 v-model.trim="supplier.email"
@@ -276,20 +276,20 @@
                 :disabled="isView"
                 autocomplete="off"
               />
-              <small class="p-invalid" v-if="submitted && !supplier.email"
-                >Email is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !supplier.email">{{
+                $t("email_alert_one")
+              }}</small>
               <small
                 class="p-invalid"
                 v-if="submitted && supplier.email && !isEmail()"
-                >The email must be a valid email address.</small
+                >{{ $t("email_alert_two") }}</small
               >
             </div>
           </div>
 
           <div class="formgrid grid">
             <div class="field col-8">
-              <label for="address">Address</label>
+              <label for="address">{{ $t("address") }}</label>
               <InputText
                 id="address"
                 v-model.trim="supplier.address"
@@ -299,18 +299,18 @@
                 :disabled="isView"
                 autocomplete="off"
               />
-              <small class="p-invalid" v-if="submitted && !supplier.address"
-                >Address is required.</small
-              >
+              <small class="p-invalid" v-if="submitted && !supplier.address">{{
+                $t("address_alert")
+              }}</small>
             </div>
             <div class="field col-4">
-              <label for="supplierType">Supplier Type</label>
+              <label for="supplierType">{{ $t("supplier_type") }}</label>
               <Dropdown
                 id="supplierType"
                 v-model="supplier.supplier_type"
                 :options="supplierTypeItems"
                 optionLabel="name"
-                placeholder="Select One"
+                :placeholder="$t('select_one')"
                 :filter="false"
                 :loading="false"
                 :class="{ 'p-invalid': submitted && !supplier.supplier_type }"
@@ -320,7 +320,7 @@
               <small
                 class="p-invalid"
                 v-if="submitted && !supplier.supplier_type"
-                >Supplier Type is required.</small
+                >{{ $t("supplier_type_alert") }}</small
               >
             </div>
           </div>
@@ -328,25 +328,25 @@
           <div class="card">
             <div v-if="!isView" class="formgrid grid">
               <div class="field col-4">
-                <label for="bankingEntity">Banking Entity</label>
+                <label for="bankingEntity">{{ $t("banking_entity") }}</label>
                 <Dropdown
                   id="bankingEntity"
                   v-model="bankItem"
                   :options="bankItems"
                   optionLabel="name"
-                  placeholder="Select One"
+                  :placeholder="$t('select_one')"
                   :filter="false"
                   :loading="false"
                   :class="{ 'p-invalid': submittedAddBank && !bankItem }"
                   autocomplete="off"
                 ></Dropdown>
-                <small class="p-invalid" v-if="submittedAddBank && !bankItem"
-                  >Banking Entity is required.</small
-                >
+                <small class="p-invalid" v-if="submittedAddBank && !bankItem">{{
+                  $t("banking_entity_alert")
+                }}</small>
               </div>
 
               <div class="field col-3">
-                <label for="accountNumber">Account Number</label>
+                <label for="accountNumber">{{ $t("account_number") }}</label>
                 <InputText
                   id="accountNumber"
                   v-model.trim="bank.account_number"
@@ -361,12 +361,12 @@
                 <small
                   class="p-invalid"
                   v-if="submittedAddBank && !bank.account_number"
-                  >Account Number is required.</small
+                  >{{ $t("account_number_alert") }}</small
                 >
               </div>
 
               <div class="field col-4">
-                <label for="interbankCode">Interbank Code</label>
+                <label for="interbankCode">{{ $t("interbank_code") }}</label>
                 <InputText
                   id="interbankCode"
                   v-model.trim="bank.interbank_account_number"
@@ -382,7 +382,7 @@
                 <small
                   class="p-invalid"
                   v-if="submittedAddBank && !bank.interbank_account_number"
-                  >Interbank Code is required.</small
+                  >{{ $t("interbank_code_alert") }}</small
                 >
               </div>
 
@@ -432,14 +432,14 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
               v-if="!isView"
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -450,7 +450,7 @@
         <Dialog
           v-model:visible="deleteSupplierDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -459,7 +459,7 @@
               style="font-size: 2rem"
             />
             <span v-if="supplier"
-              >Are you sure you want to delete <b>{{ supplier.name }}</b
+              >{{ $t("delete") }} <b>{{ supplier.name }}</b
               >?</span
             >
           </div>
@@ -471,7 +471,7 @@
               @click="deleteSupplierDialog = false"
             />
             <Button
-              label="Yes"
+              :label="$t('yes')"
               icon="pi pi-check"
               class="p-button-text"
               @click="deleteSupplier"

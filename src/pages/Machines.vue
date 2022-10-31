@@ -7,7 +7,7 @@
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
+                :label="$t('new')"
                 icon="pi pi-plus"
                 class="p-button-success mr-2"
                 @click="openNew"
@@ -46,12 +46,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">Machines</h5>
+              <h5 class="m-0">{{ $t("machines") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -59,9 +59,9 @@
 
           <Column
             field="serie_number"
-            header="Serial Number"
+            :header="$t('serial_number')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:12rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Serial Number</span>
@@ -70,7 +70,7 @@
           </Column>
           <Column
             field="name"
-            header="Name"
+            :header="$t('name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -81,7 +81,7 @@
           </Column>
           <Column
             field="brand"
-            header="Brand"
+            :header="$t('brand')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -93,7 +93,7 @@
 
           <Column
             field="model"
-            header="Model"
+            :header="$t('model')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -103,7 +103,10 @@
             </template>
           </Column>
 
-          <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+          <Column
+            :header="$t('image')"
+            headerStyle="width:14%; min-width:10rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
@@ -122,9 +125,9 @@
 
           <Column
             field="maximum_working_time_per_day"
-            header="Daily Working Hours"
+            :header="$t('daily_working_hours')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Daily Working Hours</span>
@@ -134,9 +137,9 @@
 
           <Column
             field="maximum_working_time"
-            header="Useful Life Hours"
+            :header="$t('useful_life_hours')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Useful Life Hours</span>
@@ -145,7 +148,7 @@
           </Column>
           <Column
             field="status"
-            header="Status"
+            :header="$t('status')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -183,10 +186,10 @@
           :style="{ width: '900px' }"
           :header="
             !machine.id
-              ? 'New Machine'
+              ? $t('new_machine')
               : !isView
-              ? 'Edit Machine'
-              : 'Info Machine'
+              ? $t('edit_machine')
+              : $t('inf_machine')
           "
           :modal="true"
           class="p-fluid"
@@ -195,7 +198,7 @@
             <div class="col-8">
               <div class="card mb-4">
                 <div class="field">
-                  <label for="serie_number">Serial Number</label>
+                  <label for="serie_number">{{ $t("serial_number") }}</label>
                   <InputText
                     id="serie_number"
                     v-model.trim="machine.serie_number"
@@ -208,12 +211,12 @@
                   <small
                     class="p-invalid"
                     v-if="submitted && !machine.serie_number"
-                    >Serial Number is required.</small
+                    >{{ $t("serial_number_alert") }}</small
                   >
                 </div>
 
                 <div class="field">
-                  <label for="name">Name</label>
+                  <label for="name">{{ $t("name") }}</label>
                   <InputText
                     id="name"
                     v-model.trim="machine.name"
@@ -223,14 +226,14 @@
                     :disabled="isView"
                     autocomplete="off"
                   />
-                  <small class="p-invalid" v-if="submitted && !machine.name"
-                    >Name is required.</small
-                  >
+                  <small class="p-invalid" v-if="submitted && !machine.name">{{
+                    $t("name_alert")
+                  }}</small>
                 </div>
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="brand">Brand</label>
+                    <label for="brand">{{ $t("brand") }}</label>
                     <InputText
                       id="barnd"
                       v-model.trim="machine.brand"
@@ -240,12 +243,14 @@
                       :disabled="isView"
                       autocomplete="off"
                     />
-                    <small class="p-invalid" v-if="submitted && !machine.name"
-                      >Brand is required.</small
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !machine.name"
+                      >{{ $t("brand_alert") }}</small
                     >
                   </div>
                   <div class="field col">
-                    <label for="model">Model</label>
+                    <label for="model">{{ $t("model") }}</label>
                     <InputText
                       id="model"
                       v-model.trim="machine.model"
@@ -255,17 +260,19 @@
                       :disabled="isView"
                       autocomplete="off"
                     />
-                    <small class="p-invalid" v-if="submitted && !machine.name"
-                      >Model is required.</small
+                    <small
+                      class="p-invalid"
+                      v-if="submitted && !machine.name"
+                      >{{ $t("model_alert") }}</small
                     >
                   </div>
                 </div>
 
                 <div class="formgrid grid">
                   <div class="field col">
-                    <label for="maximum_working_time_per_day"
-                      >Daily Working Hours</label
-                    >
+                    <label for="maximum_working_time_per_day">{{
+                      $t("daily_working_hours")
+                    }}</label>
                     <!-- <InputNumber id="age" v-model="product.quantity" integeronly />-->
                     <InputNumber
                       id="maximum_working_time_per_day"
@@ -284,12 +291,14 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !machine.maximum_working_time_per_day"
-                      >Daily working hours is required.</small
+                      >{{ $t("daily_working_hours_alert") }}</small
                     >
                   </div>
 
                   <div class="field col">
-                    <label for="maximum_working_time">Useful Life Hours</label>
+                    <label for="maximum_working_time">{{
+                      $t("useful_life_hours")
+                    }}</label>
                     <InputNumber
                       id="maximum_working_time"
                       v-model="machine.maximum_working_time"
@@ -305,7 +314,7 @@
                     <small
                       class="p-invalid"
                       v-if="submitted && !machine.maximum_working_time"
-                      >Useful life hours is required.</small
+                      >{{ $t("useful_life_hours_alert") }}</small
                     >
                   </div>
                 </div>
@@ -313,7 +322,7 @@
               <div class="card m-0">
                 <div v-if="!isView" class="formgrid grid">
                   <div class="field col">
-                    <label for="sparePart">Spare Parts</label>
+                    <label for="sparePart">{{ $t("spare_part") }}</label>
                     <Dropdown
                       id="sparePart"
                       v-model="sparePartItem"
@@ -330,7 +339,7 @@
                     <small
                       class="p-invalid"
                       v-if="submittedAddSparePart && !sparePartItem"
-                      >Spare Part is required.</small
+                      >{{ $t("spare_part_alert") }}</small
                     >
                   </div>
 
@@ -385,7 +394,7 @@
               <!-- <div class="col-12"> -->
               <div class="card w-full h-full m-0">
                 <div class="mb-4">
-                  <h5>Imagen</h5>
+                  <h5>{{ $t("image") }}</h5>
                   <div
                     class="
                       flex flex-column
@@ -421,13 +430,13 @@
                   </div>
                 </div>
                 <div>
-                  <h5>Technical Sheet</h5>
+                  <h5>{{ $t("technical_sheet") }}</h5>
                   <div
                     v-if="machine.id && isView && machine.technical_sheet"
                     class="w-full mb-2"
                   >
                     <Button
-                      label="View PDF"
+                      :label="$t('view_pdf')"
                       icon="pi pi-arrow-up-right"
                       class="p-button-info mr-2"
                       @click="viewPDF"
@@ -437,9 +446,9 @@
                     v-if="machine.id && isView && !machine.technical_sheet"
                     class="w-full mb-2"
                   >
-                    <Message severity="info" :closable="false"
-                      >Without PDF</Message
-                    >
+                    <Message severity="info" :closable="false">{{
+                      $t("without_pdf")
+                    }}</Message>
                   </div>
                   <div v-if="!isView" class="w-full">
                     <FileUpload
@@ -459,14 +468,14 @@
 
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
               v-if="!isView"
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
               @click="saveProduct"
@@ -477,7 +486,7 @@
         <Dialog
           v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -486,7 +495,7 @@
               style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete <b>{{ resource.name }}</b
+              >{{ $t("delete") }} <b>{{ resource.name }}</b
               >?</span
             >
           </div>
@@ -498,7 +507,7 @@
               @click="deletetDialog = false"
             />
             <Button
-              label="Yes"
+              :label="$t('yes')"
               icon="pi pi-check"
               class="p-button-text"
               @click="deleteResource"
@@ -589,7 +598,7 @@ export default {
       submittedAddSparePart: false,
 
       columns: [
-        { field: "model", header: "Serial Number" },
+        { field: "serie_number", header: "Serial Number" },
         { field: "name", header: "Nombre" },
       ],
 
@@ -662,11 +671,13 @@ export default {
       //this.product = {};
       this.submitted = false;
       this.productDialog = true;
+      this.submittedAddSparePart = false;
     },
     hideDialog() {
       this.defaultObjects();
       this.productDialog = false;
       this.submitted = false;
+      this.submittedAddSparePart = false;
     },
     async saveProduct() {
       this.submitted = true;

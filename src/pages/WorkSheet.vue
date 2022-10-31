@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">WORKS SHEETS</h3>
+          <h3 class="text-900 font-medium">{{ $t("work_sheets") }}</h3>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
           <template v-slot:start>
             <div class="field grid">
               <div style="vertical-align: inherit" class="px-2">
-                <label>From the </label>
+                <label>{{ $t("from_the") }} </label>
                 <Calendar
                   :showIcon="true"
                   :showButtonBar="false"
@@ -25,7 +25,7 @@
               </div>
 
               <div style="vertical-align: inherit" class="px-2">
-                <label> Until the </label>
+                <label> {{ $t("until_the") }}</label>
                 <Calendar
                   :showIcon="true"
                   :showButtonBar="false"
@@ -39,7 +39,7 @@
 
           <template v-slot:end>
             <Button
-              label="New Work"
+              :label="$t('new_work')"
               icon="pi pi-cog"
               class="p-button-success mr-2"
               @click="nextPage"
@@ -68,12 +68,12 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">LIST WORK SHEETS</h5>
+              <h5 class="m-0">{{ $t("list_work_sheets") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
@@ -81,7 +81,7 @@
 
           <Column
             field="code"
-            header="Code"
+            :header="$t('code')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -93,7 +93,7 @@
 
           <Column
             field="date"
-            header="Date"
+            :header="$t('date')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -105,7 +105,7 @@
 
           <Column
             field="machine.serie_number"
-            header="Serial Number"
+            :header="$t('serial_number')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -121,7 +121,7 @@
 
           <Column
             field="machine.name"
-            header="Name"
+            :header="$t('name')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -131,7 +131,10 @@
             </template>
           </Column>
 
-          <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+          <Column
+            :header="$t('image')"
+            headerStyle="width:14%; min-width:10rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
@@ -150,12 +153,12 @@
 
           <Column
             field="is_open"
-            header="Estado"
+            :header="$t('status')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Estado</span>
+              <span class="p-column-title">Status</span>
               {{ slotProps.data.is_open ? "Open" : "Closed" }}
             </template>
           </Column>

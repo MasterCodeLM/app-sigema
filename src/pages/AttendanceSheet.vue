@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">ATTENDANCES</h3>
+          <h3 class="text-900 font-medium">{{ $t("attendances") }}</h3>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
           <template v-slot:start>
             <div class="fiel grid">
               <div style="vertical-align: inherit" class="px-2">
-                <label>From the</label>
+                <label>{{ $t("from_the") }}</label>
 
                 <Calendar
                   :showIcon="true"
@@ -25,7 +25,7 @@
                 ></Calendar>
               </div>
               <div style="vertical-align: inherit" class="px-2">
-                <label>Until the</label>
+                <label>{{ $t("until_the") }}</label>
                 <Calendar
                   :showIcon="true"
                   :showButtonBar="false"
@@ -39,7 +39,7 @@
 
           <template v-slot:end>
             <Button
-              label="New Attendance Control"
+              :label="$t('new_attendance_comtrol')"
               icon="pi pi-plus"
               class="p-button-success mr-2"
               @click="openNew"
@@ -68,19 +68,19 @@
                 md:flex-row md:justify-content-between md:align-items-center
               "
             >
-              <h5 class="m-0">LIST ATTENDACE SHEETS</h5>
+              <h5 class="m-0">{{ $t("list_attendance_sheets") }}</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  :placeholder="$t('search')"
                 />
               </span>
             </div>
           </template>
           <Column
             field="date"
-            header="Date"
+            :header="$t('date')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -91,7 +91,7 @@
           </Column>
           <Column
             field="responsible"
-            header="Responsible"
+            :header="$t('responsible')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -102,12 +102,12 @@
           </Column>
           <Column
             field="is_open"
-            header="Estado"
+            :header="$t('status')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Estado</span>
+              <span class="p-column-title">Status</span>
               {{ slotProps.data.is_open ? "Open" : "Closed" }}
             </template>
           </Column>
@@ -135,8 +135,8 @@
         <Dialog v-model:visible="productDialog" :style="{ width: '1300px' }">
           <div class="content-section introduction">
             <div class="feature-intro">
-              <h6>PickList New Attendance</h6>
-              <h7>Add the employees who will work the next shift to open</h7>
+              <h6>{{ $t("pick_list_new_attendance") }}</h6>
+              <h7>{{ $t("description_pick_list_new_attendance") }}</h7>
             </div>
             <AppDemoActions />
           </div>
@@ -151,7 +151,7 @@
                 :showTargetControls="false"
               >
                 <template #sourceheader>
-                  Available
+                  {{ $t("available") }}
                   <div
                     class="
                       flex flex-column
@@ -162,7 +162,7 @@
                   >
                     <div class="field grid col-8">
                       <div style="vertical-align: inherit" class="px-2">
-                        <label>Type</label>
+                        <label>{{ $t("type") }}</label>
 
                         <Dropdown
                           id="state"
@@ -177,7 +177,7 @@
                       </div>
 
                       <div style="vertical-align: inherit" class="px-2">
-                        <label>Turn</label>
+                        <label>{{ $t("turn") }}</label>
 
                         <Dropdown
                           id="state"
@@ -198,13 +198,13 @@
                         <InputText
                           style="width: 150px"
                           v-model="searchEmployee"
-                          placeholder="Search"
+                          :placeholder="$t('search')"
                         />
                       </span>
                     </div>
                   </div>
                 </template>
-                <template #targetheader> Selected</template>
+                <template #targetheader> {{ $t("selected") }}</template>
                 <template #item="slotProps">
                   <div class="product-item">
                     <div class="product-list-detail">
@@ -241,7 +241,7 @@
             </div>
             <div class="flex justify-content-end">
               <Button
-                label="Next"
+                :label="$t('create')"
                 icon="pi pi-list"
                 class="p-button-success mr-2"
                 @click="confirmCreateAttendanceSheet"
@@ -252,7 +252,7 @@
         <Dialog
           v-model:visible="confirmCreateAttendacneSheetDialog"
           :style="{ width: '450px' }"
-          header="Check the selected workers"
+          :header="$t('create_alert_title')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -260,10 +260,15 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="attendanceSheet"
-              >Are you sure to create the New Attendance Control?</span
-            >
+            <span v-if="attendanceSheet">{{
+              $t("create_alert_question")
+            }}</span>
           </div>
+          <br />
+          <small
+            ><b>{{ $t("create_alert_note") }}</b>
+            {{ $t("create_alert_note_complete") }}</small
+          >
           <template #footer>
             <Button
               label="No"

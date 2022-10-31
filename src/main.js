@@ -39,6 +39,7 @@ import Divider from 'primevue/divider';
 import Dropdown from 'primevue/dropdown';
 import Fieldset from 'primevue/fieldset';
 import FileUpload from 'primevue/fileupload';
+import i18n from './locales/i18n';
 import Image from 'primevue/image';
 import InlineMessage from 'primevue/inlinemessage';
 import Inplace from 'primevue/inplace';
@@ -110,6 +111,7 @@ app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(router);
+app.use(i18n);
 
 app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);
