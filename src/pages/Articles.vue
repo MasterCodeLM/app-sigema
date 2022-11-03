@@ -391,7 +391,7 @@
                       :field="col.field"
                       :header="col.header"
                       :key="col.field"
-                      style="width: 25%"
+                      style="width: 90%"
                     >
                       <template #editor="{ data, field }">
                         <InputNumber
@@ -630,8 +630,8 @@ export default {
       ],
       submittedAddSuppliersRef: false,
       columns: [
-        { field: "name", header: "Supplier" },
-        { field: "price", header: "Price" },
+        { field: "name", header: this.$t("supplier") },
+        { field: "price", header: this.$t("price") },
       ],
       articleTypeItem: null,
       supplierRefItem: null,
@@ -752,8 +752,8 @@ export default {
             this.articlesAll[this.findIndexById(data.data.id)] = data.data;
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("article") + " " + this.$t("updated"),
               life: 3000,
             });
           });
@@ -790,8 +790,8 @@ export default {
             this.articlesAll.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("article") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -829,7 +829,7 @@ export default {
     },
     deleteResource() {
       this.deleteDialog = false;
-      this.articlesService.delete(this.resource.id).then((data) => {
+      this.articlesService.delete(this.resource.id).then(() => {
         this.articles = this.articles.filter(
           (val) => val.id !== this.resource.id
         );
@@ -841,8 +841,8 @@ export default {
         this.resource = {};
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("article") + " " + this.$t("deleted"),
           life: 3000,
         });
       });
@@ -905,7 +905,7 @@ export default {
         } else {
           this.$toast.add({
             severity: "error",
-            summary: "Ooops!",
+            summary: this.$t("oops"),
             detail: "supplier already exists in the list.",
             life: 3000,
           });

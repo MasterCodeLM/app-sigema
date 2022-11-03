@@ -97,7 +97,7 @@
             </template>
           </Column>
           <Column
-            field="role"
+            field="roles"
             :header="$t('role')"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
@@ -384,8 +384,8 @@ export default {
 
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("user") + " " + this.$t("updated"),
               life: 3000,
             });
           });
@@ -400,8 +400,8 @@ export default {
             this.users.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("user") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -501,12 +501,21 @@ export default {
     },
     toggleLocked(data) {
       this.userService.delete(data.id).then((data) => {
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: data.message,
-          life: 3000,
-        });
+        if (data.message == "User Locked.") {
+          this.$toast.add({
+            severity: "success",
+            summary: this.$t("successful"),
+            detail: this.$t("toast_user_locked"),
+            life: 3000,
+          });
+        } else {
+          this.$toast.add({
+            severity: "success",
+            summary: this.$t("successful"),
+            detail: this.$t("toast_user_unlocked"),
+            life: 3000,
+          });
+        }
       });
     },
     defaultObjects() {

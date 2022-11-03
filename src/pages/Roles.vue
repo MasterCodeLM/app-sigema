@@ -321,8 +321,8 @@ export default {
             this.roles[this.findIndexById(data.data.id)] = data.data;
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("role") + " " + this.$t("updated"),
               life: 3000,
             });
           });
@@ -333,8 +333,8 @@ export default {
             this.roles.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("role") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -363,13 +363,13 @@ export default {
     },
     deleteProduct() {
       this.deleteProductDialog = false;
-      this.roleService.delete(this.role.id).then((data) => {
+      this.roleService.delete(this.role.id).then(() => {
         this.roles = this.roles.filter((val) => val.id !== this.role.id);
         this.defaultObjects();
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("role") + " " + this.$t("deleted"),
           life: 3000,
         });
       });

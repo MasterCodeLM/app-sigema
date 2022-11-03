@@ -1,4 +1,5 @@
 {
+    "sign_off":"Sign off",
     "component_scale":"Component Scale",
     "menu_type":"Menu Type",
     "static":"Static",
@@ -8,15 +9,22 @@
     "to":"to",
     "of":"of",
 	"inventory":"INVENTORY",
+    "inventory_min":"Inventory",
 	"filter_by":"Filter by",
     "new":"New",
+    "register":"register",
     "created":"created",
     "deleted":"deleted",
     "updated":"updated",
+    "created_a":"created",
+    "deleted_a":"deleted",
+    "updated_a":"updated",
 	"save":"Save",
     "cancel":"Cancel",
 	"confirm":"Confirm",
 	"yes":"Yes",
+    "home":"Home",
+    "pages":"Pages",
 	"new_machine":"New Machine",
     "edit_machine":"Edit Machine",
     "inf_machine":"Info Machine",
@@ -41,6 +49,7 @@
 	"select_one":"Select One",
 	"delete":"Are you sure you want to delete ",
 
+    "article":"Article",
     "serial_number":"Serial Number",
 	"status":"Status",
 	"serial_number_alert":"Serial Number is required.",
@@ -88,6 +97,7 @@
     "interbank_code_alert":"CCI is required.",
 
 	"employees":"Employees",
+    "employees_form":"Employees from",
 	"names":"Names",
     "names_alert":"At least one name is required.",
     "last_names":"Last names",
@@ -117,6 +127,7 @@
 	"without_pdf":"Without PDF",
 	"view_pdf":"View Technical Sheet",
 
+    "user_management":"User Management",
 	"users":"Users",
     "user":"User",
     "employee":"Employee",
@@ -127,6 +138,7 @@
     "select_permissions":"Select Permissions",
     "select_permissions_alert":"you must select at least 1 permission",
 
+    "attendance_control":"Attendance Control",
     "attendances":"ATTENDANCES CONTROL SHEETS",
     "from_the":"From the ",
     "until_the":"Until the ",
@@ -154,6 +166,8 @@
     "check_in_time":"Check in time",
     "check_out_time":"Checl out time",
 
+    "operations":"Operations",
+    "maintenance":"Maintenance",
     "maintenance_sheets":"MAINTENANCE SHEETS",
     "list_maintenance_sheets":"LIST OF MAINTENANCE SHEETS",
     "new_maintenance":" New Maintenance",
@@ -178,7 +192,7 @@
     "new_hours_of_useful_life_alert":"New hours is required",
     "ref_invoice_number":"N° Reference invoice",
     "ref_invoice_number_alert":"N° Reference invoice is required",
-    "technical":"Technical",
+    "technical":"Technician who performed the maintenance",
     "technical_alert":"Technical is required",
     "details":"Details",
     "import":"Import",
@@ -192,6 +206,7 @@
     "add_cost_of_servicio":"Add Cost of Service",
     "description":"Description",
 
+    "worked":"Worked",
     "work_sheets":"WORK SHEETS",
     "new_work":"New Work",
     "list_work_sheets":"LIST WPRK SHEETS",
@@ -208,6 +223,34 @@
     "date_time_start":"Date time start",
     "date_time_end":"Date time end",
     "cumulative_hours":"Acumulative hours",
-    "total_acumulate":"Total acumulated"
+    "total_acumulate":"Total acumulated",
+
+    "reports":"Reports",
+    "maintenances":"Maintenances",
+
+    "successful":"Successful",
+    "warning":"Warning",
+    "oops":"Oops",
+    "toast_spare_parts_machine":"spare part already exists in the list.",
+    "toast_supplier_ref_machine":"supplier already exists in the list.",
+    "toast_banking_entity":"bank already exists in the list.",
+    "toast_user_locked":"User Locked.",
+    "toast_user_unlocked":"User Unlocked.",
+    "toast_attendance_list":"list of selected employees empty.",
+    "toast_attendance_list_error":"no puede crear más de dos registros por día.",
+    "toast_attendance":"You must select at least one employee.",
+    "toast_new_maintenance":"make sure you have selected a machine and add at least one detail.",
+    "toast_new_maintenance_stock":"the quantity is greater than the available stock.",
+    "toast_new_work_start":"make sure you have Selected a Machine and have the Precheck field.",
+    
+    "maintenances_report":"MAINTENANCES REPORT",
+    "options":"OPCTIONS",
+    "general":"General",
+    "detailed":"Detailed",
+    "order_by":"Order by",
+    "amount":"Amount",
+    "number_maintenances":"N° of maintenances",
+    "generate_report":"Generate report",
+    "report":"REPORT"
 
 }

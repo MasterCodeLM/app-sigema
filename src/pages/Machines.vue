@@ -370,7 +370,7 @@
                       :field="col.field"
                       :header="col.header"
                       :key="col.field"
-                      style="width: 25%"
+                      style="width: 70%"
                     >
                     </Column>
 
@@ -504,7 +504,7 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deletetDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               :label="$t('yes')"
@@ -598,8 +598,8 @@ export default {
       submittedAddSparePart: false,
 
       columns: [
-        { field: "serie_number", header: "Serial Number" },
-        { field: "name", header: "Nombre" },
+        { field: "serie_number", header: this.$t("serial_number") },
+        { field: "name", header: this.$t("name") },
       ],
 
       sparePartItem: null,
@@ -719,8 +719,8 @@ export default {
             //console.log(this.findIndexById(this.article.id));
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("machine") + " " + this.$t("updated_a"),
               life: 3000,
             });
           });
@@ -755,8 +755,8 @@ export default {
             this.machines.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("machine") + " " + this.$t("created_a"),
               life: 3000,
             });
           });
@@ -790,15 +790,15 @@ export default {
     },
     deleteResource() {
       this.deleteDialog = false;
-      this.machinesService.delete(this.resource.id).then((data) => {
+      this.machinesService.delete(this.resource.id).then(() => {
         this.machines = this.machines.filter(
           (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("machine") + " " + this.$t("deleted_a"),
           life: 3000,
         });
       });
@@ -863,8 +863,8 @@ export default {
         } else {
           this.$toast.add({
             severity: "error",
-            summary: "Ooops!",
-            detail: "spare part already exists in the list.",
+            summary: this.$t("oops"),
+            detail: this.$t("toast_spare_parts_machine"),
             life: 3000,
           });
         }

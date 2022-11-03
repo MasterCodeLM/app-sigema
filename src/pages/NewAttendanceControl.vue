@@ -330,8 +330,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Warning",
-          detail: "You must select at least one employee ",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_attendance"),
           life: 3000,
         });
       }

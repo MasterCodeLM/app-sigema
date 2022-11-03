@@ -477,7 +477,7 @@ export default {
             this.$toast.add({
               severity: "error",
               summary: "Error",
-              detail: data.message,
+              detail: this.$t("toast_attendance_list_error"),
               life: 3000,
             });
           }
@@ -485,8 +485,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Ooops!",
-          detail: "list of selected employees empty",
+          summary: this.$t("oops"),
+          detail: this.$t("toast_attendance_list"),
           life: 3000,
         });
       }
