@@ -541,9 +541,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Warning",
-          detail:
-            "make sure you have Selected a Machine and have the Precheck field",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_new_work_start"),
           life: 3000,
         });
       }

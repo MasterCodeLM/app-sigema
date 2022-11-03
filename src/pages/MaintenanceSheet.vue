@@ -197,7 +197,7 @@
         <Dialog
           v-model:visible="deleteDialog"
           :style="{ width: '450px' }"
-          header="Confirm"
+          :header="$t('confirm')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -206,8 +206,7 @@
               style="font-size: 2rem"
             />
             <span v-if="resource"
-              >Are you sure you want to delete
-              <b>{{ maintenanaceSheet.code }}</b
+              >{{ $t("delete") }} <b>{{ maintenanaceSheet.code }}</b
               >?</span
             >
           </div>
@@ -216,7 +215,7 @@
               label="No"
               icon="pi pi-times"
               class="p-button-text"
-              @click="deletetDialog = false"
+              @click="deleteDialog = false"
             />
             <Button
               label="Yes"

@@ -94,7 +94,8 @@ export default {
   data() {
     return {
       items: [
-        {
+        /*{
+          
           label: "Profile",
           icon: "pi pi-refresh",
           command: () => {
@@ -105,9 +106,9 @@ export default {
               life: 3000,
             });
           },
-        },
+        },*/
         {
-          label: "Logout",
+          label: this.$t("sign_off"),
           icon: "pi pi-refresh",
           command: () => {
             this.logout();

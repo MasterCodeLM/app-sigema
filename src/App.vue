@@ -229,10 +229,10 @@ export default {
   mounted() {
     this.menu = [
       {
-        label: "Home",
+        label: this.$t("home"),
         items: [
           {
-            label: "Dashboard",
+            label: "Home",
             icon: "pi pi-fw pi-home",
             to: "/",
           },
@@ -304,32 +304,32 @@ export default {
           },*/
 
       {
-        label: "Pages",
+        label: this.$t("pages"),
         //label: '$t("pages")',
         icon: "pi pi-fw pi-search",
         items: [
           {
-            label: "Machines",
+            label: this.$t("machines"),
             icon: "pi pi-th-large",
             to: "/machines",
             visible: this.permissions.includes("machines"),
           },
 
           {
-            label: "Employees",
+            label: this.$t("employees"),
             icon: "pi pi-users",
             visible:
               this.permissions.includes("employees") ||
               this.permissions.includes("attendance-sheets"),
             items: [
               {
-                label: "Employess Form",
+                label: this.$t("employees_form"),
                 icon: "pi pi-fw pi-user-edit",
                 to: "/employees",
                 visible: this.permissions.includes("employees"),
               },
               {
-                label: "Attendance Control",
+                label: this.$t("attendance_control"),
                 icon: "pi pi-fw pi-list",
                 to: "/attendance-sheet",
                 visible: this.permissions.includes("attendance-sheets"),
@@ -337,20 +337,20 @@ export default {
             ],
           },
           {
-            label: "Operations",
+            label: this.$t("operations"),
             icon: "pi pi-slack",
             visible:
               this.permissions.includes("maintenance-sheets") ||
               this.permissions.includes("working-sheets"),
             items: [
               {
-                label: "Maintenance",
+                label: this.$t("maintenance"),
                 icon: "pi pi-sliders-h",
                 to: "/maintenance-sheet",
                 visible: this.permissions.includes("maintenance-sheets"),
               },
               {
-                label: "Worked",
+                label: this.$t("worked"),
                 icon: "pi pi-cog",
                 to: "/work-sheet",
                 visible: this.permissions.includes("working-sheets"),
@@ -358,38 +358,38 @@ export default {
             ],
           },
           {
-            label: "Inventory",
+            label: this.$t("inventory_min"),
             icon: "pi pi-wallet",
             to: "/articles",
             visible: this.permissions.includes("articles"),
           },
           {
-            label: "Article Types",
+            label: this.$t("article_type"),
             icon: "pi pi-bars",
             to: "/article-types",
             visible: this.permissions.includes("article-types"),
           },
           {
-            label: "Suppliers",
+            label: this.$t("suppliers"),
             icon: "pi pi-briefcase",
             to: "/suppliers",
             visible: this.permissions.includes("suppliers"),
           },
           {
-            label: "User Management",
+            label: this.$t("user_management"),
             icon: "pi pi-fw pi-desktop",
             visible:
               this.permissions.includes("roles") ||
               this.permissions.includes("users"),
             items: [
               {
-                label: "Roles",
+                label: this.$t("roles"),
                 icon: "pi pi-check-square",
                 to: "/roles",
                 visible: this.permissions.includes("roles"),
               },
               {
-                label: "Users",
+                label: this.$t("users"),
                 icon: "pi pi-user",
                 to: "/users",
                 visible: this.permissions.includes("users"),
@@ -397,11 +397,11 @@ export default {
             ],
           },
           {
-            label: "Reports",
+            label: this.$t("reports"),
             icon: "pi pi-folder-open",
             items: [
               {
-                label: "Maintenances",
+                label: this.$t("maintenances"),
                 icon: "pi pi-fw pi-file",
                 to: "/r-maintenances",
                 visible: this.permissions.includes("maintenance-sheets"),

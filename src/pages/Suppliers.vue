@@ -411,7 +411,7 @@
                   :field="col.field"
                   :header="col.header"
                   :key="col.field"
-                  style="width: 25%"
+                  style="width: 30%"
                 >
                 </Column>
 
@@ -549,9 +549,12 @@ export default {
       submitted: false,
       submittedAddBank: false,
       columns: [
-        { field: "name", header: "Bank Entity" },
-        { field: "account_number", header: "Account Number" },
-        { field: "interbank_account_number", header: "Interbank Code" },
+        { field: "name", header: this.$t("name") },
+        { field: "account_number", header: this.$t("account_number") },
+        {
+          field: "interbank_account_number",
+          header: this.$t("interbank_code"),
+        },
       ],
 
       bankItem: null,
@@ -613,8 +616,8 @@ export default {
             this.suppliers[this.findIndexById(id)] = data.data;
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("supplier") + " " + this.$t("updated"),
               life: 3000,
             });
           });
@@ -626,8 +629,8 @@ export default {
             this.suppliers.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("supplier") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -656,15 +659,15 @@ export default {
     },
     deleteSupplier() {
       this.deleteSupplierDialog = false;
-      this.supplierService.delete(this.supplier.id).then((data) => {
+      this.supplierService.delete(this.supplier.id).then(() => {
         this.suppliers = this.suppliers.filter(
           (val) => val.id !== this.supplier.id
         );
         this.defaultObjects();
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("supplier") + " " + this.$t("deleted"),
           life: 3000,
         });
       });
@@ -718,8 +721,8 @@ export default {
         } else {
           this.$toast.add({
             severity: "error",
-            summary: "Ooops!",
-            detail: "bank already exists in the list.",
+            summary: this.$t("oops"),
+            detail: this.$t("toast_banking_entity"),
             life: 3000,
           });
         }

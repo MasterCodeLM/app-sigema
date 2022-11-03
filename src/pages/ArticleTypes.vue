@@ -264,8 +264,8 @@ export default {
             this.articleTypes[this.findIndexById(id)] = data.data;
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("article_type") + " " + this.$t("updated"),
               life: 3000,
             });
           });
@@ -276,8 +276,8 @@ export default {
             this.articleTypes.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("article_type") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -302,15 +302,15 @@ export default {
     },
     deleteResource() {
       this.deleteDialog = false;
-      this.articleTypesService.delete(this.resource.id).then((data) => {
+      this.articleTypesService.delete(this.resource.id).then(() => {
         this.articleTypes = this.articleTypes.filter(
           (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("article_type") + " " + this.$t("deleted"),
           life: 3000,
         });
       });

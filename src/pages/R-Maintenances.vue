@@ -1,55 +1,55 @@
 <template>
-  <Toast/>
+  <Toast />
   <div class="grid">
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">MAINTENANCES REPORT</h3>
+          <h3 class="text-900 font-medium">{{ $t("maintenances_report") }}</h3>
         </div>
       </div>
     </div>
     <div class="col-12 md:col-3">
       <div class="card p-fluid h-full">
-        <h5>OPTIONS</h5>
+        <h5>{{ $t("options") }}</h5>
         <div class="field">
-          <label>From the: </label>
+          <label>{{ $t("from_the") }}</label>
           <Calendar
-              :showIcon="true"
-              :showButtonBar="false"
-              v-model="start_date"
-              :maxDate="minDateValue"
-              dateFormat="yy-mm-dd"
+            :showIcon="true"
+            :showButtonBar="false"
+            v-model="start_date"
+            :maxDate="minDateValue"
+            dateFormat="yy-mm-dd"
           ></Calendar>
         </div>
         <div class="field">
-          <label> Until the: </label>
+          <label> {{ $t("until_the") }}</label>
           <Calendar
-              :showIcon="true"
-              :showButtonBar="false"
-              v-model="end_date"
-              :maxDate="minDateValue"
-              dateFormat="yy-mm-dd"
+            :showIcon="true"
+            :showButtonBar="false"
+            v-model="end_date"
+            :maxDate="minDateValue"
+            dateFormat="yy-mm-dd"
           ></Calendar>
         </div>
         <div class="field">
-          <label> Type: </label>
+          <label> {{ $t("type") }} </label>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="type"
-                inputId="order1"
-                name="General"
-                value="resumen"
+              v-model="type"
+              inputId="order1"
+              name="General"
+              value="resumen"
             />
-            <label for="city1">General</label>
+            <label for="city1">{{ $t("general") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="type"
-                inputId="order1"
-                name="Detail"
-                value="detail"
+              v-model="type"
+              inputId="order1"
+              name="Detail"
+              value="detail"
             />
-            <label for="city1">Detail</label>
+            <label for="city1">{{ $t("detailed") }}</label>
           </div>
           <!--          <Dropdown-->
           <!--              id="state"-->
@@ -70,71 +70,62 @@
         </div>
         <div class="field" style="border-top: 1px solid silver"></div>
         <div class="field">
-          <h5>Order by</h5>
+          <h5>{{ $t("order_by") }}</h5>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="order"
-                inputId="order1"
-                name="N° Serie"
-                value="serie_number"
+              v-model="order"
+              inputId="order1"
+              name="N° Serie"
+              value="serie_number"
             />
-            <label for="city1">Serieal Number</label>
+            <label for="city1">{{ $t("serial_number") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="order"
-                inputId="order2"
-                name="Machine"
-                value="name"
+              v-model="order"
+              inputId="order2"
+              name="Machine"
+              value="name"
             />
-            <label for="city1">Machine</label>
+            <label for="city1">{{ $t("machine") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="order"
-                inputId="order2"
-                name="Amount"
-                value="amount"
+              v-model="order"
+              inputId="order2"
+              name="Amount"
+              value="amount"
             />
-            <label for="city1">Amount</label>
+            <label for="city1">{{ $t("amount") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-                v-model="order"
-                inputId="order1"
-                name="N° of maintenances"
-                value="maintenance_count"
+              v-model="order"
+              inputId="order1"
+              name="N° of maintenances"
+              value="maintenance_count"
             />
-            <label for="city1">N° of maintenances</label>
+            <label for="city1">{{ $t("number_maintenances") }}</label>
           </div>
         </div>
         <div class="field">
           <Button
-              label="Generate report"
-              icon="pi pi-file-pdf"
-              class="p-button-outlined p-button-danger"
-              @click="generate"
+            :label="$t('generate_report')"
+            icon="pi pi-file-pdf"
+            class="p-button-outlined p-button-danger"
+            @click="generate"
           />
         </div>
       </div>
     </div>
     <div class="col-12 md:col-9">
       <div class="card p-fluid h-full">
-        <h5>REPORT</h5>
-        <div
-            v-if="urlPDF"
-            class="col-12"
-        >
+        <h5>{{ $t("report") }}</h5>
+        <div v-if="urlPDF" class="col-12">
           <PDFViewer
-              :source="this.urlPDF"
-              :controls="[
-                'download',
-                'print',
-                'rotate',
-                'zoom',
-                'switchPage',
-                ]"
-              style="height: 75vh; width: 100%"
+            :source="this.urlPDF"
+            :controls="['download', 'print', 'rotate', 'zoom', 'switchPage']"
+            style="height: 75vh; width: 100%"
           />
         </div>
       </div>
@@ -145,7 +136,7 @@
 <script>
 import moment from "moment";
 import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
-import PDFViewer from 'pdf-viewer-vue'
+import PDFViewer from "pdf-viewer-vue";
 
 export default {
   data() {
@@ -155,16 +146,16 @@ export default {
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
-        {name: "Abstarct", value: "abstarct"},
-        {name: "Detailed", value: "detailed"},
+        { name: "Abstarct", value: "abstarct" },
+        { name: "Detailed", value: "detailed" },
       ],
       dropdownTypePersonalItems: [
-        {name: "Permanent", value: "permanent"},
-        {name: "Relay", value: "relay"},
+        { name: "Permanent", value: "permanent" },
+        { name: "Relay", value: "relay" },
       ],
       dropdownTurnEntryItems: [
-        {name: "Day", value: "day"},
-        {name: "Night", value: "night"},
+        { name: "Day", value: "day" },
+        { name: "Night", value: "night" },
       ],
       dropdownItem: null,
       employees: null,
@@ -191,9 +182,9 @@ export default {
       message: null,
       //loading: false,
       statuses: [
-        {label: "INSTOCK", value: "instock"},
-        {label: "LOWSTOCK", value: "lowstock"},
-        {label: "OUTOFSTOCK", value: "outofstock"},
+        { label: "INSTOCK", value: "instock" },
+        { label: "LOWSTOCK", value: "lowstock" },
+        { label: "OUTOFSTOCK", value: "outofstock" },
       ],
 
       documentTypeItem: null,
@@ -203,7 +194,7 @@ export default {
       documentTypeItems: null,
       loadingEmployees: true,
       isView: false,
-      urlPDF: null
+      urlPDF: null,
     };
   },
   components: {
@@ -216,19 +207,19 @@ export default {
   methods: {
     generate() {
       let payload = {
-        start_date: moment(this.start_date).format('YYYY-MM-DD'),
-        end_date: moment(this.end_date).format('YYYY-MM-DD'),
+        start_date: moment(this.start_date).format("YYYY-MM-DD"),
+        end_date: moment(this.end_date).format("YYYY-MM-DD"),
         type: this.type,
         sort_by: this.order,
-        order_by: 'desc',
-      }
+        order_by: "desc",
+      };
       console.log(payload);
       this.maintenenaceSheetService.report(payload).then((data) => {
         if (data.path) {
-          this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`
+          this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`;
         }
-      })
-    }
-  }
+      });
+    },
+  },
 };
 </script>

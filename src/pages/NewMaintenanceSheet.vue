@@ -246,6 +246,7 @@
               id="name1"
               type="text"
               :disabled="this.maintenanceSheet.id"
+              autocomplete="off"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.responsible,
@@ -336,6 +337,7 @@
               type="text"
               v-model="maintenanceSheet.ref_invoice_number"
               :disabled="this.maintenanceSheet.id"
+              autocomplete="off"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
@@ -381,6 +383,7 @@
               id="name1"
               type="text"
               :disabled="this.maintenanceSheet.id"
+              autocomplete="off"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.technical,
@@ -675,6 +678,7 @@
                 v-model="article.name"
                 id="name1"
                 type="text"
+                autocomplete="off"
                 :class="{
                   'p-invalid': submittedAddArticle && !article.name,
                 }"
@@ -691,6 +695,7 @@
                 v-model="article.brand"
                 id="name1"
                 type="text"
+                autocomplete="off"
                 :class="{
                   'p-invalid': submittedAddArticle && !article.brand,
                 }"
@@ -708,6 +713,7 @@
                 v-model="article.model"
                 id="name1"
                 type="text"
+                autocomplete="off"
                 :class="{
                   'p-invalid': submittedAddArticle && !article.model,
                 }"
@@ -837,6 +843,7 @@
               v-model="service.description"
               id="name1"
               type="text"
+              autocomplete="off"
               :class="{
                 'p-invalid': submittedAddService && !service.description,
               }"
@@ -1248,8 +1255,8 @@ export default {
           } else {
             this.$toast.add({
               severity: "error",
-              summary: "Warning",
-              detail: "the quantity is greater than the available stock",
+              summary: this.$t("warning"),
+              detail: this.$t("toast_new_maintenance_stock"),
               life: 3000,
             });
           }
@@ -1326,12 +1333,12 @@ export default {
           ).format("YYYY-MM-DD HH:mm:ss");
           const payload = this.maintenanceSheet;
           // console.log(payload);
-          this.maintenanceSheetService.create(payload).then((data) => {
+          this.maintenanceSheetService.create(payload).then(() => {
             // this.suppliers[this.findIndexById(id)] = data.data;
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("new_maintenance") + " " + this.$t("register"),
               life: 3000,
             });
             this.$router.push(`/maintenance-sheet`);
@@ -1343,9 +1350,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Warning",
-          detail:
-            "make sure you have Selected a Machine and add at least one detail",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_new_maintenance"),
           life: 3000,
         });
       }

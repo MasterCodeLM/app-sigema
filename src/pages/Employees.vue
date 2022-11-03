@@ -561,16 +561,16 @@ export default {
   data() {
     return {
       dropdownLenguageItems: [
-        { name: "English", value: "english" },
-        { name: "Spanish", value: "spanish" },
+        { name: this.$t("english"), value: "english" },
+        { name: this.$t("spanish"), value: "spanish" },
       ],
       dropdownTypePersonalItems: [
-        { name: "Permanent", value: "permanent" },
-        { name: "Relay", value: "relay" },
+        { name: this.$t("permanent"), value: "permanent" },
+        { name: this.$t("relay"), value: "relay" },
       ],
       dropdownTurnEntryItems: [
-        { name: "Day", value: "day" },
-        { name: "Night", value: "night" },
+        { name: this.$t("day"), value: "day" },
+        { name: this.$t("night"), value: "night" },
       ],
       dropdownItem: null,
       employees: null,
@@ -659,8 +659,8 @@ export default {
               this.employees[this.findIndexById(data.data.id)] = data.data;
               this.$toast.add({
                 severity: "success",
-                summary: "Successful",
-                detail: data.message,
+                summary: this.$t("successful"),
+                detail: this.$t("employee") + " " + this.$t("updated"),
                 life: 3000,
               });
             });
@@ -674,8 +674,8 @@ export default {
             this.employees.unshift(data.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: data.message,
+              summary: this.$t("successful"),
+              detail: this.$t("machine") + " " + this.$t("created"),
               life: 3000,
             });
           });
@@ -704,15 +704,15 @@ export default {
     },
     deleteResource() {
       this.deleteDialog = false;
-      this.employeesService.delete(this.resource.id).then((data) => {
+      this.employeesService.delete(this.resource.id).then(() => {
         this.employees = this.employees.filter(
           (val) => val.id !== this.resource.id
         );
         this.resource = {};
         this.$toast.add({
           severity: "success",
-          summary: "Successful",
-          detail: data.message,
+          summary: this.$t("successful"),
+          detail: this.$t("machine") + " " + this.$t("deleted"),
           life: 3000,
         });
       });
