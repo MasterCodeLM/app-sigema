@@ -178,6 +178,11 @@
                   class="p-button-rounded p-button-warning mr-2"
                   @click="editProduct(slotProps.data)"
                 />
+                <Button
+                    icon="pi pi-file-pdf"
+                    class="p-button-rounded p-button-success mr-2"
+                    @click="getPDF(slotProps.data)"
+                />
                 <!--<Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
@@ -601,8 +606,18 @@ export default {
       // console.log(path)
       return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
-    viewPDF() {
-      let uri = `${process.env.VUE_APP_API_HOST}/storage/${this.machine.technical_sheet}`;
+    getPDF(data) {
+      this.workSheetService
+          .reportOne(data.id)
+          .then((data) => {
+            // console.log(data)
+            this.viewPDF(data.path);
+            // this.loadingMachines = false;
+          });
+    },
+    viewPDF(path) {
+      // console.log(data)
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${path}`;
       window.open(uri);
       // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
