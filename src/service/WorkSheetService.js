@@ -37,4 +37,7 @@ export default class WorkSheetService {
     async delete(id) {
         return HttpService.prototype.delete(uri, id)
     }
+    async reportOne(id) {
+        return HttpService.prototype.reportOne(uri, id)
+    }
 }

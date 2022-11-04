@@ -21,6 +21,9 @@ export default class MaintenenaceSheetService {
         let custom_uri = uri + '/pdf'
         return HttpService.prototype.create(custom_uri, payload)
     }
+    async reportOne(id) {
+        return HttpService.prototype.reportOne(uri, id)
+    }
     async delete(id) {
         return HttpService.prototype.delete(uri, id)
     }

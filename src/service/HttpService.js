@@ -67,6 +67,15 @@ export default class HttpService {
         }).then(d => d);
     }
 
+    async reportOne(uri, id) {
+        return await httpService(`${apiHost}/${uri}/${id}/pdf`, {
+            method: 'GET',
+        }).then(res => {
+            if (res.status === 401) logout()
+            return res.json()
+        }).then(d => d);
+    }
+
     async uploadFile(uri, formdata) {
         return await httpService(`${apiHost}/${uri}`, {
             method: 'POST',
