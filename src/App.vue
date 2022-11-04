@@ -232,7 +232,7 @@ export default {
         label: this.$t("home"),
         items: [
           {
-            label: "Home",
+            label: this.$t("principal"),
             icon: "pi pi-fw pi-home",
             to: "/",
           },

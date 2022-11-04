@@ -141,8 +141,8 @@ import PDFViewer from "pdf-viewer-vue";
 export default {
   data() {
     return {
-      order: null,
-      type: null,
+      order: "name",
+      type: "resumen",
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [

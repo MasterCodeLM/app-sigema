@@ -59,13 +59,13 @@
           </div>
         </template>
         <Column
-          field="serial_number"
+          field="serie_number"
           :header="$t('serial_number')"
           :sortable="true"
           headerStyle="width:25%; min-width:10rem;"
         >
           <template #body="slotProps">
-            <span class="p-column-title">Serial Number</span>
+            <span class="p-column-title">Serie Number</span>
             {{ slotProps.data.serie_number }}
           </template>
         </Column>
@@ -122,7 +122,7 @@
           </template>
         </Column>
         <Column
-          field="inventoryStatus"
+          field="status"
           :header="$t('status')"
           :sortable="true"
           headerStyle="width:14%; min-width:10rem;"
@@ -141,6 +141,7 @@
               <Button
                 icon="pi pi-angle-double-down"
                 class="p-button-rounded p-button-success mr-2"
+                :disabled="slotProps.data.status !== 'available'"
                 @click="selectMachine(slotProps.data)"
               />
               <!--              <Button-->
@@ -180,10 +181,6 @@
                 <b>> {{ $t("model") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.model }}</i>
               </div>
-              <div class="field col-12">
-                <b>> {{ $t("last_maintenance_date") }}: </b>
-                <i>{{ this.maintenanceSheet.machine.date_last_maintenance }}</i>
-              </div>
             </div>
           </div>
           <div class="col-6">
@@ -218,7 +215,7 @@
               v-model="maintenanceSheet.description"
               :placeholder="$t('your_message')"
               :autoResize="true"
-              rows="7"
+              rows="3"
               cols="67"
               :disabled="this.maintenanceSheet.id"
               :class="{
@@ -229,7 +226,30 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
-              >{{ $t("descriptio_alert") }}</small
+              >{{ $t("description_alert") }}</small
+            >
+          </div>
+          <h6>{{ $t("recommendation_of_use") }}</h6>
+          <div class="field col-12">
+            <!--          <label for="name1">Description</label>-->
+            <Textarea
+              v-model="maintenanceSheet.recommendation"
+              :placeholder="$t('your_message_recommendation')"
+              :autoResize="true"
+              rows="3"
+              cols="67"
+              :disabled="this.maintenanceSheet.id"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.recommendation,
+              }"
+            />
+            <small
+              class="p-invalid"
+              v-if="
+                submittedMaintenanceSheet && !maintenanceSheet.recommendation
+              "
+              >{{ $t("description_alert") }}</small
             >
           </div>
         </div>
@@ -414,7 +434,7 @@
                 @click="openNewAddSparePart"
               />
               <Button
-                :label="$t('add_servicio')"
+                :label="$t('add_service')"
                 class="p-button-secondary mr-2 mb-2"
                 @click="openNewAddService"
               />
@@ -721,7 +741,7 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.model"
-                >{{ $t("model_Alert") }}</small
+                >{{ $t("model_alert") }}</small
               >
             </div>
             <div class="field col-12 sm:col-3">
@@ -730,7 +750,6 @@
                 id="quantity"
                 v-model="article.quantity"
                 showButtons
-                :disabled="isView"
                 :min="1"
                 :useGrouping="false"
                 :class="{
@@ -754,13 +773,20 @@
                 locale="es-PE"
                 :min="0"
                 :class="{
-                  'p-invalid': submittedAddArticle && !article.price >= 0,
+                  'p-invalid':
+                    submittedAddArticle && article.price
+                      ? !(article.price >= 0)
+                      : true,
                 }"
               />
 
               <small
                 class="p-invalid"
-                v-if="submittedAddArticle && !article.price >= 0"
+                v-if="
+                  submittedAddArticle && article.price
+                    ? !(article.price >= 0)
+                    : true
+                "
                 >{{ $t("price_alert") }}</small
               >
             </div>
@@ -797,7 +823,7 @@
                       }}
                     </template>
                   </Column>
-                  <Column v-if="!isView" headerStyle="min-width:4rem;">
+                  <Column headerStyle="min-width:4rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
                         <Button
@@ -897,7 +923,7 @@
                   </template>
                 </Column>
 
-                <Column v-if="!isView" headerStyle="min-width:4rem;">
+                <Column headerStyle="min-width:4rem;">
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
@@ -947,6 +973,7 @@ export default {
         technical: null,
         maximum_working_time: null,
         description: null,
+        recommendation: null,
         maintenance_type: null,
         ref_invoice_number: null,
         supplier: null,
@@ -1269,7 +1296,11 @@ export default {
       }
     },
     validateAddArticle() {
-      console.log(this.article.price);
+      console.log(
+        this.article.price,
+        this.article.price >= 0,
+        !this.article.price
+      );
       return (
         this.article.serie_number &&
         this.article.name &&
@@ -1365,6 +1396,7 @@ export default {
         this.maintenanceSheet.maintenance_type &&
         this.maintenanceSheet.supplier &&
         this.maintenanceSheet.description &&
+        this.maintenanceSheet.recommendation &&
         this.maintenanceSheet.ref_invoice_number &&
         this.maintenanceSheet.maximum_working_time
       );
@@ -1376,6 +1408,7 @@ export default {
         technical: null,
         maximum_working_time: null,
         description: null,
+        recommendation: null,
         maintenance_type: null,
         ref_invoice_number: null,
         supplier: null,
