@@ -754,13 +754,13 @@
                 locale="es-PE"
                 :min="0"
                 :class="{
-                  'p-invalid': submittedAddArticle && !article.price >= 0,
+                  'p-invalid': submittedAddArticle && article.price === null,
                 }"
               />
 
               <small
                 class="p-invalid"
-                v-if="submittedAddArticle && !article.price >= 0"
+                v-if="submittedAddArticle && article.price === null"
                 >{{ $t("price_alert") }}</small
               >
             </div>
@@ -1276,7 +1276,8 @@ export default {
         this.article.brand &&
         this.article.model &&
         this.article.quantity &&
-        this.article.price >= 0
+        this.article.price !== null
+        // this.article.price >= 0
       );
     },
     removeAddArticle(data) {

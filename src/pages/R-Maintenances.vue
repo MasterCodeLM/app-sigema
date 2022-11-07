@@ -124,7 +124,7 @@
         <div v-if="urlPDF" class="col-12">
           <PDFViewer
             :source="this.urlPDF"
-            :controls="['download', 'print', 'rotate', 'zoom', 'switchPage']"
+            :controls="['catalog','download', 'print', 'rotate', 'zoom', 'switchPage']"
             style="height: 75vh; width: 100%"
           />
         </div>
