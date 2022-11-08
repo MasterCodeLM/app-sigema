@@ -426,6 +426,9 @@ export default {
         ],
       },
     ];
+    window.Echo.channel('notifications').listen('NewNotification',(e)=>{
+      console.log(e)
+    })
   },
   watch: {
     $route() {

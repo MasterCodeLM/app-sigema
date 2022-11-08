@@ -99,6 +99,19 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import CodeHighlight from './AppCodeHighlight';
 import BlockViewer from './BlockViewer';
 
+import Echo from "laravel-echo"
+window.Pusher = require('pusher-js');
+
+// console.log(process.env.VUE_PUSHER_KEY,process.env.VUE_WEBSOCKET_HOST)
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'ABCDEFG',
+    wsHost: '127.0.0.1',
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+});
+
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
     next();
