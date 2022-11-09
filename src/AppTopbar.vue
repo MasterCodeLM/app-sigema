@@ -1,19 +1,19 @@
 <template>
   <div class="layout-topbar">
     <router-link to="/" class="layout-topbar-logo">
-      <img alt="Logo" :src="topbarImage()" style="height: 4rem" />
+      <img alt="Logo" :src="topbarImage()" style="height: 4rem"/>
       <!--      <span>JEX</span>-->
     </router-link>
     <button
-      class="p-link layout-menu-button layout-topbar-button"
-      @click="onMenuToggle"
+        class="p-link layout-menu-button layout-topbar-button"
+        @click="onMenuToggle"
     >
       <i class="pi pi-bars"></i>
     </button>
 
     <button
-      class="p-link layout-topbar-menu-button layout-topbar-button"
-      v-styleclass="{
+        class="p-link layout-topbar-menu-button layout-topbar-button"
+        v-styleclass="{
         selector: '@next',
         enterClass: 'hidden',
         enterActiveClass: 'scalein',
@@ -43,33 +43,32 @@
           <span>Notifications</span>
         </button>
         <OverlayPanel
-          ref="op"
-          appendTo="body"
-          :showCloseIcon="false"
-          style="width: 25rem"
+            ref="op"
+            appendTo="body"
+            :showCloseIcon="false"
+            style="width: 25rem"
         >
           <ScrollPanel style="width: 100%; height: 300px">
-            <div class="card mb-2">
+            <div class="card mb-2" v-for="(item, index) in notifications" :key="index">
               <p class="text-700">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Inventore sed consequuntur error repudiandae numquam deserunt
+                {{ item.message }}
               </p>
-              <span class="text-500">ago 12 Hours</span>
+              <!--              <span class="text-500">ago 12 Hours</span>-->
             </div>
-            <div class="card mb-2">
-              <p class="text-700">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Inventore sed consequuntur error repudiandae numquam deserunt
-              </p>
-              <span class="text-500">ago 12 Hours</span>
-            </div>
-            <div class="card mb-2">
-              <p class="text-700">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Inventore sed consequuntur error repudiandae numquam deserunt
-              </p>
-              <span class="text-500">ago 12 Hours</span>
-            </div>
+            <!--            <div class="card mb-2">-->
+            <!--              <p class="text-700">-->
+            <!--                Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
+            <!--                Inventore sed consequuntur error repudiandae numquam deserunt-->
+            <!--              </p>-->
+            <!--              <span class="text-500">ago 12 Hours</span>-->
+            <!--            </div>-->
+            <!--            <div class="card mb-2">-->
+            <!--              <p class="text-700">-->
+            <!--                Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
+            <!--                Inventore sed consequuntur error repudiandae numquam deserunt-->
+            <!--              </p>-->
+            <!--              <span class="text-500">ago 12 Hours</span>-->
+            <!--            </div>-->
           </ScrollPanel>
         </OverlayPanel>
       </li>
@@ -78,7 +77,7 @@
           <i class="pi pi-user"></i>
           <span>Profile</span>
         </button>
-        <Menu ref="menu" :model="items" :popup="true" />
+        <Menu ref="menu" :model="items" :popup="true"/>
       </li>
       <!--      <Button type="button" label="Image"  class="p-button-success"/>-->
 
@@ -93,6 +92,10 @@ import AuthService from "@/service/AuthService";
 export default {
   data() {
     return {
+      player: new Audio(),
+      sound: require("./assets/notification-sound.mp3"),
+      volume: 0.5,
+      notifications: [],
       items: [
         /*{
           
@@ -138,6 +141,15 @@ export default {
   created() {
     this.authService = new AuthService();
   },
+  mounted() {
+    this.player.src = this.sound;
+    this.player.volume = this.volume;
+    window.Echo.channel('notifications').listen('NewNotification', (notification) => {
+      console.log(notification)
+      this.notifications.unshift(notification)
+      this.player.play();
+    })
+  },
   methods: {
     logout() {
       //  ELIMINAR TOKEN
@@ -148,7 +160,7 @@ export default {
           localStorage.removeItem("userLogged");
           localStorage.removeItem("token");
           //  REDIRECIONAR
-          this.$router.push({ name: "login" });
+          this.$router.push({name: "login"});
         }
       });
     },

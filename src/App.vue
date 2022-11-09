@@ -33,9 +33,6 @@ export default {
   emits: ["change-theme"],
   data() {
     return {
-      player:new Audio(),
-      sound:require("./assets/notification-sound.mp3"),
-      volume:0.5,
       layoutMode: "static",
       staticMenuInactive: false,
       overlayMenuActive: false,
@@ -429,12 +426,6 @@ export default {
         ],
       },
     ];
-    this.player.src = this.sound;
-    this.player.volume = this.volume;
-    window.Echo.channel('notifications').listen('NewNotification',(e)=>{
-      console.log(e)
-      this.player.play();
-    })
   },
   watch: {
     $route() {
