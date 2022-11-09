@@ -184,7 +184,7 @@
                 id="user"
                 v-model.trim="user.email"
                 required="true"
-                disabled
+                readonly
                 autofocus
                 :class="{
                   'p-invalid': submitted && !user.email,

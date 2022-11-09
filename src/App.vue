@@ -234,7 +234,8 @@ export default {
           {
             label: this.$t("principal"),
             icon: "pi pi-fw pi-home",
-            to: "/",
+            to: "/dashboard",
+            visible: this.permissions.includes("machines"),
           },
         ],
       },

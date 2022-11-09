@@ -255,7 +255,7 @@
                     (submitted && !employee.document_number) ||
                     (submitted && employee.document_number.length < 8),
                 }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
                 @keypress="isNumber($event)"
               />
@@ -286,7 +286,7 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': submitted && !employee.name }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !employee.name">{{
@@ -302,7 +302,7 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': submitted && !employee.lastname }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !employee.lastname">{{
@@ -353,7 +353,7 @@
                 v-model.trim="employee.phone"
                 required="true"
                 autofocus
-                :disabled="isView"
+                :readonly="isView"
                 :class="{
                   'p-invalid':
                     (submitted && !employee.phone) ||
@@ -384,7 +384,7 @@
                     (submitted && !employee.personal_email) ||
                     (submitted && !isEmail()),
                 }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
               />
               <small
@@ -406,7 +406,7 @@
               v-model.trim="employee.address"
               required="true"
               autofocus
-              :disabled="isView"
+              :readonly="isView"
               :class="{ 'p-invalid': submitted && !employee.address }"
             />
             <small class="p-invalid" v-if="submitted && !employee.address">{{

@@ -17,7 +17,6 @@
             :showIcon="true"
             :showButtonBar="false"
             v-model="start_date"
-            :maxDate="minDateValue"
             dateFormat="yy-mm-dd"
           ></Calendar>
         </div>
@@ -27,7 +26,6 @@
             :showIcon="true"
             :showButtonBar="false"
             v-model="end_date"
-            :maxDate="minDateValue"
             dateFormat="yy-mm-dd"
           ></Calendar>
         </div>

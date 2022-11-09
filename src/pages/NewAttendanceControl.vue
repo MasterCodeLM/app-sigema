@@ -31,6 +31,14 @@
                 @click="checkOut"
                 :disabled="disabledButtonCheckOut"
               />
+
+              <Button
+                :label="$t('justify')"
+                icon="pi pi-check-square"
+                class="p-button-rounded p-button-warning mr-2 mb-2"
+                @click="openJustify"
+                :disabled="disabledButtonCheckOut"
+              />
             </div>
           </template>
 
@@ -132,43 +140,71 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
-              {{ slotProps.data.status_working }}
+
+              <span
+                :class="
+                  'product-badge status-' +
+                  (slotProps.data.status_working === 'started working'
+                    ? 'instock'
+                    : slotProps.data.status_working === 'justified absence'
+                    ? 'lowstock'
+                    : slotProps.data.status_working === 'finished work'
+                    ? 'new'
+                    : 'outofstock')
+                "
+                >{{ slotProps.data.status_working }}</span
+              >
             </template>
           </Column>
         </DataTable>
 
         <Dialog
-          v-model:visible="productDialog"
+          v-model:visible="justifyDialog"
           :style="{ width: '450px' }"
-          header="New Article Type"
+          :header="$t('justification')"
           :modal="true"
           class="p-fluid"
         >
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name">{{ $t("reason") }}</label>
             <InputText
               id="name"
-              v-model.trim="product.name"
+              v-model.trim="missedReason"
               required="true"
               autofocus
-              :class="{ 'p-invalid': submitted && !product.name }"
+              :class="{ 'p-invalid': submitted && !missedReason }"
             />
-            <small class="p-invalid" v-if="submitted && !product.name"
-              >Name is required.</small
-            >
+            <small class="p-invalid" v-if="submitted && !missedReason">{{
+              $t("reason_alert")
+            }}</small>
+          </div>
+          <div class="field">
+            <label for="name">{{ $t("description") }}</label>
+            <Textarea
+              id="name"
+              v-model.trim="missedDescription"
+              rows="5"
+              :autoResize="true"
+              required="true"
+              autofocus
+              :class="{ 'p-invalid': submitted && !missedDescription }"
+            />
+            <small class="p-invalid" v-if="submitted && !missedDescription">{{
+              $t("description_alert")
+            }}</small>
           </div>
           <template #footer>
             <Button
-              label="Cancel"
+              :label="$t('cancel')"
               icon="pi pi-times"
               class="p-button-text p-button-danger"
               @click="hideDialog"
             />
             <Button
-              label="Save"
+              :label="$t('save')"
               icon="pi pi-check"
               class="p-button-text"
-              @click="saveProduct"
+              @click="checkJustify"
             />
           </template>
         </Dialog>
@@ -251,7 +287,9 @@ export default {
     return {
       //products: null,
       employeesList: null,
-      productDialog: false,
+      justifyDialog: false,
+      missedReason: null,
+      missedDescription: null,
       deleteProductDialog: false,
       deleteProductsDialog: false,
       product: {},
@@ -301,8 +339,15 @@ export default {
         let employees = JSON.parse(JSON.stringify(this.employeesList));
 
         this.selectedProducts.map((employee) => {
-          if (!employees[this.findIndexEmployeesById(employee.id)].check_in) {
+          if (
+            !employees[this.findIndexEmployeesById(employee.id)].check_in &&
+            !employees[this.findIndexEmployeesById(employee.id)].attendance &&
+            !employees[this.findIndexEmployeesById(employee.id)].missed_reason
+          ) {
             employees[this.findIndexEmployeesById(employee.id)].check_in = now;
+            employees[
+              this.findIndexEmployeesById(employee.id)
+            ].attendance = true;
           }
         });
         let payload = { employees };
@@ -314,8 +359,9 @@ export default {
               this.selectedProducts = [];
               this.$toast.add({
                 severity: "success",
-                summary: "Successful",
-                detail: data.message,
+                summary: this.$t("successful"),
+                detail:
+                  this.$t("attendance_sheet") + " " + this.$t("updated_a"),
                 life: 3000,
               });
             } else {
@@ -359,8 +405,9 @@ export default {
               this.selectedProducts = [];
               this.$toast.add({
                 severity: "success",
-                summary: "Successful",
-                detail: data.message,
+                summary: this.$t("successful"),
+                detail:
+                  this.$t("attendance_sheet") + " " + this.$t("updated_a"),
                 life: 3000,
               });
             } else {
@@ -375,12 +422,67 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Warning",
-          detail: "You must select at least one employee ",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_attendance"),
           life: 3000,
         });
       }
     },
+
+    checkJustify() {
+      this.submitted = true;
+      if (this.validateFormJustify()) {
+        this.justifyDialog = true;
+        let attendance_sheet = this.$route.params;
+        let employees = JSON.parse(JSON.stringify(this.employeesList));
+        //console.log(this.selectedProducts);
+        this.selectedProducts.map((employee) => {
+          if (
+            !employees[this.findIndexEmployeesById(employee.id)].check_out &&
+            !employees[this.findIndexEmployeesById(employee.id)].check_in
+          ) {
+            employees[this.findIndexEmployeesById(employee.id)].missed_reason =
+              this.missedReason;
+            employees[
+              this.findIndexEmployeesById(employee.id)
+            ].missed_description = this.missedDescription;
+          }
+        });
+        let payload = { employees };
+        //console.log(payload);
+        this.sheetListService
+          .update(attendance_sheet.id, payload)
+          .then((data) => {
+            if (data.data) {
+              this.employeesList = data.data.employees;
+              this.selectedProducts = [];
+              this.$toast.add({
+                severity: "success",
+                summary: this.$t("successful"),
+                detail: "Justificación" + " " + this.$t("register_a"),
+                life: 3000,
+              });
+            } else {
+              this.$toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: data.message,
+                life: 3000,
+              });
+            }
+          });
+        this.justifyDialog = false;
+        this.defaultObjects();
+      } /*else {
+        this.$toast.add({
+          severity: "error",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_attendance"),
+          life: 3000,
+        });
+      }*/
+    },
+
     closeSheet() {
       let attendance_sheet = this.$route.params;
       let payload = {
@@ -412,11 +514,32 @@ export default {
     openNew() {
       this.product = {};
       this.submitted = false;
-      this.productDialog = true;
+      this.justifyDialog = true;
+    },
+    openJustify() {
+      this.defaultObjects();
+      if (this.selectedProducts.length > 0) {
+        this.submitted = false;
+        this.justifyDialog = true;
+      } else {
+        this.$toast.add({
+          severity: "error",
+          summary: this.$t("warning"),
+          detail: this.$t("toast_attendance"),
+          life: 3000,
+        });
+      }
     },
     hideDialog() {
-      this.productDialog = false;
+      this.defaultObjects();
+      this.justifyDialog = false;
       this.submitted = false;
+    },
+    defaultObjects() {
+      (this.missedReason = null), (this.missedDescription = null);
+    },
+    validateFormJustify() {
+      return this.missedReason && this.missedDescription;
     },
     saveProduct() {
       this.submitted = true;
@@ -447,13 +570,13 @@ export default {
             life: 3000,
           });
         }
-        this.productDialog = false;
+        this.justifyDialog = false;
         this.product = {};
       }
     },
     editProduct(product) {
       this.product = { ...product };
-      this.productDialog = true;
+      this.justifyDialog = true;
     },
     confirmDeleteProduct(product) {
       this.product = product;

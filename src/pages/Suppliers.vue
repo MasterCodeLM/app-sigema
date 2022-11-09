@@ -195,7 +195,7 @@
                     (submitted && !supplier.document_number) ||
                     (submitted && supplier.document_number.length < 8),
                 }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
                 @keypress="isNumber($event)"
               />
@@ -224,7 +224,7 @@
               required="true"
               autofocus
               :class="{ 'p-invalid': submitted && !supplier.name }"
-              :disabled="isView"
+              :readonly="isView"
               autocomplete="off"
             />
             <small class="p-invalid" v-if="submitted && !supplier.name">{{
@@ -247,7 +247,7 @@
                     (submitted && !supplier.phone) ||
                     (submitted && supplier.phone.length < 9),
                 }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
                 @keypress="isNumber($event)"
               />
@@ -273,7 +273,7 @@
                   'p-invalid':
                     (submitted && !supplier.email) || (submitted && !isEmail()),
                 }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.email">{{
@@ -296,7 +296,7 @@
                 required="true"
                 autofocus
                 :class="{ 'p-invalid': submitted && !supplier.address }"
-                :disabled="isView"
+                :readonly="isView"
                 autocomplete="off"
               />
               <small class="p-invalid" v-if="submitted && !supplier.address">{{
