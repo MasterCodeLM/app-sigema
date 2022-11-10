@@ -408,19 +408,10 @@ export default {
                 visible: this.permissions.includes("maintenance-sheets"),
               },
               {
-                label: "Report 02",
+                label: this.$t("r_attendances"),
                 icon: "pi pi-fw pi-file",
-                //to: "/roles",
-              },
-              {
-                label: "Report 03",
-                icon: "pi pi-fw pi-file",
-                //to: "/roles",
-              },
-              {
-                label: "Report 04",
-                icon: "pi pi-fw pi-file",
-                //to: "/roles",
+                to: "/r-attendances",
+                visible: this.permissions.includes("attendance-sheets"),
               },
             ],
           },

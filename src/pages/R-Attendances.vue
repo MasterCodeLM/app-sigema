@@ -4,7 +4,7 @@
     <div class="col-12">
       <div class="card p-fluid">
         <div class="flex flex-column align-items-center">
-          <h3 class="text-900 font-medium">{{ $t("maintenances_report") }}</h3>
+          <h3 class="text-900 font-medium">{{ $t("attendances_report") }}</h3>
         </div>
       </div>
     </div>
@@ -37,36 +37,20 @@
             <RadioButton
               v-model="type"
               inputId="order1"
-              name="General"
-              value="resumen"
+              name="Attendances"
+              value="attendances"
             />
-            <label for="city1">{{ $t("general") }}</label>
+            <label for="city1">{{ $t("r_attendances") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
               v-model="type"
               inputId="order1"
-              name="Detail"
-              value="detail"
+              name="Absences"
+              value="absences"
             />
-            <label for="city1">{{ $t("detailed") }}</label>
+            <label for="city1">{{ $t("absences") }}</label>
           </div>
-          <!--          <Dropdown-->
-          <!--              id="state"-->
-          <!--              v-model="typeItem"-->
-          <!--              :disabled="isView"-->
-          <!--              :filter="false"-->
-          <!--              :options="dropdownReportType"-->
-          <!--              optionLabel="name"-->
-          <!--              optionValue="value"-->
-          <!--              placeholder="Select One"-->
-          <!--          ></Dropdown>-->
-          <!--v-model="employee.native_language"
-          <small
-                class="p-invalid"
-                v-if="submitted && !employee.native_language"
-                >Native language is required.</small
-              >-->
         </div>
         <div class="field" style="border-top: 1px solid silver"></div>
         <div class="field">
@@ -74,38 +58,38 @@
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
-              inputId="order1"
-              name="N° Serie"
-              value="serie_number"
-            />
-            <label for="city1">{{ $t("serial_number") }}</label>
-          </div>
-          <div class="field-radiobutton">
-            <RadioButton
-              v-model="order"
               inputId="order2"
-              name="Machine"
+              name="Name"
               value="name"
             />
-            <label for="city1">{{ $t("machine") }}</label>
+            <label for="city1">{{ $t("name") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
               inputId="order2"
-              name="Amount"
-              value="amount"
+              name="Last name"
+              value="lastname"
             />
-            <label for="city1">{{ $t("amount") }}</label>
+            <label for="city1">{{ $t("last_name") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
               inputId="order1"
               name="N° of maintenances"
-              value="maintenance_count"
+              value="attendances_count"
             />
-            <label for="city1">{{ $t("number_maintenances") }}</label>
+            <label for="city1">{{ $t("n_attendances") }}</label>
+          </div>
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order"
+              inputId="order1"
+              name="N° of absences"
+              value="absences_count"
+            />
+            <label for="city1">{{ $t("n_absences") }}</label>
           </div>
         </div>
         <div class="field">
@@ -142,12 +126,12 @@ export default {
   data() {
     return {
       order: "name",
-      type: "resumen",
+      type: "attendances",
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
-        { name: "Abstarct", value: "abstarct" },
-        { name: "Detailed", value: "detailed" },
+        { name: "Attendances", value: "attendances" },
+        { name: "Absences", value: "absences" },
       ],
       dropdownTypePersonalItems: [
         { name: "Permanent", value: "permanent" },
