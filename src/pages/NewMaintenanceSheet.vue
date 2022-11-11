@@ -59,13 +59,13 @@
           </div>
         </template>
         <Column
-          field="serie_number"
+          field="serial_number"
           :header="$t('serial_number')"
           :sortable="true"
           headerStyle="width:25%; min-width:10rem;"
         >
           <template #body="slotProps">
-            <span class="p-column-title">Serie Number</span>
+            <span class="p-column-title">Serial Number</span>
             {{ slotProps.data.serie_number }}
           </template>
         </Column>
@@ -122,7 +122,7 @@
           </template>
         </Column>
         <Column
-          field="status"
+          field="inventoryStatus"
           :header="$t('status')"
           :sortable="true"
           headerStyle="width:14%; min-width:10rem;"
@@ -149,7 +149,6 @@
               <Button
                 icon="pi pi-angle-double-down"
                 class="p-button-rounded p-button-success mr-2"
-                :disabled="slotProps.data.status !== 'available'"
                 @click="selectMachine(slotProps.data)"
               />
               <!--              <Button-->
@@ -189,6 +188,10 @@
                 <b>> {{ $t("model") }}: </b>
                 <i>{{ this.maintenanceSheet.machine.model }}</i>
               </div>
+              <div class="field col-12">
+                <b>> {{ $t("last_maintenance_date") }}: </b>
+                <i>{{ this.maintenanceSheet.machine.date_last_maintenance }}</i>
+              </div>
             </div>
           </div>
           <div class="col-6">
@@ -223,7 +226,7 @@
               v-model="maintenanceSheet.description"
               :placeholder="$t('your_message')"
               :autoResize="true"
-              rows="3"
+              rows="7"
               cols="67"
               :readonly="this.maintenanceSheet.id"
               :class="{
@@ -442,7 +445,7 @@
                 @click="openNewAddSparePart"
               />
               <Button
-                :label="$t('add_service')"
+                :label="$t('add_servicio')"
                 class="p-button-secondary mr-2 mb-2"
                 @click="openNewAddService"
               />
@@ -749,7 +752,7 @@
               <small
                 class="p-invalid"
                 v-if="submittedAddArticle && !article.model"
-                >{{ $t("model_alert") }}</small
+                >{{ $t("model_Alert") }}</small
               >
             </div>
             <div class="field col-12 sm:col-3">
@@ -758,6 +761,7 @@
                 id="quantity"
                 v-model="article.quantity"
                 showButtons
+                :disabled="isView"
                 :min="1"
                 :useGrouping="false"
                 :class="{
@@ -781,20 +785,13 @@
                 locale="es-PE"
                 :min="0"
                 :class="{
-                  'p-invalid':
-                    submittedAddArticle && article.price
-                      ? !(article.price >= 0)
-                      : true,
+                  'p-invalid': submittedAddArticle && article.price === null,
                 }"
               />
 
               <small
                 class="p-invalid"
-                v-if="
-                  submittedAddArticle && article.price
-                    ? !(article.price >= 0)
-                    : true
-                "
+                v-if="submittedAddArticle && article.price === null"
                 >{{ $t("price_alert") }}</small
               >
             </div>
@@ -831,7 +828,7 @@
                       }}
                     </template>
                   </Column>
-                  <Column headerStyle="min-width:4rem;">
+                  <Column v-if="!isView" headerStyle="min-width:4rem;">
                     <template #body="slotProps">
                       <div style="display: flex; justify-content: end">
                         <Button
@@ -931,7 +928,7 @@
                   </template>
                 </Column>
 
-                <Column headerStyle="min-width:4rem;">
+                <Column v-if="!isView" headerStyle="min-width:4rem;">
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button
@@ -981,7 +978,6 @@ export default {
         technical: null,
         maximum_working_time: null,
         description: null,
-        recommendation: null,
         maintenance_type: null,
         ref_invoice_number: null,
         supplier: null,
@@ -1304,18 +1300,15 @@ export default {
       }
     },
     validateAddArticle() {
-      console.log(
-        this.article.price,
-        this.article.price >= 0,
-        !this.article.price
-      );
+      console.log(this.article.price);
       return (
         this.article.serie_number &&
         this.article.name &&
         this.article.brand &&
         this.article.model &&
         this.article.quantity &&
-        this.article.price >= 0
+        this.article.price !== null
+        // this.article.price >= 0
       );
     },
     removeAddArticle(data) {
@@ -1404,7 +1397,6 @@ export default {
         this.maintenanceSheet.maintenance_type &&
         this.maintenanceSheet.supplier &&
         this.maintenanceSheet.description &&
-        this.maintenanceSheet.recommendation &&
         this.maintenanceSheet.ref_invoice_number &&
         this.maintenanceSheet.maximum_working_time
       );
@@ -1416,7 +1408,6 @@ export default {
         technical: null,
         maximum_working_time: null,
         description: null,
-        recommendation: null,
         maintenance_type: null,
         ref_invoice_number: null,
         supplier: null,
