@@ -162,6 +162,14 @@
             <template #body="slotProps">
               <div style="display: flex; justify-content: end">
                 <Button
+                  icon="pi pi-question"
+                  class="
+                    p-button-rounded p-button-success p-button-outlined
+                    mr-2
+                  "
+                  @click="recommendationMachine(slotProps.data)"
+                />
+                <Button
                   icon="pi pi-eye"
                   class="p-button-rounded p-button-info mr-2"
                   @click="viewMachine(slotProps.data)"
@@ -180,6 +188,34 @@
             </template>
           </Column>
         </DataTable>
+
+        <Dialog
+          v-model:visible="recommendationDialog"
+          :style="{ width: '450px' }"
+          :header="$t('recommendation_title')"
+          :modal="true"
+        >
+          <div class="flex align-items-center justify-content-center">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span>{{ $t("create_alert_question") }}</span>
+          </div>
+          <br />
+          <small
+            ><b>{{ $t("create_alert_note") }}</b>
+            {{ $t("create_alert_note_complete") }}</small
+          >
+          <template #footer>
+            <Button
+              label="Entendido"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="recommendationDialog = false"
+            />
+          </template>
+        </Dialog>
 
         <Dialog
           v-model:visible="productDialog"
@@ -563,6 +599,7 @@ export default {
       // apiHost: "https://stormy-tundra-82595.herokuapp.com/storage/",
       machines: null,
       productDialog: false,
+      recommendationDialog: false,
       deleteDialog: false,
       deleteProductsDialog: false,
       machine: {
@@ -764,6 +801,13 @@ export default {
 
         this.defaultObjects();
       }
+    },
+    recommendationMachine() {
+      this.recommendationDialog = true;
+      /*this.machinesService.getOne(machine.id).then((data) => {
+        this.machine = { ...data };
+        this.productDialog = true;
+      });*/
     },
     viewMachine(machine) {
       this.isView = true;

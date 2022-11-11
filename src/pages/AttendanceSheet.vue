@@ -252,7 +252,7 @@
         <Dialog
           v-model:visible="confirmCreateAttendacneSheetDialog"
           :style="{ width: '450px' }"
-          :header="$t('create_alert_title')"
+          :header="$t('recommendation_title')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
