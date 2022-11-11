@@ -102,11 +102,12 @@ import BlockViewer from './BlockViewer';
 import Echo from "laravel-echo"
 window.Pusher = require('pusher-js');
 
-// console.log(process.env.VUE_PUSHER_KEY,process.env.VUE_WEBSOCKET_HOST)
+// console.log(process.env.VUE_APP_WEBSOCKET_HOST,
 window.Echo = new Echo({
+    // authEndpoint : '/broadcasting/auth',
     broadcaster: 'pusher',
-    key: 'ABCDEFG',
-    wsHost: '127.0.0.1',
+    wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
+    key: process.env.VUE_APP_PUSHER_KEY,
     wsPort: 6001,
     forceTLS: false,
     disableStats: true,
