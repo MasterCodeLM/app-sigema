@@ -415,7 +415,7 @@
                 >
                 </Column>
 
-                <Column v-if="!isView" headerStyle="min-width:10rem;">
+                <Column v-if="!isView" headerStyle="min-width:3rem;">
                   <template #body="slotProps">
                     <div style="display: flex; justify-content: end">
                       <Button

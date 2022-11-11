@@ -8,27 +8,31 @@
         </div>
       </div>
     </div>
-    <div class="col-12 md:col-3">
+    <div class="col-12 md:col-12">
       <div class="card p-fluid h-full">
         <h5>{{ $t("options") }}</h5>
-        <div class="field">
-          <label>{{ $t("from_the") }}</label>
-          <Calendar
-            :showIcon="true"
-            :showButtonBar="false"
-            v-model="start_date"
-            dateFormat="yy-mm-dd"
-          ></Calendar>
+
+        <div class="fiel grid">
+          <div class="field col-6">
+            <label>{{ $t("from_the") }}</label>
+            <Calendar
+              :showIcon="true"
+              :showButtonBar="false"
+              v-model="start_date"
+              dateFormat="yy-mm-dd"
+            ></Calendar>
+          </div>
+          <div class="field col-6">
+            <label> {{ $t("until_the") }}</label>
+            <Calendar
+              :showIcon="true"
+              :showButtonBar="false"
+              v-model="end_date"
+              dateFormat="yy-mm-dd"
+            ></Calendar>
+          </div>
         </div>
-        <div class="field">
-          <label> {{ $t("until_the") }}</label>
-          <Calendar
-            :showIcon="true"
-            :showButtonBar="false"
-            v-model="end_date"
-            dateFormat="yy-mm-dd"
-          ></Calendar>
-        </div>
+
         <div class="field">
           <label>
             <b>{{ $t("report_type") }}</b>
@@ -118,6 +122,7 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="col-12 md:col-9">
       <div class="card p-fluid h-full">
         <h5>{{ $t("report") }}</h5>
@@ -130,13 +135,15 @@
         </div>
       </div>
     </div>
+
+    -->
   </div>
 </template>
 
 <script>
 import moment from "moment";
 import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
-import PDFViewer from "pdf-viewer-vue";
+//import PDFViewer from "pdf-viewer-vue";
 
 export default {
   data() {
@@ -197,9 +204,9 @@ export default {
       urlPDF: null,
     };
   },
-  components: {
+  /*components: {
     PDFViewer,
-  },
+  },*/
   maintenenaceSheetService: null,
   created() {
     this.maintenenaceSheetService = new MaintenenaceSheetService();

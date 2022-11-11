@@ -20,6 +20,7 @@
             <div class="my-2">
               <Button
                 :label="$t('check_in')"
+                icon="pi pi-sign-in"
                 class="p-button-success mr-2 mb-2"
                 @click="checkIn"
                 :disabled="disabledButtonCheckIn"
@@ -27,6 +28,7 @@
 
               <Button
                 :label="$t('check_out')"
+                icon="pi pi-sign-out"
                 class="p-button-danger mr-2 mb-2"
                 @click="checkOut"
                 :disabled="disabledButtonCheckOut"
@@ -459,7 +461,8 @@ export default {
               this.$toast.add({
                 severity: "success",
                 summary: this.$t("successful"),
-                detail: "Justificación" + " " + this.$t("register_a"),
+                detail:
+                  this.$t("attendance_sheet") + " " + this.$t("updated_a"),
                 life: 3000,
               });
             } else {
