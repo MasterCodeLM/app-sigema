@@ -129,9 +129,17 @@
         >
           <template #body="slotProps">
             <span class="p-column-title">Status</span>
-            <span class="product-badge status-instock">{{
-              slotProps.data.status.toLowerCase()
-            }}</span>
+            <span
+              :class="
+                'product-badge status-' +
+                (slotProps.data.status === 'available'
+                  ? 'new'
+                  : slotProps.data.status === 'operating'
+                  ? 'instock'
+                  : 'outofstock')
+              "
+              >{{ slotProps.data.status }}</span
+            >
           </template>
         </Column>
 
@@ -220,7 +228,7 @@
               :autoResize="true"
               rows="7"
               cols="67"
-              :disabled="this.maintenanceSheet.id"
+              :readonly="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet && !maintenanceSheet.description,
@@ -229,7 +237,30 @@
             <small
               class="p-invalid"
               v-if="submittedMaintenanceSheet && !maintenanceSheet.description"
-              >{{ $t("descriptio_alert") }}</small
+              >{{ $t("description_alert") }}</small
+            >
+          </div>
+          <h6>{{ $t("recommendation_of_use") }}</h6>
+          <div class="field col-12">
+            <!--          <label for="name1">Description</label>-->
+            <Textarea
+              v-model="maintenanceSheet.recommendation"
+              :placeholder="$t('your_message_recommendation')"
+              :autoResize="true"
+              rows="3"
+              cols="67"
+              :readonly="this.maintenanceSheet.id"
+              :class="{
+                'p-invalid':
+                  submittedMaintenanceSheet && !maintenanceSheet.recommendation,
+              }"
+            />
+            <small
+              class="p-invalid"
+              v-if="
+                submittedMaintenanceSheet && !maintenanceSheet.recommendation
+              "
+              >{{ $t("recommendation_of_use_alert") }}</small
             >
           </div>
         </div>
@@ -245,7 +276,7 @@
               v-model="maintenanceSheet.responsible"
               id="name1"
               type="text"
-              :disabled="this.maintenanceSheet.id"
+              :readonly="this.maintenanceSheet.id"
               autocomplete="off"
               :class="{
                 'p-invalid':
@@ -313,7 +344,7 @@
               showButtons
               :min="0"
               :useGrouping="false"
-              :disabled="this.maintenanceSheet.id"
+              :readonly="this.maintenanceSheet.id"
               :class="{
                 'p-invalid':
                   submittedMaintenanceSheet &&
@@ -336,7 +367,7 @@
               id="name1"
               type="text"
               v-model="maintenanceSheet.ref_invoice_number"
-              :disabled="this.maintenanceSheet.id"
+              :readonly="this.maintenanceSheet.id"
               autocomplete="off"
               :class="{
                 'p-invalid':
@@ -382,7 +413,7 @@
               v-model="maintenanceSheet.technical"
               id="name1"
               type="text"
-              :disabled="this.maintenanceSheet.id"
+              :readonly="this.maintenanceSheet.id"
               autocomplete="off"
               :class="{
                 'p-invalid':
@@ -467,7 +498,7 @@
                     currency="PEN"
                     locale="es-PE"
                     autofocus
-                    :disabled="this.maintenanceSheet.id"
+                    :readonly="this.maintenanceSheet.id"
                   />
                 </template>
                 <template #body="slotProps">
@@ -482,7 +513,7 @@
                     showButtons
                     :useGrouping="false"
                     autofocus
-                    :disabled="this.maintenanceSheet.id"
+                    :readonly="this.maintenanceSheet.id"
                   />
                 </template>
               </Column>
@@ -1410,3 +1441,8 @@ export default {
   },*/
 };
 </script>
+
+<style scoped lang="scss">
+@import "../assets/demo/badges.scss";
+</style>
+

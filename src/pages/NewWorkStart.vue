@@ -266,7 +266,7 @@
         headerStyle="width:25%; min-width:10rem;"
       >
         <template #body="slotProps">
-          <span class="p-column-title">Serial Number</span>
+          <span class="p-column-title">Serie Number</span>
           {{ slotProps.data.serie_number }}
         </template>
       </Column>
@@ -323,16 +323,24 @@
         </template>
       </Column>
       <Column
-        field="inventoryStatus"
+        field="status"
         :header="$t('status')"
         :sortable="true"
         headerStyle="width:14%; min-width:10rem;"
       >
         <template #body="slotProps">
           <span class="p-column-title">Status</span>
-          <span class="product-badge status-instock">{{
-            slotProps.data.status.toLowerCase()
-          }}</span>
+          <span
+            :class="
+              'product-badge status-' +
+              (slotProps.data.status === 'available'
+                ? 'new'
+                : slotProps.data.status === 'operating'
+                ? 'instock'
+                : 'outofstock')
+            "
+            >{{ slotProps.data.status }}</span
+          >
         </template>
       </Column>
 
@@ -588,3 +596,7 @@ export default {
   },*/
 };
 </script>
+
+<style scoped lang="scss">
+@import "../assets/demo/badges.scss";
+</style>

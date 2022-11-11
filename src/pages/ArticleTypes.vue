@@ -111,7 +111,7 @@
               v-model.trim="resource.name"
               required="true"
               autofocus
-              :disabled="isView"
+              :readonly="isView"
               :class="{ 'p-invalid': submitted && !resource.name }"
             />
             <small class="p-invalid" v-if="submitted && !resource.name">{{

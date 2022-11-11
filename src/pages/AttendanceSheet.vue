@@ -135,8 +135,8 @@
         <Dialog v-model:visible="productDialog" :style="{ width: '1300px' }">
           <div class="content-section introduction">
             <div class="feature-intro">
-              <h6>{{ $t("pick_list_new_attendance") }}</h6>
-              <h7>{{ $t("description_pick_list_new_attendance") }}</h7>
+              <h5>{{ $t("pick_list_new_attendance") }}</h5>
+              <h6>{{ $t("description_pick_list_new_attendance") }}</h6>
             </div>
             <AppDemoActions />
           </div>
@@ -171,7 +171,6 @@
                           optionLabel="name"
                           placeholder="Type employee"
                           :filter="false"
-                          :loading="loadingArticleTypesFilter"
                           @change="filterByType"
                         ></Dropdown>
                       </div>
@@ -186,7 +185,6 @@
                           optionLabel="name"
                           placeholder="Turn"
                           :filter="false"
-                          :loading="loadingArticleTypesFilter"
                           @change="filterByTurn"
                         ></Dropdown>
                       </div>

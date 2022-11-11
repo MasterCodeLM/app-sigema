@@ -111,7 +111,7 @@
               v-model.trim="role.name"
               required="true"
               autofocus
-              :disabled="isView"
+              :readonly="isView"
               :class="{ 'p-invalid': submitted && !role.name }"
             />
             <small class="p-invalid" v-if="submitted && !role.name">{{

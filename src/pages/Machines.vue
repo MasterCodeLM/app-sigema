@@ -150,11 +150,21 @@
             field="status"
             :header="$t('status')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:14%; min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
-              {{ slotProps.data.status }}
+              <span
+                :class="
+                  'product-badge status-' +
+                  (slotProps.data.status === 'available'
+                    ? 'new'
+                    : slotProps.data.status === 'operating'
+                    ? 'instock'
+                    : 'outofstock')
+                "
+                >{{ slotProps.data.status }}</span
+              >
             </template>
           </Column>
 
@@ -191,22 +201,24 @@
 
         <Dialog
           v-model:visible="recommendationDialog"
-          :style="{ width: '450px' }"
+          :style="{ width: '550px' }"
           :header="$t('recommendation_title')"
           :modal="true"
         >
-          <div class="flex align-items-center justify-content-center">
-            <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
+          <div class="field col-12">
+            <label for="recommendation">{{ $t("recommendationDialog") }}</label>
+            <br />
+            <Textarea
+              id="recommendation"
+              v-model.trim="machine.recommendation"
+              :autoResize="true"
+              rows="3"
+              cols="60"
+              readonly="true"
+              autocomplete="off"
             />
-            <span>{{ $t("create_alert_question") }}</span>
           </div>
-          <br />
-          <small
-            ><b>{{ $t("create_alert_note") }}</b>
-            {{ $t("create_alert_note_complete") }}</small
-          >
+
           <template #footer>
             <Button
               label="Entendido"
@@ -219,7 +231,7 @@
 
         <Dialog
           v-model:visible="productDialog"
-          :style="{ width: '900px' }"
+          :style="{ width: '950px' }"
           :header="
             !machine.id
               ? $t('new_machine')
@@ -231,7 +243,7 @@
           class="p-fluid"
         >
           <div class="formgrid grid">
-            <div class="col-8">
+            <div class="col-7">
               <div class="card mb-4">
                 <div class="field">
                   <label for="serie_number">{{ $t("serial_number") }}</label>
@@ -241,7 +253,7 @@
                     required="true"
                     autofocus
                     :class="{ 'p-invalid': submitted && !machine.serie_number }"
-                    :disabled="isView"
+                    :readonly="isView"
                     autocomplete="off"
                   />
                   <small
@@ -259,7 +271,7 @@
                     required="true"
                     autofocus
                     :class="{ 'p-invalid': submitted && !machine.name }"
-                    :disabled="isView"
+                    :readonly="isView"
                     autocomplete="off"
                   />
                   <small class="p-invalid" v-if="submitted && !machine.name">{{
@@ -276,7 +288,7 @@
                       required="true"
                       autofocus
                       :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
+                      :readonly="isView"
                       autocomplete="off"
                     />
                     <small
@@ -293,7 +305,7 @@
                       required="true"
                       autofocus
                       :class="{ 'p-invalid': submitted && !machine.name }"
-                      :disabled="isView"
+                      :readonly="isView"
                       autocomplete="off"
                     />
                     <small
@@ -315,7 +327,7 @@
                       v-model="machine.maximum_working_time_per_day"
                       showButtons
                       mode="decimal"
-                      :disabled="isView"
+                      :readonly="isView"
                       :min="0"
                       :max="24"
                       :useGrouping="false"
@@ -340,7 +352,7 @@
                       v-model="machine.maximum_working_time"
                       showButtons
                       mode="decimal"
-                      :disabled="isView"
+                      :readonly="isView"
                       :class="{
                         'p-invalid': submitted && !machine.maximum_working_time,
                       }"
@@ -354,6 +366,29 @@
                     >
                   </div>
                 </div>
+
+                <div class="field">
+                  <label for="recommendation">{{
+                    $t("recommendation_of_use")
+                  }}</label>
+                  <Textarea
+                    id="recommendation"
+                    v-model.trim="machine.recommendation"
+                    required="true"
+                    autofocus
+                    rows="4"
+                    :class="{
+                      'p-invalid': submitted && !machine.recommendation,
+                    }"
+                    :readonly="isView"
+                    autocomplete="off"
+                  />
+                  <small
+                    class="p-invalid"
+                    v-if="submitted && !machine.recommendation"
+                    >{{ $t("recommendation_of_use_alert") }}</small
+                  >
+                </div>
               </div>
               <div class="card m-0">
                 <div v-if="!isView" class="formgrid grid">
@@ -364,7 +399,7 @@
                       v-model="sparePartItem"
                       :options="sparePartItems"
                       optionLabel="name"
-                      placeholder="Select One"
+                      :placeholder="$t('select_one')"
                       :filter="true"
                       :loading="loadingSpareParts"
                       :class="{
@@ -426,7 +461,7 @@
               </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-5">
               <!-- <div class="col-12"> -->
               <div class="card w-full h-full m-0">
                 <div class="mb-4">
@@ -610,6 +645,7 @@ export default {
         maximum_working_time: null,
         maximum_working_time_per_day: null,
         image: null,
+        recommendation: null,
         articles: [],
       },
       spare_Part: {
@@ -802,11 +838,12 @@ export default {
         this.defaultObjects();
       }
     },
-    recommendationMachine() {
+    recommendationMachine(machine) {
       this.recommendationDialog = true;
+      this.machine = machine;
       /*this.machinesService.getOne(machine.id).then((data) => {
         this.machine = { ...data };
-        this.productDialog = true;
+        this.recommendationDialog = true;
       });*/
     },
     viewMachine(machine) {
@@ -927,6 +964,7 @@ export default {
         this.machine.brand &&
         this.machine.model &&
         this.machine.maximum_working_time &&
+        this.machine.recommendation &&
         this.machine.maximum_working_time_per_day
       );
     },
@@ -960,6 +998,7 @@ export default {
         brand: null,
         model: null,
         maximum_working_time: null,
+        recommendation: null,
         maximum_working_time_per_day: null,
         image: null,
         articles: [],

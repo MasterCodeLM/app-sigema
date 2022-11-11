@@ -11,7 +11,7 @@ const routes = [
         component: App,
         children: [
             {
-                path: '',
+                path: '/dashboard',
                 name: 'dashboard',
                 component: () => import('./pages/CustomDashboard.vue')
             },
@@ -216,6 +216,11 @@ const routes = [
                 path: '/r-maintenances',
                 name: 'r-maintenances',
                 component: () => import('./pages/R-Maintenances.vue')
+            },
+            {
+                path: '/r-attendances',
+                name: 'r-attendances',
+                component: () => import('./pages/R-Attendances.vue')
             }
 
         ]
@@ -257,6 +262,9 @@ function hasAccess(name) {
         case 'new-attendance-control':
             return permissions.includes('attendance-sheets')
 
+        case 'r-attendances':
+            return permissions.includes('attendance-sheets')
+
         case 'suppliers':
             return permissions.includes('suppliers')
 
@@ -265,6 +273,9 @@ function hasAccess(name) {
 
         case 'machines':
             return permissions.includes('machines')
+
+        /*case 'dashboard':
+            return permissions.includes('machines')*/
 
         case 'maintenance-sheet':
             return permissions.includes('maintenance-sheets')

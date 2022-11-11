@@ -211,7 +211,7 @@
                       id="serialNumber"
                       v-model.trim="article.serie_number"
                       required="true"
-                      :disabled="isView"
+                      :readonly="isView"
                       autofocus
                       :class="{
                         'p-invalid': submitted && !article.serie_number,
@@ -231,7 +231,7 @@
                       v-model.trim="article.name"
                       required="true"
                       autofocus
-                      :disabled="isView"
+                      :readonly="isView"
                       autocomplete="off"
                       :class="{ 'p-invalid': submitted && !article.name }"
                     />
@@ -251,7 +251,7 @@
                       v-model.trim="article.brand"
                       required="true"
                       autofocus
-                      :disabled="isView"
+                      :readonly="isView"
                       :class="{ 'p-invalid': submitted && !article.brand }"
                     />
                     <small
@@ -268,7 +268,7 @@
                       v-model.trim="article.model"
                       required="true"
                       autofocus
-                      :disabled="isView"
+                      :readonly="isView"
                       :class="{ 'p-invalid': submitted && !article.model }"
                     />
                     <small
@@ -286,7 +286,7 @@
                       id="quantity"
                       v-model="article.quantity"
                       showButtons
-                      :disabled="isView"
+                      :readonly="isView"
                       :min="0"
                       :useGrouping="false"
                       :class="{ 'p-invalid': submitted && !article.quantity }"
@@ -616,6 +616,7 @@ export default {
       resource: {}, // One Resource Articles
       selectedProducts: null,
       filters: {},
+      filter: null,
       submitted: false,
       message: null,
 
