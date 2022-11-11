@@ -152,12 +152,12 @@ export default {
   mounted() {
     this.player.src = this.sound;
     this.player.volume = this.volume;
-    window.Echo.channel('notifications').listen('NewNotification', (notification) => {
-      // console.log(notification)
-      this.notifications.unshift(notification)
-      this.notificationsDontView.unshift(notification)
-      this.player.play();
-    })
+    // window.Echo.channel('notifications').listen('NewNotification', (notification) => {
+    //   // console.log(notification)
+    //   this.notifications.unshift(notification)
+    //   this.notificationsDontView.unshift(notification)
+    //   this.player.play();
+    // })
   },
   methods: {
     logout() {

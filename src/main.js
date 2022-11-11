@@ -99,19 +99,17 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import CodeHighlight from './AppCodeHighlight';
 import BlockViewer from './BlockViewer';
 
-import Echo from "laravel-echo"
-window.Pusher = require('pusher-js');
-
-// console.log(process.env.VUE_APP_WEBSOCKET_HOST,
-window.Echo = new Echo({
-    // authEndpoint : '/broadcasting/auth',
-    broadcaster: 'pusher',
-    wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
-    key: process.env.VUE_APP_PUSHER_KEY,
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true,
-});
+// import Echo from "laravel-echo"
+// window.Pusher = require('pusher-js');
+//
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
+//     key: process.env.VUE_APP_PUSHER_KEY,
+//     wsPort: 6001,
+//     forceTLS: false,
+//     disableStats: true,
+// });
 
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
