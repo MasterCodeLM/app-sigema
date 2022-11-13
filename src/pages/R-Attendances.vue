@@ -12,7 +12,7 @@
       <div class="card p-fluid h-full">
         <h5>{{ $t("options") }}</h5>
         <div class="fiel grid">
-          <div class="field col-6">
+          <div class="field col-12 sm:col-6">
             <label>{{ $t("from_the") }}</label>
             <Calendar
               :showIcon="true"
@@ -21,7 +21,7 @@
               dateFormat="yy-mm-dd"
             ></Calendar>
           </div>
-          <div class="field col-6">
+          <div class="field col-12 sm:col-6">
             <label> {{ $t("until_the") }}</label>
             <Calendar
               :showIcon="true"
@@ -41,7 +41,7 @@
               v-model="type"
               inputId="order1"
               name="Attendances"
-              value="attendances"
+              value="attended"
             />
             <label for="city1">{{ $t("r_attendances") }}</label>
           </div>
@@ -50,14 +50,14 @@
               v-model="type"
               inputId="order1"
               name="Absences"
-              value="absences"
+              value="missed"
             />
             <label for="city1">{{ $t("absences") }}</label>
           </div>
         </div>
         <div class="field" style="border-top: 1px solid silver"></div>
         <div class="field">
-          <h5>{{ $t("order_by") }}</h5>
+          <h6>{{ $t("order_by") }}</h6>
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
@@ -81,7 +81,8 @@
               v-model="order"
               inputId="order1"
               name="N° of maintenances"
-              value="attendances_count"
+              value="attendances"
+              :disabled="type == 'absences'"
             />
             <label for="city1">{{ $t("n_attendances") }}</label>
           </div>
@@ -90,9 +91,37 @@
               v-model="order"
               inputId="order1"
               name="N° of absences"
-              value="absences_count"
+              value="absences"
             />
             <label for="city1">{{ $t("n_absences") }}</label>
+          </div>
+        </div>
+        <div class="field">
+          <h6>{{ $t("scale") }}</h6>
+
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order_by"
+              inputId="order1"
+              name="N° Serie"
+              value="asc"
+            />
+            <label for="city1"
+              ><i class="pi pi-sort-amount-up text-green-500 text-xl"></i
+              >{{ $t("upward") }}</label
+            >
+          </div>
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order_by"
+              inputId="order2"
+              name="Machine"
+              value="desc"
+            />
+            <label for="city1">
+              <i class="pi pi-sort-amount-down text-green-500 text-xl"></i
+              >{{ $t("downward") }}</label
+            >
           </div>
         </div>
         <div class="field">
@@ -110,14 +139,15 @@
 
 <script>
 import moment from "moment";
-import MaintenenaceSheetService from "@/service/MaintenenceSheetService";
+import AttendanceService from "@/service/AttendanceService";
 //import PDFViewer from "pdf-viewer-vue";
 
 export default {
   data() {
     return {
       order: "name",
-      type: "attendances",
+      order_by: "asc",
+      type: "attended",
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
@@ -175,9 +205,9 @@ export default {
   /*components: {
     PDFViewer,
   },*/
-  maintenenaceSheetService: null,
+  attendanceService: null,
   created() {
-    this.maintenenaceSheetService = new MaintenenaceSheetService();
+    this.attendanceService = new AttendanceService();
   },
   methods: {
     generate() {
@@ -186,10 +216,10 @@ export default {
         end_date: moment(this.end_date).format("YYYY-MM-DD"),
         type: this.type,
         sort_by: this.order,
-        order_by: "desc",
+        order_by: this.order_by,
       };
       console.log(payload);
-      this.maintenenaceSheetService.report(payload).then((data) => {
+      this.attendanceService.report(payload).then((data) => {
         if (data.path) {
           this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`;
         }

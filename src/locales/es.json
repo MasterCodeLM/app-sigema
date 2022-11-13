@@ -272,6 +272,9 @@
     "r_attendances":"Asistencias",
     "n_attendances":"N° de asistencias",
     "absences":"Faltas",
-    "n_absences":"N° de faltas"
+    "n_absences":"N° de faltas",
+    "scale":"Escala",
+    "upward":" Ascendente",
+    "downward":" Descendente"
 
 }

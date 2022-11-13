@@ -1,8 +1,8 @@
 <template>
   <div class="grid">
-    <div class="col-12 lg:col-6 xl:col-12">
+    <div class="col-12 lg:col-6 xl:col-12 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageMachines">
           <div>
             <span class="block text-500 font-medium mb-3">MACHINES</span>
             <div class="text-900 font-medium text-xl">152</div>
@@ -28,9 +28,9 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageWorkSheets">
           <div>
             <span class="block text-500 font-medium mb-3">WORK</span>
             <div class="text-900 font-medium text-xl">$2.100</div>
@@ -53,9 +53,12 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div
+          class="flex justify-content-between mb-3"
+          @click="pageMaintenancesSheets"
+        >
           <div>
             <span class="block text-500 font-medium mb-3">MAINTENANCE</span>
             <div class="text-900 font-medium text-xl">28441</div>
@@ -78,9 +81,9 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageEmployees">
           <div>
             <span class="block text-500 font-medium mb-3">EMPLOYEES</span>
             <div class="text-900 font-medium text-xl">152 Unread</div>
@@ -102,9 +105,12 @@
         <span class="text-500">responded</span>
       </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div
+          class="flex justify-content-between mb-3"
+          @click="pageAttendancesSheets"
+        >
           <div>
             <span class="block text-500 font-medium mb-3"
               >ATTENDANCE SHEETS</span
@@ -129,9 +135,9 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageSuppliers">
           <div>
             <span class="block text-500 font-medium mb-3">SUPPLIERS</span>
             <div class="text-900 font-medium text-xl">$2.100</div>
@@ -154,9 +160,9 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageInventory">
           <div>
             <span class="block text-500 font-medium mb-3">INVENTORY</span>
             <div class="text-900 font-medium text-xl">28441</div>
@@ -178,11 +184,11 @@
         <span class="text-500">newly registered</span>
       </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-12">
+    <div class="col-12 lg:col-6 xl:col-12 card-dashboard">
       <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
+        <div class="flex justify-content-between mb-3" @click="pageUsers">
           <div>
-            <span class="block text-500 font-medium mb-3">REPORTS</span>
+            <span class="block text-500 font-medium mb-3">USERS</span>
             <div class="text-900 font-medium text-xl">152</div>
           </div>
           <div
@@ -342,6 +348,36 @@ export default {
         },
       };
     },
+    pageMachines() {
+      this.$router.push(`/machines`);
+    },
+    pageWorkSheets() {
+      this.$router.push(`/work-sheet`);
+    },
+    pageMaintenancesSheets() {
+      this.$router.push(`/maintenance-sheet`);
+    },
+    pageEmployees() {
+      this.$router.push(`/employees`);
+    },
+    pageAttendancesSheets() {
+      this.$router.push(`/attendance-sheet`);
+    },
+    pageSuppliers() {
+      this.$router.push(`/suppliers`);
+    },
+    pageInventory() {
+      this.$router.push(`/articles`);
+    },
+    pageUsers() {
+      this.$router.push(`/users`);
+    },
   },
 };
 </script>
+
+<style scoped>
+.card-dashboard :hover {
+  transform: scale(1.03);
+}
+</style>

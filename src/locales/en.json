@@ -272,6 +272,9 @@
     "r_attendances":"Attendances",
     "n_attendances":"N° of attendances",
     "absences":"Absences",
-    "n_absences":"N° of absences"
+    "n_absences":"N° of absences",
+    "scale":"Scale",
+    "upward":" Upward",
+    "downward":" Downward"
 
 }
