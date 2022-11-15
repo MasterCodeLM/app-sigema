@@ -229,7 +229,8 @@ export default {
     // console.log(localStorage.getItem("token"));
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
+        // wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
+        wsHost: window.location.hostname,
         key: process.env.VUE_APP_PUSHER_KEY,
         wsPort: 6001,
         forceTLS: false,
