@@ -99,6 +99,7 @@ import AuthService from "@/service/AuthService";
 export default {
   data() {
     return {
+      permissions:[],
       player: new Audio(),
       sound: require("./assets/notification-sound.mp3"),
       volume: 0.5,
@@ -148,16 +149,22 @@ export default {
   authService: null,
   created() {
     this.authService = new AuthService();
+    // let permissions = [];
+    const permissions_list = JSON.parse(localStorage.getItem("userLogged")).permissions;
+    permissions_list.map((permission) => this.permissions.push(permission.name))
   },
   mounted() {
     this.player.src = this.sound;
     this.player.volume = this.volume;
-    // window.Echo.channel('notifications').listen('NewNotification', (notification) => {
-    //   // console.log(notification)
-    //   this.notifications.unshift(notification)
-    //   this.notificationsDontView.unshift(notification)
-    //   this.player.play();
-    // })
+    window.Echo.channel('notifications').listen('NewNotification', (notification) => {
+      // console.log(notification)
+      // TODO:EVALUATE IF USER HAS PERMISSIONS
+      if(this.permissions.includes('users')){
+        this.notifications.unshift(notification)
+        this.notificationsDontView.unshift(notification)
+        this.player.play();
+      }
+    })
   },
   methods: {
     logout() {
