@@ -275,6 +275,23 @@
     "n_absences":"N° de faltas",
     "scale":"Escala",
     "upward":" Ascendente",
-    "downward":" Descendente"
+    "downward":" Descendente",
+    "d_machines":"MAQUINAS",
+    "d_workSheets":"HOJAS DE TRABAJO",
+    "d_maintenanceSheets":"FICHAS DE MANTENIMIETO",
+    "d_employees":"TRABAJADORES",
+    "d_attendanceSheets":"CONTROL DE ASISTENCIA",
+    "d_suppliers":"PROVEEDORES",
+    "d_inventory":"INVENTARIO",
+    "d_users":"USUARIOS",
+    "note":"Nota: ",
+    "d_n_machines":"Check la información de las máquinas, fichas técnicas, repuesto, etc.",
+    "d_n_workSheets":"Check las hojas de trabajo del día actual y de días anteriores / empieza un nuevo trabajo.",
+    "d_n_maintenancesSheets":"Check las fichas de mantenimiento del día actual y anteriores / registra un nuevo mantenimiento.",
+    "d_n_employees":"Check la información de los trabajadores, correos, dirección, teléfono, etc.",
+    "d_n_attendanceSheets":"Check las asistencias realizadas y crea nuevas asistencias para los turnos del presente día.",
+    "d_n_suppliers":"Check la información de sus proveedores, RUC, razón social, cuentas bancarias, etc.",
+    "d_n_inventory":"Check todos los artículos, precios referenciales relacionados a sus proveedores, etc.",
+    "d_n_users":"Check los usuarios y el rol que cumplen en el sistema."
 
 }

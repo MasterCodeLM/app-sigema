@@ -275,6 +275,23 @@
     "n_absences":"N° of absences",
     "scale":"Scale",
     "upward":" Upward",
-    "downward":" Downward"
+    "downward":" Downward",
+    "d_machines":"MACHINES",
+    "d_workSheets":"WORK SHEETS",
+    "d_maintenanceSheets":"MAINTENANCES SHEETS",
+    "d_employees":"EMPLOYEES",
+    "d_attendanceSheets":"ATTENDANCES CONTROL",
+    "d_suppliers":"SUPPLIERS",
+    "d_inventory":"INVENTORY",
+    "d_users":"USERS",
+    "note":"Note: ",
+    "d_n_machines":"Check the information of the machines, technical sheets, spare parts, etc.",
+    "d_n_workSheets":"Check the worksheets of the current day and previous days / start a new job.",
+    "d_n_maintenancesSheets":"Check current and previous day's maintenance tabs / record a new maintenance.",
+    "d_n_employees":"Check la información de los trabajadores, correos, dirección, teléfono, etc.",
+    "d_n_attendanceSheets":"Check the information of the workers, emails, address, telephone, etc.",
+    "d_n_suppliers":"Check the information of your suppliers, RUC, business name, bank accounts, etc.",
+    "d_n_inventory":"Check all articles, reference prices related to your suppliers, etc.",
+    "d_n_users":"Check the users and the role they play in the system."
 
 }

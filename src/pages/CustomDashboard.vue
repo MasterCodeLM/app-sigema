@@ -4,8 +4,12 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageMachines">
           <div>
-            <span class="block text-500 font-medium mb-3">MACHINES</span>
-            <div class="text-900 font-medium text-xl">152</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_machines")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.machines.count }}
+            </div>
           </div>
           <div
             class="
@@ -20,11 +24,8 @@
             <i class="pi pi-th-large text-blue-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">Note: </span>
-        <span class="text-500"
-          >Check the information of the machines, technical sheets, spare parts,
-          etc.</span
-        >
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_machines") }}</span>
       </div>
     </div>
 
@@ -32,8 +33,12 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageWorkSheets">
           <div>
-            <span class="block text-500 font-medium mb-3">WORK</span>
-            <div class="text-900 font-medium text-xl">$2.100</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_workSheets")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.working_sheets.count_today }}
+            </div>
           </div>
           <div
             class="
@@ -48,8 +53,8 @@
             <i class="pi pi-cog text-orange-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">%52+ </span>
-        <span class="text-500">since last week</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_workSheets") }}</span>
       </div>
     </div>
 
@@ -60,8 +65,12 @@
           @click="pageMaintenancesSheets"
         >
           <div>
-            <span class="block text-500 font-medium mb-3">MAINTENANCE</span>
-            <div class="text-900 font-medium text-xl">28441</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_maintenanceSheets")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.maintenance_sheets.count_today }}
+            </div>
           </div>
           <div
             class="
@@ -76,8 +85,8 @@
             <i class="pi pi-sliders-h text-cyan-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">520 </span>
-        <span class="text-500">newly registered</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }} </span>
+        <span class="text-500">{{ $t("d_n_maintenancesSheets") }}</span>
       </div>
     </div>
 
@@ -85,8 +94,12 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageEmployees">
           <div>
-            <span class="block text-500 font-medium mb-3">EMPLOYEES</span>
-            <div class="text-900 font-medium text-xl">152 Unread</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_employees")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.employees.count }}
+            </div>
           </div>
           <div
             class="
@@ -101,8 +114,8 @@
             <i class="pi pi-users text-purple-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">85 </span>
-        <span class="text-500">responded</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_employees") }}</span>
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-6 card-dashboard">
@@ -112,10 +125,12 @@
           @click="pageAttendancesSheets"
         >
           <div>
-            <span class="block text-500 font-medium mb-3"
-              >ATTENDANCE SHEETS</span
-            >
-            <div class="text-900 font-medium text-xl">152 Unread</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_attendanceSheets")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.attendance_sheets.count_today }}
+            </div>
           </div>
           <div
             class="
@@ -130,8 +145,8 @@
             <i class="pi pi-check-square text-purple-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">85 </span>
-        <span class="text-500">responded</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_attendanceSheets") }}</span>
       </div>
     </div>
 
@@ -139,8 +154,12 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageSuppliers">
           <div>
-            <span class="block text-500 font-medium mb-3">SUPPLIERS</span>
-            <div class="text-900 font-medium text-xl">$2.100</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_suppliers")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.suppliers.count }}
+            </div>
           </div>
           <div
             class="
@@ -155,8 +174,8 @@
             <i class="pi pi-briefcase text-green-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">%52+ </span>
-        <span class="text-500">since last week</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_suppliers") }}</span>
       </div>
     </div>
 
@@ -164,8 +183,12 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageInventory">
           <div>
-            <span class="block text-500 font-medium mb-3">INVENTORY</span>
-            <div class="text-900 font-medium text-xl">28441</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_inventory")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.articles.count }}
+            </div>
           </div>
           <div
             class="
@@ -180,16 +203,20 @@
             <i class="pi pi-wallet text-cyan-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">520 </span>
-        <span class="text-500">newly registered</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_inventory") }}</span>
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-12 card-dashboard">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3" @click="pageUsers">
           <div>
-            <span class="block text-500 font-medium mb-3">USERS</span>
-            <div class="text-900 font-medium text-xl">152</div>
+            <span class="block text-500 font-medium mb-3">{{
+              $t("d_users")
+            }}</span>
+            <div class="text-900 font-medium text-xl">
+              {{ this.dashboard.users.count }}
+            </div>
           </div>
           <div
             class="
@@ -201,11 +228,11 @@
             "
             style="width: 2.5rem; height: 2.5rem"
           >
-            <i class="pi pi-file-pdf text-red-500 text-xl"></i>
+            <i class="pi pi-user text-red-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">24 new </span>
-        <span class="text-500">since last visit</span>
+        <span class="text-green-500 font-medium">{{ $t("note") }}</span>
+        <span class="text-500">{{ $t("d_n_users") }}</span>
       </div>
     </div>
   </div>
@@ -214,10 +241,21 @@
 <script>
 import EventBus from "@/AppEventBus";
 import ProductService from "../service/ProductService";
+import DashboardService from "../service/DashboardService";
 
 export default {
   data() {
     return {
+      dashboard: {
+        machines: { count: null },
+        working_sheets: { count_today: null },
+        maintenance_sheets: { count_today: null },
+        employees: { count: null },
+        attendance_sheets: { count_today: null },
+        suppliers: { count: null },
+        articles: { count: null },
+        users: { count: null },
+      },
       products: null,
       lineData: {
         labels: [
@@ -253,11 +291,19 @@ export default {
         { label: "Remove", icon: "pi pi-fw pi-minus" },
       ],
       lineOptions: null,
+      //loadingDashboard : true,
     };
   },
   productService: null,
+  dashboardService: null,
   themeChangeListener: null,
   mounted() {
+    this.dashboardService.getAll().then((data) => {
+      this.dashboard = data;
+      //this.loadingDashboard = false;
+      //console.log(this.dashboard);
+    });
+
     this.productService
       .getProductsSmall()
       .then((data) => (this.products = data));
@@ -279,6 +325,7 @@ export default {
   },
   created() {
     this.productService = new ProductService();
+    this.dashboardService = new DashboardService();
   },
   methods: {
     formatCurrency(value) {
@@ -378,6 +425,6 @@ export default {
 
 <style scoped>
 .card-dashboard :hover {
-  transform: scale(1.03);
+  transform: scale(1.015);
 }
 </style>

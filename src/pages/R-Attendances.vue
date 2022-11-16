@@ -222,6 +222,7 @@ export default {
       this.attendanceService.report(payload).then((data) => {
         if (data.path) {
           this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`;
+          window.open(this.urlPDF);
         }
       });
     },

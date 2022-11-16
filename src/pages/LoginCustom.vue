@@ -138,6 +138,19 @@ export default {
           //  TODO:SET DATA
           this.authService.setUserLogged({ ...data.data });
           this.authService.setToken(data.token);
+          let language;
+          const user = JSON.parse(localStorage.getItem("userLogged"));
+          switch (user.employee.native_language) {
+            case "spanish":
+              language = "es";
+              break;
+
+            default:
+              language = "en";
+              break;
+          }
+          this.$i18n.locale = language;
+          //console.log(user.employee.native_language),
           this.$router.push({ name: "dashboard" });
         } else {
           this.invalidCredential = true;
