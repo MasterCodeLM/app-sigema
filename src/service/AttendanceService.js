@@ -18,6 +18,10 @@ export default class AttendanceService {
     async create(payload) {
         return HttpService.prototype.create(uri, payload)
     }
+    async report(payload) {
+        let custom_uri = uri + '/pdf'
+        return HttpService.prototype.create(custom_uri, payload)
+    }
 
     async update(id, payload) {
         return HttpService.prototype.update(uri, id, payload)

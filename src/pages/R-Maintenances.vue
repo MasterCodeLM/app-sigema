@@ -13,7 +13,7 @@
         <h5>{{ $t("options") }}</h5>
 
         <div class="fiel grid">
-          <div class="field col-6">
+          <div class="field col-12 sm:col-6">
             <label>{{ $t("from_the") }}</label>
             <Calendar
               :showIcon="true"
@@ -22,7 +22,7 @@
               dateFormat="yy-mm-dd"
             ></Calendar>
           </div>
-          <div class="field col-6">
+          <div class="field col-12 sm:col-6">
             <label> {{ $t("until_the") }}</label>
             <Calendar
               :showIcon="true"
@@ -74,16 +74,7 @@
         </div>
         <div class="field" style="border-top: 1px solid silver"></div>
         <div class="field">
-          <h5>{{ $t("order_by") }}</h5>
-          <div class="field-radiobutton">
-            <RadioButton
-              v-model="order"
-              inputId="order1"
-              name="N° Serie"
-              value="serie_number"
-            />
-            <label for="city1">{{ $t("serial_number") }}</label>
-          </div>
+          <h6>{{ $t("order_by") }}</h6>
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
@@ -93,6 +84,16 @@
             />
             <label for="city1">{{ $t("machine") }}</label>
           </div>
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order"
+              inputId="order1"
+              name="N° Serie"
+              value="serie_number"
+            />
+            <label for="city1">{{ $t("serial_number") }}</label>
+          </div>
+
           <div class="field-radiobutton">
             <RadioButton
               v-model="order"
@@ -110,6 +111,34 @@
               value="maintenance_count"
             />
             <label for="city1">{{ $t("number_maintenances") }}</label>
+          </div>
+        </div>
+        <div class="field">
+          <h6>{{ $t("scale") }}</h6>
+
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order_by"
+              inputId="order1"
+              name="N° Serie"
+              value="asc"
+            />
+            <label for="city1"
+              ><i class="pi pi-sort-amount-up text-green-500 text-xl"></i
+              >{{ $t("upward") }}</label
+            >
+          </div>
+          <div class="field-radiobutton">
+            <RadioButton
+              v-model="order_by"
+              inputId="order2"
+              name="Machine"
+              value="desc"
+            />
+            <label for="city1">
+              <i class="pi pi-sort-amount-down text-green-500 text-xl"></i
+              >{{ $t("downward") }}</label
+            >
           </div>
         </div>
         <div class="field">
@@ -149,6 +178,7 @@ export default {
   data() {
     return {
       order: "name",
+      order_by: "asc",
       type: "resumen",
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
@@ -218,14 +248,21 @@ export default {
         end_date: moment(this.end_date).format("YYYY-MM-DD"),
         type: this.type,
         sort_by: this.order,
-        order_by: "desc",
+        order_by: this.order_by,
       };
-      console.log(payload);
+      //console.log(payload);
       this.maintenenaceSheetService.report(payload).then((data) => {
         if (data.path) {
-          this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`;
+          this.viewPDF(data.path);
         }
       });
+    },
+
+    viewPDF(path) {
+      // console.log(data)
+      let uri = `${process.env.VUE_APP_API_HOST}/storage/${path}`;
+      window.open(uri);
+      // return `${process.env.VUE_APP_API_HOST}/storage/${path}`;
     },
   },
 };

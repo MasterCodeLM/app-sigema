@@ -39,7 +39,6 @@
                 icon="pi pi-check-square"
                 class="p-button-rounded p-button-warning mr-2 mb-2"
                 @click="openJustify"
-                :disabled="disabledButtonCheckOut"
               />
             </div>
           </template>
