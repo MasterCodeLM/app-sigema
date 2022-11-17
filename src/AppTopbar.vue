@@ -42,7 +42,7 @@
         <!--          <span>Notifications</span>-->
         <!--          <i class="pi pi-bell p-text-secondary" v-badge="2"></i>-->
         <!--        </button>-->
-        <i v-badge="this.notificationsDontView.length>0?this.notificationsDontView.length:null"
+        <i v-badge="numberDontView"
            class="pi pi-bell mr-4 mt-3 p-text-secondary icon" @click="toggleNotification"></i>
         <!--        <i class="pi pi-bell" v-badge.success="2"></i>-->
 
@@ -70,7 +70,7 @@
       <ScrollPanel style="width: 100%; height: 300px">
         <div class="card mb-2" v-for="(item, index) in notifications" :key="index">
           <p class="text-700">
-            {{ item.message }}
+            {{ item.machine.name + ' ' + item.message }}
           </p>
           <!--              <span class="text-500">ago 12 Hours</span>-->
         </div>
@@ -95,11 +95,13 @@
 
 <script>
 import AuthService from "@/service/AuthService";
+import NotificationService from "@/service/NotificationService";
 
 export default {
   data() {
     return {
-      permissions:[],
+      numberDontView: 0,
+      permissions: [],
       player: new Audio(),
       sound: require("./assets/notification-sound.mp3"),
       volume: 0.5,
@@ -147,21 +149,40 @@ export default {
     };
   },
   authService: null,
+  otificationService: null,
   created() {
     this.authService = new AuthService();
+    this.notificationService = new NotificationService();
     // let permissions = [];
     const permissions_list = JSON.parse(localStorage.getItem("userLogged")).permissions;
     permissions_list.map((permission) => this.permissions.push(permission.name))
   },
   mounted() {
+    this.notificationService.getAll().then((data) => {
+      // console.log(data)
+      this.notifications = data;
+
+      let numberDontView = 0;
+      this.notifications.map((notification) => {
+        if (!notification.is_view) numberDontView++;
+      })
+      this.numberDontView = numberDontView;
+    });
     this.player.src = this.sound;
     this.player.volume = this.volume;
     window.Echo.channel('notifications').listen('NewNotification', (notification) => {
       // console.log(notification)
       // TODO:EVALUATE IF USER HAS PERMISSIONS
-      if(this.permissions.includes('users')){
+      if (this.permissions.includes('notifications')) {
+        console.log(notification);
         this.notifications.unshift(notification)
-        this.notificationsDontView.unshift(notification)
+
+        let numberDontView = 0;
+        this.notifications.map((notification) => {
+          if (!notification.is_view) numberDontView++;
+        })
+        this.numberDontView = numberDontView;
+
         this.player.play();
       }
     })
@@ -185,7 +206,10 @@ export default {
     },
     toggleNotification(event) {
       this.$refs.op.toggle(event);
-      this.notificationsDontView = []
+      // this.notifications = []
+      this.numberDontView = 0;
+      this.notificationService.check()
+      // this.numberDontView
     },
     onMenuToggle(event) {
       this.$emit("menu-toggle", event);
@@ -203,6 +227,15 @@ export default {
       return this.$appState.darkTheme;
     },
   },
+  // watch: {
+  //   numberDontView() {
+  //     let numberDontView = 0;
+  //     this.notifications.map((notification) => {
+  //       if (!notification.is_view) numberDontView++;
+  //     })
+  //     return numberDontView;
+  //   }
+  // }
 };
 </script>
 <style scoped>
