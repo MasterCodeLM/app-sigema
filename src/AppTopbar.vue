@@ -171,11 +171,11 @@ export default {
     this.player.src = this.sound;
     this.player.volume = this.volume;
     window.Echo.channel('notifications').listen('NewNotification', (notification) => {
-      // console.log(notification)
+      //console.log(notification.data)
       // TODO:EVALUATE IF USER HAS PERMISSIONS
       if (this.permissions.includes('notifications')) {
-        console.log(notification);
-        this.notifications.unshift(notification)
+        //console.log(notification);
+        this.notifications.unshift(notification.data)
 
         let numberDontView = 0;
         this.notifications.map((notification) => {
