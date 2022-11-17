@@ -189,7 +189,7 @@ const routes = [
                 name: 'roles',
                 component: () => import('./pages/Roles.vue')
             },
-            
+
             {
                 path: '/maintenance-sheet',
                 name: 'maintenance-sheet',
@@ -200,13 +200,13 @@ const routes = [
                 name: 'new-maintenance-sheet',
                 component: () => import('./pages/NewMaintenanceSheet.vue')
             },
-            
+
             {
                 path: '/work-sheet',
                 name: 'work-sheet',
                 component: () => import('./pages/WorkSheet.vue')
             },
-            
+
             {
                 path: '/new-work-start/:id?',
                 name: 'new-work-start',
@@ -243,13 +243,15 @@ const router = createRouter({
 });
 
 function hasAccess(name) {
+    // console.log(name)
     let permissions = [];
     const permissions_list = JSON.parse(localStorage.getItem("userLogged")).permissions;
     permissions_list.map((permission) => permissions.push(permission.name))
     switch (name) {
+        // case 'app':
+        //     return true
         case 'dashboard':
             return true
-
         case 'users':
             return permissions.includes('users')
 
@@ -315,7 +317,11 @@ router.beforeEach((to, from, next) => {
             // user not logged in, send them to login page
             next({name: 'login'})
             return
-        } else if (!hasAccess(to.name)) {
+        }
+        else if(to.name === 'app'){
+            next({name: 'dashboard'})
+        }
+        else if (!hasAccess(to.name)) {
             next('notfound')
             return
         }
