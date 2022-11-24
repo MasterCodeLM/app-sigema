@@ -1,19 +1,19 @@
 <template>
   <div class="layout-topbar">
     <router-link to="/" class="layout-topbar-logo">
-      <img alt="Logo" :src="topbarImage()" style="height: 4rem"/>
+      <img alt="Logo" :src="topbarImage()" style="height: 4rem" />
       <!--      <span>JEX</span>-->
     </router-link>
     <button
-        class="p-link layout-menu-button layout-topbar-button"
-        @click="onMenuToggle"
+      class="p-link layout-menu-button layout-topbar-button"
+      @click="onMenuToggle"
     >
       <i class="pi pi-bars"></i>
     </button>
 
     <button
-        class="p-link layout-topbar-menu-button layout-topbar-button"
-        v-styleclass="{
+      class="p-link layout-topbar-menu-button layout-topbar-button"
+      v-styleclass="{
         selector: '@next',
         enterClass: 'hidden',
         enterActiveClass: 'scalein',
@@ -24,7 +24,11 @@
     >
       <i class="pi pi-ellipsis-v"></i>
     </button>
+
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
+      <div class="mr-4 mt-3">
+        <i>{{ user.employee.name + " " + user.employee.lastname }}</i>
+      </div>
       <!--            <li>-->
       <!--              <button class="p-link layout-topbar-button">-->
       <!--                <i class="pi pi-calendar"></i>-->
@@ -42,11 +46,12 @@
         <!--          <span>Notifications</span>-->
         <!--          <i class="pi pi-bell p-text-secondary" v-badge="2"></i>-->
         <!--        </button>-->
-        <i v-badge="numberDontView"
-           class="pi pi-bell mr-4 mt-3 p-text-secondary icon" @click="toggleNotification"></i>
+        <i
+          v-badge="numberDontView"
+          class="pi pi-bell mr-4 mt-3 p-text-secondary icon"
+          @click="toggleNotification"
+        ></i>
         <!--        <i class="pi pi-bell" v-badge.success="2"></i>-->
-
-
       </li>
       <li>
         <!--        <button class="p-link mr-4 mt-3" @click="toggle">-->
@@ -54,24 +59,38 @@
         <!--          <span>Profile</span>-->
         <!--        </button>-->
         <!--        <i class="pi pi-user mr-4 mt-3 p-text-secondary" style="font-size: 1.5rem" @click="toggle"></i>-->
-        <i class="pi pi-user mr-4 mt-3 p-text-secondary icon" @click="toggle"></i>
-        <Menu ref="menu" :model="items" :popup="true"/>
+        <i
+          class="pi pi-user mr-4 mt-3 p-text-secondary icon"
+          @click="toggle"
+        ></i>
+        <Menu ref="menu" :model="items" :popup="true" />
       </li>
       <!--      <Button type="button" label="Image"  class="p-button-success"/>-->
 
       <!--      <Button type="button" label="Toggle" />-->
     </ul>
+
     <OverlayPanel
-        ref="op"
-        appendTo="body"
-        :showCloseIcon="false"
-        style="width: 25rem"
+      ref="op"
+      appendTo="body"
+      :showCloseIcon="false"
+      style="width: 25rem"
     >
       <ScrollPanel style="width: 100%; height: 300px">
-        <div class="card mb-2" v-for="(item, index) in notifications" :key="index">
+        <div
+          class="card mb-2"
+          v-for="(item, index) in notifications"
+          :key="index"
+        >
+          <b class="text-700">
+            {{ item.machine.name + "-" + item.machine.serie_number }}
+          </b>
           <p class="text-700">
-            {{ item.machine.name + ' ' + item.message }}
+            {{ $t(item.message) }}
           </p>
+          <i class="text-700">
+            {{ item.date_send_notification }}
+          </i>
           <!--              <span class="text-500">ago 12 Hours</span>-->
         </div>
         <!--            <div class="card mb-2">-->
@@ -100,6 +119,12 @@ import NotificationService from "@/service/NotificationService";
 export default {
   data() {
     return {
+      user: {
+        employee: {
+          name: null,
+          lastname: null,
+        },
+      },
       numberDontView: 0,
       permissions: [],
       player: new Audio(),
@@ -154,10 +179,16 @@ export default {
     this.authService = new AuthService();
     this.notificationService = new NotificationService();
     // let permissions = [];
-    const permissions_list = JSON.parse(localStorage.getItem("userLogged")).permissions;
-    permissions_list.map((permission) => this.permissions.push(permission.name))
+    const permissions_list = JSON.parse(
+      localStorage.getItem("userLogged")
+    ).permissions;
+    permissions_list.map((permission) =>
+      this.permissions.push(permission.name)
+    );
   },
   mounted() {
+    this.user = JSON.parse(localStorage.getItem("userLogged"));
+
     this.notificationService.getAll().then((data) => {
       // console.log(data)
       this.notifications = data;
@@ -165,27 +196,30 @@ export default {
       let numberDontView = 0;
       this.notifications.map((notification) => {
         if (!notification.is_view) numberDontView++;
-      })
+      });
       this.numberDontView = numberDontView;
     });
     this.player.src = this.sound;
     this.player.volume = this.volume;
-    window.Echo.channel('notifications').listen('NewNotification', (notification) => {
-      //console.log(notification.data)
-      // TODO:EVALUATE IF USER HAS PERMISSIONS
-      if (this.permissions.includes('notifications')) {
-        //console.log(notification);
-        this.notifications.unshift(notification.data)
+    window.Echo.channel("notifications").listen(
+      "NewNotification",
+      (notification) => {
+        //console.log(notification.data)
+        // TODO:EVALUATE IF USER HAS PERMISSIONS
+        if (this.permissions.includes("notifications")) {
+          //console.log(notification);
+          this.notifications.unshift(notification.data);
 
-        let numberDontView = 0;
-        this.notifications.map((notification) => {
-          if (!notification.is_view) numberDontView++;
-        })
-        this.numberDontView = numberDontView;
+          let numberDontView = 0;
+          this.notifications.map((notification) => {
+            if (!notification.is_view) numberDontView++;
+          });
+          this.numberDontView = numberDontView;
 
-        this.player.play();
+          this.player.play();
+        }
       }
-    })
+    );
   },
   methods: {
     logout() {
@@ -197,7 +231,7 @@ export default {
           localStorage.removeItem("userLogged");
           localStorage.removeItem("token");
           //  REDIRECIONAR
-          this.$router.push({name: "login"});
+          this.$router.push({ name: "login" });
         }
       });
     },
@@ -208,7 +242,7 @@ export default {
       this.$refs.op.toggle(event);
       // this.notifications = []
       this.numberDontView = 0;
-      this.notificationService.check()
+      this.notificationService.check();
       // this.numberDontView
     },
     onMenuToggle(event) {

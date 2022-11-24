@@ -54,6 +54,9 @@
     "article":"Article",
     "serial_number":"Serial Number",
 	"status":"Status",
+    "available":"Available",
+    "operating":"Operanding",
+    "unavailable":"Unavailable",
 	"serial_number_alert":"Serial Number is required.",
 	"name":"Name",
 	"name_alert":"Name is required.",
@@ -152,14 +155,15 @@
     "responsible":"Responsible",
     "pick_list_new_attendance":"Pick employees New Attendance<",
     "description_pick_list_new_attendance":"Add the employees who will work the next shift to open",
-    "available":"Available",
+    "availables":"Available",
     "type":"Type ",
     "turn":"Turn ",
     "selected":"Selected",
+    "selected_turn":"Select the shift to which the attendance control will belong ",
     "create":"Create",
     "create_alert_title":"Check the selected workers",
     "create_alert_question":"Are you sure to create the New Attendance Control?",
-    "create_alert_note":"Note",
+    "create_alert_note":"Note: ",
 	"create_alert_note_complete":"Once the new attendance control sheet has been created, no more employees can be added or deleted",
 
     "assist_control":"ASSIST CONTROL",
@@ -292,6 +296,9 @@
     "d_n_attendanceSheets":"Check the information of the workers, emails, address, telephone, etc.",
     "d_n_suppliers":"Check the information of your suppliers, RUC, business name, bank accounts, etc.",
     "d_n_inventory":"Check all articles, reference prices related to your suppliers, etc.",
-    "d_n_users":"Check the users and the role they play in the system."
+    "d_n_users":"Check the users and the role they play in the system.",
+    "has 48 hours of working time left":"has 48 hours of shelf life remaining",
+    "has 6 hours of working time left":"has 6 hours of pot life remaining",
+    "has 1 hours of working time left today":"he has 1 hour of work time left today"
 
 }

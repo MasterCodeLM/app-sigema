@@ -163,7 +163,7 @@
                     ? 'instock'
                     : 'outofstock')
                 "
-                >{{ slotProps.data.status }}</span
+                >{{ $t(slotProps.data.status) }}</span
               >
             </template>
           </Column>

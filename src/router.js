@@ -250,8 +250,8 @@ function hasAccess(name) {
     switch (name) {
         // case 'app':
         //     return true
-        case 'dashboard':
-            return true
+        /*case 'dashboard':
+            return true*/
         case 'users':
             return permissions.includes('users')
 
@@ -276,8 +276,8 @@ function hasAccess(name) {
         case 'machines':
             return permissions.includes('machines')
 
-        /*case 'dashboard':
-            return permissions.includes('machines')*/
+        case 'dashboard':
+            return permissions.includes('dashboard')
 
         case 'maintenance-sheet':
             return permissions.includes('maintenance-sheets')
