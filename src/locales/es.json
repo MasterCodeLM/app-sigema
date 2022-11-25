@@ -54,6 +54,9 @@
     "article":"Artículo",
     "serial_number":"Número de Serie",
     "status":"Estado",
+    "available":"Disponible",
+    "operating":"Operando",
+    "unavailable":"Indisponible",
     "serial_number_alert":"Se requiere número de serie.",
     "name":"Nombre",
     "name_alert":"Se requiere el nombre.",
@@ -152,14 +155,15 @@
     "responsible":"Responsable",
     "pick_list_new_attendance":"Seleccionar trabajadores para Nueva Asistencia",
     "description_pick_list_new_attendance":"Agregue los empleados que trabajarán en el próximo turno por abrirse",
-    "available":"Disponibles",
+    "availables":"Disponibles",
     "type":"Tipo ",
     "turn":"Turno ",
     "selected":"Seleccionados",
+    "selected_turn":"Seleccione el turno al que pertenecerá el control de asistencia ",
     "create":"Crear",
     "create_alert_title":"Verifique los trabajadores seleccionados",
     "create_alert_question":"¿Está seguro de crear el nuevo control de asistencia?",
-    "create_alert_note":"Nota:",
+    "create_alert_note":"Nota: ",
     "create_alert_note_complete":"Una vez creada la nueva hoja de control de asistencia, no podrán añadirse ni eliminarse más empleados.",
     
     "assist_control":"CONTROL DE ASISTENCIA",
@@ -292,6 +296,9 @@
     "d_n_attendanceSheets":"Check las asistencias realizadas y crea nuevas asistencias para los turnos del presente día.",
     "d_n_suppliers":"Check la información de sus proveedores, RUC, razón social, cuentas bancarias, etc.",
     "d_n_inventory":"Check todos los artículos, precios referenciales relacionados a sus proveedores, etc.",
-    "d_n_users":"Check los usuarios y el rol que cumplen en el sistema."
+    "d_n_users":"Check los usuarios y el rol que cumplen en el sistema.",
+    "has 48 hours of working time left":"le quedan 48 horas de tiempo de vida útil",
+    "has 6 hours of working time left":"le quedan 6 horas de tiempo de vida útil",
+    "has 1 hours of working time left today":"le queda 1 hora de tiempo de trabajo hoy"
 
 }

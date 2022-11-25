@@ -93,11 +93,22 @@
             field="responsible"
             :header="$t('responsible')"
             :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
+            headerStyle="width:20%; min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Responsible</span>
               {{ slotProps.data.responsible }}
+            </template>
+          </Column>
+          <Column
+            field="turn"
+            :header="$t('turn')"
+            :sortable="true"
+            headerStyle="width:3%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Turn</span>
+              {{ $t(slotProps.data.turn) }}
             </template>
           </Column>
           <Column
@@ -108,7 +119,14 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
-              {{ slotProps.data.is_open ? "Open" : "Closed" }}
+
+              <span
+                :class="
+                  'product-badge status-' +
+                  (slotProps.data.is_open === 1 ? 'instock' : 'outofstock')
+                "
+                >{{ slotProps.data.is_open ? "Open" : "Closed" }}</span
+              >
             </template>
           </Column>
 
@@ -151,7 +169,7 @@
                 :showTargetControls="false"
               >
                 <template #sourceheader>
-                  {{ $t("available") }}
+                  {{ $t("availables") }}
                   <div
                     class="
                       flex flex-column
@@ -202,7 +220,33 @@
                     </div>
                   </div>
                 </template>
-                <template #targetheader> {{ $t("selected") }}</template>
+                <template #targetheader>
+                  {{ $t("selected") }}
+
+                  <div
+                    class="
+                      flex flex-column
+                      md:flex-row
+                      md:justify-content-between
+                      md:align-items-center
+                    "
+                  >
+                    <div class="field grid col-12">
+                      <div style="vertical-align: inherit" class="px-2">
+                        <i>{{ $t("selected_turn") }}</i>
+
+                        <Dropdown
+                          id="state"
+                          v-model="attendanceTurnItem"
+                          :options="attendanceTurn"
+                          optionLabel="name"
+                          :filter="false"
+                        ></Dropdown>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
                 <template #item="slotProps">
                   <div class="product-item">
                     <div class="product-list-detail">
@@ -373,6 +417,7 @@ export default {
       filters: {},
       submitted: false,
       message: null,
+
       statuses: [
         { label: "INSTOCK", value: "instock" },
         { label: "LOWSTOCK", value: "lowstock" },
@@ -395,8 +440,13 @@ export default {
         { name: "Day", value: "day" },
         { name: "Night", value: "night" },
       ],
+      attendanceTurn: [
+        { name: "Day", value: "day" },
+        { name: "Night", value: "night" },
+      ],
       typeItem: null,
       turnItem: null,
+      attendanceTurnItem: null,
 
       searchEmployee: null,
     };
@@ -424,6 +474,7 @@ export default {
 
     this.typeItem = this.employeeTypes[0];
     this.turnItem = this.employeeTurns[0];
+    this.attendanceTurnItem = this.attendanceTurn[0];
   },
   watch: {
     start_date(value) {
@@ -465,6 +516,7 @@ export default {
     nextPage() {
       const payload = {
         employees: this.employees[1],
+        turn: this.attendanceTurnItem.value,
       };
       if (this.employees[1].length > 0) {
         this.sheetAttendanceService.create(payload).then((data) => {

@@ -28,8 +28,8 @@ import AppMenu from "./AppMenu.vue";
 import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
 import "primeicons/primeicons.css";
-import Echo from "laravel-echo"
-window.Pusher = require('pusher-js');
+import Echo from "laravel-echo";
+window.Pusher = require("pusher-js");
 export default {
   emits: ["change-theme"],
   data() {
@@ -228,21 +228,20 @@ export default {
     this.permissions = permissions;
     // console.log(localStorage.getItem("token"));
     window.Echo = new Echo({
-        broadcaster: 'pusher',
-        // wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
-        wsHost: window.location.hostname,
-        key: process.env.VUE_APP_PUSHER_KEY,
-        wsPort: 6001,
-        forceTLS: false,
-        disableStats: true,
-        // authEndpoint: `http://127.0.0.1:8000/broadcasting/auth`,
-        // auth: {
-        //     headers: {
-        //         Authorization: 'Bearer ' + localStorage.getItem("token"),
-        //     },
-        // },
+      broadcaster: "pusher",
+      // wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
+      wsHost: window.location.hostname,
+      key: process.env.VUE_APP_PUSHER_KEY,
+      wsPort: 6001,
+      forceTLS: false,
+      disableStats: true,
+      // authEndpoint: `http://127.0.0.1:8000/broadcasting/auth`,
+      // auth: {
+      //     headers: {
+      //         Authorization: 'Bearer ' + localStorage.getItem("token"),
+      //     },
+      // },
     });
-
   },
   mounted() {
     this.menu = [
@@ -253,7 +252,7 @@ export default {
             label: this.$t("principal"),
             icon: "pi pi-fw pi-home",
             to: "/dashboard",
-            visible: this.permissions.includes("machines"),
+            visible: this.permissions.includes("dashboard"),
           },
         ],
       },
