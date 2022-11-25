@@ -122,7 +122,7 @@
           </template>
         </Column>
         <Column
-          field="inventoryStatus"
+          field="status"
           :header="$t('status')"
           :sortable="true"
           headerStyle="width:14%; min-width:10rem;"
@@ -138,7 +138,7 @@
                   ? 'instock'
                   : 'outofstock')
               "
-              >{{ slotProps.data.status }}</span
+              >{{ $t(slotProps.data.status) }}</span
             >
           </template>
         </Column>
@@ -149,6 +149,7 @@
               <Button
                 icon="pi pi-angle-double-down"
                 class="p-button-rounded p-button-success mr-2"
+                :disabled="slotProps.data.status === 'operating'"
                 @click="selectMachine(slotProps.data)"
               />
               <!--              <Button-->

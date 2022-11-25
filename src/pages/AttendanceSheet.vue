@@ -516,7 +516,7 @@ export default {
     nextPage() {
       const payload = {
         employees: this.employees[1],
-        //turn:this.turnItem,
+        turn: this.attendanceTurnItem.value,
       };
       if (this.employees[1].length > 0) {
         this.sheetAttendanceService.create(payload).then((data) => {
