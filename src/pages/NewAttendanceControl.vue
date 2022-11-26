@@ -387,7 +387,7 @@ export default {
         let payload = {
           employees: selectedEmployees
         }
-        console.log(payload)
+        // console.log(payload)
         this.sheetListService
             .checkOut(attendance_sheet.id, payload)
             .then((data) => {
@@ -425,24 +425,17 @@ export default {
       if (this.validateFormJustify()) {
         this.justifyDialog = true;
         let attendance_sheet = this.$route.params;
-        let employees = JSON.parse(JSON.stringify(this.employeesList));
-        //console.log(this.selectedProducts);
-        this.selectedProducts.map((employee) => {
-          if (
-              !employees[this.findIndexEmployeesById(employee.id)].check_out &&
-              !employees[this.findIndexEmployeesById(employee.id)].check_in
-          ) {
-            employees[this.findIndexEmployeesById(employee.id)].missed_reason =
-                this.missedReason;
-            employees[
-                this.findIndexEmployeesById(employee.id)
-                ].missed_description = this.missedDescription;
-          }
+        // let employees = JSON.parse(JSON.stringify(this.employeesList));
+        let selectedEmployees = JSON.parse(JSON.stringify(this.selectedProducts))
+        selectedEmployees.map((employee) => {
+          employee.missed_reason = this.missedReason;
+          employee.missed_description = this.missedDescription;
         });
-        let payload = {employees};
-        //console.log(payload);
+        let payload = {
+          employees: selectedEmployees
+        }
         this.sheetListService
-            .update(attendance_sheet.id, payload)
+            .justifiedAbsence(attendance_sheet.id, payload)
             .then((data) => {
               if (data.data) {
                 this.employeesList = data.data.employees;

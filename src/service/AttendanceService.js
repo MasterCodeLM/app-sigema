@@ -36,5 +36,9 @@ export default class AttendanceService {
         let custom_uri = uri + '/' + id + '/check-out'
         return HttpService.prototype.update2(custom_uri, payload)
     }
+    async justifiedAbsence(id, payload) {
+        let custom_uri = uri + '/' + id + '/justified-absence'
+        return HttpService.prototype.update2(custom_uri, payload)
+    }
 
 }
