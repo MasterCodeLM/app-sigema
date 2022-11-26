@@ -337,38 +337,36 @@ export default {
       if (this.selectedProducts.length > 0) {
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
         let attendance_sheet = this.$route.params;
-        // let employees = JSON.parse(JSON.stringify(this.employeesList));
-
-        this.selectedProducts.map((employee) => {
+        let selectedEmployees = JSON.parse(JSON.stringify(this.selectedProducts))
+        selectedEmployees.map((employee) => {
           employee.check_in = now
         });
         let payload = {
-          employees: this.selectedProducts
+          employees: selectedEmployees
         }
-        // let payload = { employees };
         // console.log(payload)
         this.sheetListService
-          .checkIn(attendance_sheet.id, payload)
-          .then((data) => {
-            if (data.data) {
-              this.employeesList = data.data.employees;
-              this.selectedProducts = [];
-              this.$toast.add({
-                severity: "success",
-                summary: this.$t("successful"),
-                detail:
-                  this.$t("attendance_sheet") + " " + this.$t("updated_a"),
-                life: 3000,
-              });
-            } else {
-              this.$toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: data.message,
-                life: 3000,
-              });
-            }
-          });
+            .checkIn(attendance_sheet.id, payload)
+            .then((data) => {
+              if (data.data) {
+                this.employeesList = data.data.employees;
+                this.selectedProducts = [];
+                this.$toast.add({
+                  severity: "success",
+                  summary: this.$t("successful"),
+                  detail:
+                      this.$t("attendance_sheet") + " " + this.$t("updated_a"),
+                  life: 3000,
+                });
+              } else {
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Error",
+                  detail: data.message,
+                  life: 3000,
+                });
+              }
+            });
       } else {
         this.$toast.add({
           severity: "error",
@@ -380,21 +378,18 @@ export default {
     },
     checkOut() {
       if (this.selectedProducts.length > 0) {
-        let now = moment().format("HH:mm:ss");
+        let now = moment().format("YYYY-MM-DD HH:mm:ss");
         let attendance_sheet = this.$route.params;
-        let employees = JSON.parse(JSON.stringify(this.employeesList));
-
-        this.selectedProducts.map((employee) => {
-          if (
-              !employees[this.findIndexEmployeesById(employee.id)].check_out &&
-              employees[this.findIndexEmployeesById(employee.id)].check_in
-          ) {
-            employees[this.findIndexEmployeesById(employee.id)].check_out = now;
-          }
+        let selectedEmployees = JSON.parse(JSON.stringify(this.selectedProducts))
+        selectedEmployees.map((employee) => {
+          employee.check_out = now
         });
-        let payload = {employees};
+        let payload = {
+          employees: selectedEmployees
+        }
+        console.log(payload)
         this.sheetListService
-            .update(attendance_sheet.id, payload)
+            .checkOut(attendance_sheet.id, payload)
             .then((data) => {
               if (data.data) {
                 this.employeesList = data.data.employees;

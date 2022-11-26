@@ -32,5 +32,9 @@ export default class AttendanceService {
         let custom_uri = uri + '/' + id + '/check-in'
         return HttpService.prototype.update2(custom_uri, payload)
     }
+    async checkOut(id, payload) {
+        let custom_uri = uri + '/' + id + '/check-out'
+        return HttpService.prototype.update2(custom_uri, payload)
+    }
 
 }
