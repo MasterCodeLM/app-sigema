@@ -470,11 +470,8 @@ export default {
 
     closeSheet() {
       let attendance_sheet = this.$route.params;
-      let payload = {
-        is_open: false,
-      };
       this.sheetListService
-          .update(attendance_sheet.id, payload)
+          .closed(attendance_sheet.id)
           .then((data) => {
             this.employeesList = data.data.employees;
             this.selectedProducts = [];
