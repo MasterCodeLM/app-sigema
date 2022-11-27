@@ -159,7 +159,7 @@
     "type":"Type ",
     "turn":"Turn ",
     "selected":"Selected",
-    "selected_turn":"Select the shift to which the attendance control will belong ",
+    "selected_turn":"Turn to which the attendance control will belong ",
     "create":"Create",
     "create_alert_title":"Check the selected workers",
     "create_alert_question":"Are you sure to create the New Attendance Control?",

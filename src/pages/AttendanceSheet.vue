@@ -294,7 +294,7 @@
         <Dialog
           v-model:visible="confirmCreateAttendacneSheetDialog"
           :style="{ width: '450px' }"
-          :header="$t('recommendation_title')"
+          :header="$t('create_alert_title')"
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
@@ -432,17 +432,17 @@ export default {
 
       employeeTypes: [
         { name: "All", value: "" },
-        { name: "Permanent", value: "permanent" },
-        { name: "Relay", value: "relay" },
+        { name: this.$t("permanent"), value: "permanent" },
+        { name: this.$t("relay"), value: "relay" },
       ],
       employeeTurns: [
         { name: "All", value: "" },
-        { name: "Day", value: "day" },
-        { name: "Night", value: "night" },
+        { name: this.$t("day"), value: "day" },
+        { name: this.$t("night"), value: "night" },
       ],
       attendanceTurn: [
-        { name: "Day", value: "day" },
-        { name: "Night", value: "night" },
+        { name: this.$t("day"), value: "day" },
+        { name: this.$t("night"), value: "night" },
       ],
       typeItem: null,
       turnItem: null,
