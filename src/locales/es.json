@@ -159,7 +159,7 @@
     "type":"Tipo ",
     "turn":"Turno ",
     "selected":"Seleccionados",
-    "selected_turn":"Seleccione el turno al que pertenecerá el control de asistencia ",
+    "selected_turn":"Turno al que pertenecerá el control de asistencia ",
     "create":"Crear",
     "create_alert_title":"Verifique los trabajadores seleccionados",
     "create_alert_question":"¿Está seguro de crear el nuevo control de asistencia?",

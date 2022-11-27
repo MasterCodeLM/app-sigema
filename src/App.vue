@@ -244,6 +244,7 @@ export default {
     });
   },
   mounted() {
+    this.setLenguage();
     this.menu = [
       {
         label: this.$t("home"),
@@ -443,6 +444,20 @@ export default {
     },
   },
   methods: {
+    async setLenguage() {
+      let language;
+      const user = JSON.parse(localStorage.getItem("userLogged"));
+      switch (user.employee.native_language) {
+        case "spanish":
+          language = "es";
+          break;
+
+        default:
+          language = "en";
+          break;
+      }
+      await (this.$i18n.locale = language);
+    },
     onWrapperClick() {
       if (!this.menuClick) {
         this.overlayMenuActive = false;

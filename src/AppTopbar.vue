@@ -83,7 +83,7 @@
           :key="index"
         >
           <b class="text-700">
-            {{ item.machine.name + "-" + item.machine.serie_number }}
+            {{ item.machine.name + " / " + item.machine.serie_number }}
           </b>
           <p class="text-700">
             {{ $t(item.message) }}
