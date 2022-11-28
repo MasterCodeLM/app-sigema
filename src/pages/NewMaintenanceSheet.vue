@@ -1338,6 +1338,13 @@ export default {
       }
       // console.log(article.id)
     },
+    incrementStock(article) {
+      let index = this.findIndexArticlesById(article.id)
+      if (index > -1) {
+        this.articles[index].quantity += article.quantity;
+      }
+      // console.log(article.id)
+    },
     findIndexArticlesById(id) {
       let index = -1;
       for (let i = 0; i < this.articles.length; i++) {
@@ -1363,11 +1370,12 @@ export default {
     removeAddArticle(data) {
       /*console.log(data);
       console.log(this.listArticles.indexOf(data));*/
-
+      // console.log(data)
       const index = this.listArticles.indexOf(data);
       if (index > -1) {
         // only splice array when item is found
         this.listArticles.splice(index, 1); // 2nd parameter means remove one item only
+        this.incrementStock(data)
       }
 
       /*this.listArticles = this.listArticles.filter(
