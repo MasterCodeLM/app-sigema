@@ -1,22 +1,22 @@
 <template>
   <div :class="containerClass" @click="onWrapperClick">
-    <AppTopBar @menu-toggle="onMenuToggle" />
+    <AppTopBar @menu-toggle="onMenuToggle"/>
     <div class="layout-sidebar" @click="onSidebarClick">
-      <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+      <AppMenu :model="menu" @menuitem-click="onMenuItemClick"/>
     </div>
 
     <div class="layout-main-container">
       <div class="layout-main">
-        <router-view />
+        <router-view/>
       </div>
-      <AppFooter />
+      <AppFooter/>
     </div>
 
-    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
+    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange"/>
     <transition name="layout-mask">
       <div
-        class="layout-mask p-component-overlay"
-        v-if="mobileMenuActive"
+          class="layout-mask p-component-overlay"
+          v-if="mobileMenuActive"
       ></div>
     </transition>
   </div>
@@ -29,6 +29,7 @@ import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
 import "primeicons/primeicons.css";
 import Echo from "laravel-echo";
+
 window.Pusher = require("pusher-js");
 export default {
   emits: ["change-theme"],
@@ -222,7 +223,7 @@ export default {
   created() {
     let permissions = [];
     const permissions_list = JSON.parse(
-      localStorage.getItem("userLogged")
+        localStorage.getItem("userLogged")
     ).permissions;
     permissions_list.map((permission) => permissions.push(permission.name));
     this.permissions = permissions;
@@ -338,8 +339,8 @@ export default {
             label: this.$t("employees"),
             icon: "pi pi-users",
             visible:
-              this.permissions.includes("employees") ||
-              this.permissions.includes("attendance-sheets"),
+                this.permissions.includes("employees") ||
+                this.permissions.includes("attendance-sheets"),
             items: [
               {
                 label: this.$t("employees_form"),
@@ -359,8 +360,8 @@ export default {
             label: this.$t("operations"),
             icon: "pi pi-slack",
             visible:
-              this.permissions.includes("maintenance-sheets") ||
-              this.permissions.includes("working-sheets"),
+                this.permissions.includes("maintenance-sheets") ||
+                this.permissions.includes("working-sheets"),
             items: [
               {
                 label: this.$t("maintenance"),
@@ -398,8 +399,8 @@ export default {
             label: this.$t("user_management"),
             icon: "pi pi-fw pi-desktop",
             visible:
-              this.permissions.includes("roles") ||
-              this.permissions.includes("users"),
+                this.permissions.includes("roles") ||
+                this.permissions.includes("users"),
             items: [
               {
                 label: this.$t("roles"),
@@ -506,11 +507,11 @@ export default {
       if (element.classList) element.classList.remove(className);
       else
         element.className = element.className.replace(
-          new RegExp(
-            "(^|\\b)" + className.split(" ").join("|") + "(\\b|$)",
-            "gi"
-          ),
-          " "
+            new RegExp(
+                "(^|\\b)" + className.split(" ").join("|") + "(\\b|$)",
+                "gi"
+            ),
+            " "
         );
     },
     isDesktop() {
@@ -533,9 +534,9 @@ export default {
           "layout-overlay": this.layoutMode === "overlay",
           "layout-static": this.layoutMode === "static",
           "layout-static-sidebar-inactive":
-            this.staticMenuInactive && this.layoutMode === "static",
+              this.staticMenuInactive && this.layoutMode === "static",
           "layout-overlay-sidebar-active":
-            this.overlayMenuActive && this.layoutMode === "overlay",
+              this.overlayMenuActive && this.layoutMode === "overlay",
           "layout-mobile-sidebar-active": this.mobileMenuActive,
           "p-input-filled": this.$primevue.config.inputStyle === "filled",
           "p-ripple-disabled": this.$primevue.config.ripple === false,
@@ -544,8 +545,8 @@ export default {
     },
     logo() {
       return this.$appState.darkTheme
-        ? "images/logo-white.svg"
-        : "images/logo.svg";
+          ? "images/logo-white.svg"
+          : "images/logo.svg";
     },
   },
   beforeUpdate() {
