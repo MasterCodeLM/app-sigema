@@ -564,7 +564,7 @@
     class="p-fluid"
   >
     <div class="grid">
-      <div class="col-12 md:col-6">
+      <div class="col-12 lg:col-6">
         <div class="card p-fluid">
           <h5>{{ $t("sub_title_one") }}</h5>
           <div class="grid">
@@ -684,7 +684,7 @@
           </div>
         </div>
       </div>
-      <div class="col-12 md:col-6">
+      <div class="col-12 lg:col-6">
         <div class="card p-fluid">
           <h5>{{ $t("sub_title_two") }}</h5>
           <div class="grid">
