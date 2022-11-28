@@ -1136,12 +1136,15 @@ export default {
       this.submitted = false;
       this.submittedAddArticle = false;
       this.addSparePartDialog = true;
-      this.loadingArticles = true;
-      this.articleService.getAll().then((data) => {
-        this.articles = data;
-        this.articlesAll = data;
-        this.loadingArticles = false;
-      });
+      // console.log(this.articles === [])
+      if (!this.articles.length) {
+        this.loadingArticles = true;
+        this.articleService.getAll().then((data) => {
+          this.articles = data;
+          this.articlesAll = data;
+          this.loadingArticles = false;
+        });
+      }
       this.articleTypeService.getAll().then((data) => {
         this.articleTypeFilterItems = data;
         this.articleTypeFilterItems.unshift({
