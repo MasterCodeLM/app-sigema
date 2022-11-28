@@ -12,6 +12,7 @@
           <h3 class="text-900 font-medium">{{ $t("maintenance_sheet") }}</h3>
           <Button
             :label="$t('select_machine_btn')"
+            :disabled="this.maintenanceSheet.id"
             class="p-button-secondary mr-2 mb-2"
             @click="openNewSelectMachine"
           />
@@ -227,7 +228,7 @@
               v-model="maintenanceSheet.description"
               :placeholder="$t('your_message')"
               :autoResize="true"
-              rows="7"
+              rows="3"
               cols="67"
               :readonly="this.maintenanceSheet.id"
               :class="{
@@ -446,7 +447,7 @@
                 @click="openNewAddSparePart"
               />
               <Button
-                :label="$t('add_servicio')"
+                :label="$t('add_service')"
                 class="p-button-secondary mr-2 mb-2"
                 @click="openNewAddService"
               />
@@ -479,7 +480,7 @@
               responsiveLayout="scroll"
             >
               <Column
-                field="article.serie_number"
+                field="serie_number"
                 :header="$t('serial_number')"
               ></Column>
               <Column field="name" :header="$t('name')">
@@ -804,6 +805,12 @@
                style="margin-top: 1.8rem"
                 @click="addArticle"
               ></Button>
+              <Button
+                icon="pi pi-plus"
+                class="p-button-secondary"
+                style="margin-top: 1.8rem"
+                @click="addArticle"
+              ></Button>
             </div>
             <div class="field col-12">
               <Button
@@ -1042,7 +1049,7 @@ export default {
         brand: null,
         model: null,
         quantity: null,
-        price: null,
+        price: 0,
       },
       submittedAddArticle: false,
       listArticles: [],
@@ -1269,6 +1276,7 @@ export default {
         brand: value.brand,
         model: value.model,
         description: null,
+        price: 0,
       };
       this.article.article = {
         id: value.id,
@@ -1291,7 +1299,15 @@ export default {
           if (this.article.quantity <= this.article.article.quantity) {
             //console.log(this.article);
             this.listArticles.push(this.article);
-            this.article = {};
+            console.log("hihihih");
+            this.article = {
+              serie_number: null,
+              name: null,
+              brand: null,
+              model: null,
+              quantity: null,
+              price: 0,
+            };
           } else {
             this.$toast.add({
               severity: "error",
@@ -1302,14 +1318,21 @@ export default {
           }
         } else {
           this.listArticles.push(this.article);
-          this.article = {};
+          this.article = {
+            serie_number: null,
+            name: null,
+            brand: null,
+            model: null,
+            quantity: null,
+            price: 0,
+          };
         }
 
         this.submittedAddArticle = false;
       }
     },
     validateAddArticle() {
-      console.log(this.article.price);
+      //console.log(this.article.price);
       return (
         this.article.serie_number &&
         this.article.name &&
