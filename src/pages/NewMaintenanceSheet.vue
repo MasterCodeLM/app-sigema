@@ -801,8 +801,16 @@
               <Button
                 icon="pi pi-plus"
                 class="p-button-secondary"
-                style="margin-top: 1.8rem"
+               style="margin-top: 1.8rem"
                 @click="addArticle"
+              ></Button>
+            </div>
+            <div class="field col-12">
+              <Button
+                  label="Clear"
+                  class="p-button-secondary"
+                  style="width: 100%"
+                  @click="clearArticle"
               ></Button>
             </div>
             <div class="field col-12 sm:col-12">
@@ -1428,6 +1436,17 @@ export default {
         price: null,
       };
     },
+    clearArticle(){
+      this.submittedAddArticle = false
+      this.article = {
+        serie_number: null,
+        name: null,
+        brand: null,
+        model: null,
+        quantity: null,
+        price: 0,
+      };
+    }
   },
   /*mounted() {
     this.productService
