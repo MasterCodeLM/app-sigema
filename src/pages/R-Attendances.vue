@@ -82,7 +82,7 @@
               inputId="order1"
               name="N° of maintenances"
               value="attendances"
-              :disabled="type == 'absences'"
+              :disabled="type == 'missed'"
             />
             <label for="city1">{{ $t("n_attendances") }}</label>
           </div>
@@ -151,8 +151,8 @@ export default {
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
-        { name: "Attendances", value: "attendances" },
-        { name: "Absences", value: "absences" },
+        { name: "Attendances", value: "attended" },
+        { name: "Absences", value: "missed" },
       ],
       dropdownTypePersonalItems: [
         { name: "Permanent", value: "permanent" },
