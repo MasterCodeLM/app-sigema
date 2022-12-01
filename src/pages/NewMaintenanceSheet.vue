@@ -1403,6 +1403,7 @@ export default {
       if (index > -1) this.maintenanceSheet.detail.splice(index, 1);
       if (indexService > -1) this.listService.splice(indexService, 1);
       if (indexArticles > -1) this.listArticles.splice(indexArticles, 1);
+      this.incrementStock(data);
     },
     addArticleInDetail() {
       //  TODO:VALIDATE FIELDS EMPTY TABLE
