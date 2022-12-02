@@ -42,6 +42,7 @@
               inputId="order1"
               name="Attendances"
               value="attended"
+              order="name"
             />
             <label for="city1">{{ $t("r_attendances") }}</label>
           </div>
