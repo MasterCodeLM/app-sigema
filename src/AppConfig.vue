@@ -1,41 +1,18 @@
 <template>
   <div id="layout-config" :class="containerClass">
-    <a
-      href="#"
-      class="layout-config-button"
-      id="layout-config-button"
-      @click="toggleConfigurator"
-    >
+    <a href="#" class="layout-config-button" id="layout-config-button" @click="toggleConfigurator">
       <i class="pi pi-cog"></i>
     </a>
-    <Button
-      class="p-button-danger layout-config-close p-button-rounded p-button-text"
-      icon="pi pi-times"
-      @click="hideConfigurator"
-      :style="{ 'z-index': 1 }"
-    ></Button>
+    <Button class="p-button-danger layout-config-close p-button-rounded p-button-text" icon="pi pi-times"
+      @click="hideConfigurator" :style="{ 'z-index': 1 }"></Button>
 
     <div class="layout-config-content">
       <h5 class="mt-0">{{ $t("component_scale") }}</h5>
       <div class="config-scale">
-        <Button
-          icon="pi pi-minus"
-          @click="decrementScale()"
-          class="p-button-text"
-          :disabled="scale === scales[0]"
-        />
-        <i
-          class="pi pi-circle-on"
-          v-for="s of scales"
-          :class="{ 'scale-active': s === scale }"
-          :key="s"
-        />
-        <Button
-          icon="pi pi-plus"
-          @click="incrementScale()"
-          class="p-button-text"
-          :disabled="scale === scales[scales.length - 1]"
-        />
+        <Button icon="pi pi-minus" @click="decrementScale()" class="p-button-text" :disabled="scale === scales[0]" />
+        <i class="pi pi-circle-on" v-for="s of scales" :class="{ 'scale-active': s === scale }" :key="s" />
+        <Button icon="pi pi-plus" @click="incrementScale()" class="p-button-text"
+          :disabled="scale === scales[scales.length - 1]" />
       </div>
       <!--
       <h5>Input Style</h5>
@@ -71,23 +48,13 @@
       <h5>{{ $t("menu_type") }}</h5>
       <div class="p-formgroup-inline">
         <div class="field-radiobutton">
-          <RadioButton
-            id="static"
-            name="layoutMode"
-            value="static"
-            v-model="d_layoutMode"
-            @change="changeLayout($event, 'static')"
-          />
+          <RadioButton id="static" name="layoutMode" value="static" v-model="d_layoutMode"
+            @change="changeLayout($event, 'static')" />
           <label for="static">{{ $t("static") }}</label>
         </div>
         <div class="field-radiobutton">
-          <RadioButton
-            id="overlay"
-            name="layoutMode"
-            value="overlay"
-            v-model="d_layoutMode"
-            @change="changeLayout($event, 'overlay')"
-          />
+          <RadioButton id="overlay" name="layoutMode" value="overlay" v-model="d_layoutMode"
+            @change="changeLayout($event, 'overlay')" />
           <label for="overlay">{{ $t("overlay") }}</label>
         </div>
       </div>
@@ -238,16 +205,8 @@
 					</button>
 				</div>-->
         <div class="col-3 text-center">
-          <button
-            class="p-link"
-            type="button"
-            @click="changeTheme($event, 'saga-green', false)"
-          >
-            <img
-              class="block"
-              src="images/themes/saga-green.png"
-              alt="Saga Green"
-            />
+          <button class="p-link" type="button" @click="changeTheme($event, 'saga-green', false)">
+            <img class="block" src="images/themes/saga-green.png" alt="Saga Green" />
           </button>
         </div>
         <!--
@@ -269,16 +228,8 @@
 					</button>
 				</div>-->
         <div class="col-3 text-center">
-          <button
-            class="p-link"
-            type="button"
-            @click="changeTheme($event, 'vela-green', true)"
-          >
-            <img
-              class="block"
-              src="images/themes/vela-green.png"
-              alt="Vela Green"
-            />
+          <button class="p-link" type="button" @click="changeTheme($event, 'vela-green', true)">
+            <img class="block" src="images/themes/vela-green.png" alt="Vela Green" />
           </button>
         </div>
         <!--
@@ -300,16 +251,8 @@
 					</button>
 				</div>-->
         <div class="col-3 text-center">
-          <button
-            class="p-link"
-            type="button"
-            @click="changeTheme($event, 'arya-green', true)"
-          >
-            <img
-              class="block"
-              src="images/themes/arya-green.png"
-              alt="Arya Green"
-            />
+          <button class="p-link" type="button" @click="changeTheme($event, 'arya-green', true)">
+            <img class="block" src="images/themes/arya-green.png" alt="Arya Green" />
           </button>
         </div>
         <!--
@@ -369,8 +312,15 @@ export default {
     };
 
     EventBus.on("theme-change", this.themeChangeListener);
+    this.setTheme()
+
   },
   methods: {
+    setTheme() {
+      let theme = localStorage.getItem("theme") ? JSON.parse(localStorage.getItem("theme")) : { theme: 'saga-green', dark: true };
+      console.log(theme);
+      EventBus.emit("theme-change", theme);
+    },
     toggleConfigurator(event) {
       this.active = !this.active;
       event.preventDefault();
@@ -427,6 +377,7 @@ export default {
     },
     changeTheme(event, theme, dark) {
       EventBus.emit("theme-change", { theme: theme, dark: dark });
+      localStorage.setItem('theme',JSON.stringify({ theme: theme, dark: dark }))
       event.preventDefault();
     },
   },
