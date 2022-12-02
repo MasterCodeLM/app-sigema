@@ -369,6 +369,7 @@ export default {
     };
 
     EventBus.on("theme-change", this.themeChangeListener);
+    EventBus.emit("theme-change", { theme: 'saga-green', dark: true });
   },
   methods: {
     toggleConfigurator(event) {
