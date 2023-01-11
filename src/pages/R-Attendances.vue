@@ -1,5 +1,5 @@
 <template>
-  <Toast />
+  <Toast/>
   <div class="grid">
     <div class="col-12">
       <div class="card p-fluid">
@@ -15,19 +15,19 @@
           <div class="field col-12 sm:col-6">
             <label>{{ $t("from_the") }}</label>
             <Calendar
-              :showIcon="true"
-              :showButtonBar="false"
-              v-model="start_date"
-              dateFormat="yy-mm-dd"
+                :showIcon="true"
+                :showButtonBar="false"
+                v-model="start_date"
+                dateFormat="yy-mm-dd"
             ></Calendar>
           </div>
           <div class="field col-12 sm:col-6">
             <label> {{ $t("until_the") }}</label>
             <Calendar
-              :showIcon="true"
-              :showButtonBar="false"
-              v-model="end_date"
-              dateFormat="yy-mm-dd"
+                :showIcon="true"
+                :showButtonBar="false"
+                v-model="end_date"
+                dateFormat="yy-mm-dd"
             ></Calendar>
           </div>
         </div>
@@ -38,19 +38,19 @@
           </label>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="type"
-              inputId="order1"
-              name="Attendances"
-              value="attended"
+                v-model="type"
+                inputId="order1"
+                name="Attendances"
+                value="attended"
             />
             <label for="city1">{{ $t("r_attendances") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="type"
-              inputId="order1"
-              name="Absences"
-              value="missed"
+                v-model="type"
+                inputId="order1"
+                name="Absences"
+                value="missed"
             />
             <label for="city1">{{ $t("absences") }}</label>
           </div>
@@ -60,38 +60,38 @@
           <h6>{{ $t("order_by") }}</h6>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order2"
-              name="Name"
-              value="name"
+                v-model="order"
+                inputId="order2"
+                name="Name"
+                value="name"
             />
             <label for="city1">{{ $t("name") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order2"
-              name="Last name"
-              value="lastname"
+                v-model="order"
+                inputId="order2"
+                name="Last name"
+                value="lastname"
             />
             <label for="city1">{{ $t("last_name") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order1"
-              name="N° of maintenances"
-              value="attendances"
-              :disabled="type == 'missed'"
+                v-model="order"
+                inputId="order1"
+                name="N° of maintenances"
+                value="attendances"
+                :disabled="type == 'missed'"
             />
             <label for="city1">{{ $t("n_attendances") }}</label>
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order"
-              inputId="order1"
-              name="N° of absences"
-              value="absences"
+                v-model="order"
+                inputId="order1"
+                name="N° of absences"
+                value="absences"
             />
             <label for="city1">{{ $t("n_absences") }}</label>
           </div>
@@ -101,22 +101,22 @@
 
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order_by"
-              inputId="order1"
-              name="N° Serie"
-              value="asc"
+                v-model="order_by"
+                inputId="order1"
+                name="N° Serie"
+                value="asc"
             />
             <label for="city1"
-              ><i class="pi pi-sort-amount-up text-green-500 text-xl"></i
-              >{{ $t("upward") }}</label
+            ><i class="pi pi-sort-amount-up text-green-500 text-xl"></i
+            >{{ $t("upward") }}</label
             >
           </div>
           <div class="field-radiobutton">
             <RadioButton
-              v-model="order_by"
-              inputId="order2"
-              name="Machine"
-              value="desc"
+                v-model="order_by"
+                inputId="order2"
+                name="Machine"
+                value="desc"
             />
             <label for="city1">
               <i class="pi pi-sort-amount-down text-green-500 text-xl"></i
@@ -126,10 +126,10 @@
         </div>
         <div class="field">
           <Button
-            :label="$t('generate_report')"
-            icon="pi pi-file-pdf"
-            class="p-button-outlined p-button-danger"
-            @click="generate"
+              :label="$t('generate_report')"
+              icon="pi pi-file-pdf"
+              class="p-button-outlined p-button-danger"
+              @click="generate"
           />
         </div>
       </div>
@@ -151,16 +151,16 @@ export default {
       start_date: moment().format("YYYY-MM-DD"),
       end_date: moment().format("YYYY-MM-DD"),
       dropdownReportType: [
-        { name: "Attendances", value: "attended" },
-        { name: "Absences", value: "missed" },
+        {name: "Attendances", value: "attended"},
+        {name: "Absences", value: "missed"},
       ],
       dropdownTypePersonalItems: [
-        { name: "Permanent", value: "permanent" },
-        { name: "Relay", value: "relay" },
+        {name: "Permanent", value: "permanent"},
+        {name: "Relay", value: "relay"},
       ],
       dropdownTurnEntryItems: [
-        { name: "Day", value: "day" },
-        { name: "Night", value: "night" },
+        {name: "Day", value: "day"},
+        {name: "Night", value: "night"},
       ],
       dropdownItem: null,
       employees: null,
@@ -187,9 +187,9 @@ export default {
       message: null,
       //loading: false,
       statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
+        {label: "INSTOCK", value: "instock"},
+        {label: "LOWSTOCK", value: "lowstock"},
+        {label: "OUTOFSTOCK", value: "outofstock"},
       ],
 
       documentTypeItem: null,
@@ -209,6 +209,11 @@ export default {
   created() {
     this.attendanceService = new AttendanceService();
   },
+  watch: {
+    type() {
+      this.clearRadioButtons()
+    }
+  },
   methods: {
     generate() {
       let payload = {
@@ -218,7 +223,6 @@ export default {
         sort_by: this.order,
         order_by: this.order_by,
       };
-      console.log(payload);
       this.attendanceService.report(payload).then((data) => {
         if (data.path) {
           this.urlPDF = `${process.env.VUE_APP_API_HOST}/storage/${data.path}`;
@@ -226,6 +230,10 @@ export default {
         }
       });
     },
+    clearRadioButtons() {
+      this.order = "name";
+      this.order_by = "asc";
+    }
   },
 };
 </script>
