@@ -13,7 +13,7 @@
     <div class="grid justify-content-center p-4" style="min-width: 55%">
       <div class="text-center">
         <img
-          src="layout/images/LOGO.png"
+          src="layout/images/logoInicio.png"
           alt="Image JEX"
           class="mb-3 w-full h-auto"
           style="max-height: 380px"

@@ -299,6 +299,8 @@
     "d_n_users":"Check los usuarios y el rol que cumplen en el sistema.",
     "has 48 hours of working time left":"le quedan 48 horas de tiempo de vida útil",
     "has 6 hours of working time left":"le quedan 6 horas de tiempo de vida útil",
-    "has 1 hours of working time left today":"le queda 1 hora de tiempo de trabajo hoy"
+    "has 1 hours of working time left today":"le queda 1 hora de tiempo de trabajo hoy",
+
+    "not_notifications_text": "no hay notificaciones que mostrar"
 
 }

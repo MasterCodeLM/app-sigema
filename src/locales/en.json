@@ -299,6 +299,8 @@
     "d_n_users":"Check the users and the role they play in the system.",
     "has 48 hours of working time left":"has 48 hours of shelf life remaining",
     "has 6 hours of working time left":"has 6 hours of pot life remaining",
-    "has 1 hours of working time left today":"he has 1 hour of work time left today"
+    "has 1 hours of working time left today":"he has 1 hour of work time left today",
+
+    "not_notifications_text": "no notifications to show"
 
 }

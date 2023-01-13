@@ -77,6 +77,7 @@
       style="width: 25rem"
     >
       <ScrollPanel style="width: 100%; height: 300px">
+        <p v-if="!(notifications.length > 0)" class="text-center text-gray-500">{{ $t("not_notifications_text") }}</p>
         <div
           class="card mb-2"
           v-for="(item, index) in notifications"
@@ -93,20 +94,6 @@
           </i>
           <!--              <span class="text-500">ago 12 Hours</span>-->
         </div>
-        <!--            <div class="card mb-2">-->
-        <!--              <p class="text-700">-->
-        <!--                Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
-        <!--                Inventore sed consequuntur error repudiandae numquam deserunt-->
-        <!--              </p>-->
-        <!--              <span class="text-500">ago 12 Hours</span>-->
-        <!--            </div>-->
-        <!--            <div class="card mb-2">-->
-        <!--              <p class="text-700">-->
-        <!--                Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
-        <!--                Inventore sed consequuntur error repudiandae numquam deserunt-->
-        <!--              </p>-->
-        <!--              <span class="text-500">ago 12 Hours</span>-->
-        <!--            </div>-->
       </ScrollPanel>
     </OverlayPanel>
   </div>
