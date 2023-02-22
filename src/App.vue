@@ -230,18 +230,9 @@ export default {
     // console.log(localStorage.getItem("token"));
     window.Echo = new Echo({
       broadcaster: "pusher",
-      // wsHost: process.env.VUE_APP_WEBSOCKET_HOST,
-      wsHost: window.location.hostname,
-      key: process.env.VUE_APP_PUSHER_KEY,
-      wsPort: 6001,
-      forceTLS: false,
-      disableStats: true,
-      // authEndpoint: `http://127.0.0.1:8000/broadcasting/auth`,
-      // auth: {
-      //     headers: {
-      //         Authorization: 'Bearer ' + localStorage.getItem("token"),
-      //     },
-      // },
+      key: '50f52a7e704c828f839c',
+      cluster : 'ap1',
+      forceTLS: true,
     });
   },
   mounted() {
