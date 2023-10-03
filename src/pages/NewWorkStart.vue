@@ -110,6 +110,9 @@
         <h5 style="text-align: center">{{ $t("operation") }}</h5>
 
         <div class="grid">
+          <div class="col-12 text-center">
+            <p class="font-bold text-4xl pt-4 pb-4">{{ workSheet.working_hours_total }}</p>
+          </div>
           <div class="col-12 grid">
             <div v-if="workSheet.is_open && !workSheet.id" class="col-6">
               <Button
@@ -205,11 +208,11 @@
                 <template #body="slotProps">
                   {{
                     slotProps.data.date_time_diff.hours +
-                    " hrs " +
+                    ":" +
                     slotProps.data.date_time_diff.minutes +
-                    " min " +
+                    ":" +
                     slotProps.data.date_time_diff.secons +
-                    " sec"
+                    ""
                   }}
                 </template>
               </Column>
@@ -429,6 +432,9 @@ export default {
       // },
       machines: [],
       loadingMachines: true,
+      intervalId: null, // Almacenar la referencia al intervalo
+      isCounterRunning: false, // Indica si el contador está en funcionamiento
+
     };
   },
 
@@ -459,11 +465,87 @@ export default {
           this.disabledButtonClose = true;
         }
         this.workSheet = data;
-        // console.log(this.workSheet);
+        this.startCounter()
       });
     }
   },
+  beforeRouteLeave(to, from, next) {
+    // Antes de salir de la página, detén el contador si está en funcionamiento
+    if (this.isCounterRunning) {
+      this.stopCounter();
+    }
+    next();
+  },
   methods: {
+    startCounter() {
+      if (!this.isCounterRunning) {
+        const activeItem = this.getActiveItem();
+
+        if (activeItem) {
+          this.intervalId = setInterval(() => {
+            this.updateCounter(activeItem);
+          }, 1000);
+        }
+        this.isCounterRunning = true;
+      }
+    },
+    getActiveItem() {
+      return this.workSheet.working_hours.find(item => item.date_time_end === null);
+    },
+    updateCounter(activeItem) {
+      const diff = this.updateDateTimeDiff(activeItem.date_time_start);
+      this.updateActiveItem(activeItem, diff);
+      this.incrementTotalTime();
+    },
+    updateActiveItem(activeItem, diff) {
+      const index = this.workSheet.working_hours.indexOf(activeItem);
+      if (index !== -1) {
+        this.workSheet.working_hours[index].date_time_diff = diff;
+      }
+    },
+    incrementTotalTime() {
+      const totalParts = this.workSheet.working_hours_total.split(':');
+      let hours = parseInt(totalParts[0]);
+      let minutes = parseInt(totalParts[1]);
+      let seconds = parseInt(totalParts[2]) + 1;
+
+      if (seconds >= 60) {
+        seconds = 0;
+        minutes += 1;
+      }
+      if (minutes >= 60) {
+        minutes = 0;
+        hours += 1;
+      }
+
+      this.workSheet.working_hours_total = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    },
+    stopCounter() {
+      if (this.isCounterRunning) {
+        // Detener el intervalo utilizando clearInterval y la referencia almacenada
+        clearInterval(this.intervalId);
+
+        // Restablecer el indicador de que el contador está detenido
+        this.isCounterRunning = false;
+      }
+    },
+    updateDateTimeDiff(start) {
+      if (start) {
+        const startTime = new Date(start).getTime();
+        const currentTime = new Date().getTime();
+        const diffMilliseconds = currentTime - startTime;
+
+        const hours = Math.floor(diffMilliseconds / 3600000);
+        const minutes = Math.floor((diffMilliseconds % 3600000) / 60000);
+        const seconds = Math.floor((diffMilliseconds % 60000) / 1000);
+
+        return {
+          hours: hours.toString().padStart(2, '0'),
+          minutes: minutes.toString().padStart(2, '0'),
+          secons: seconds.toString().padStart(2, '0'),
+        };
+      }
+    },
     backPage() {
       this.$router.push(`/work-sheet`);
     },
@@ -545,6 +627,7 @@ export default {
 
         this.machineWorkSheetService.start(payload).then((data) => {
           this.workSheet = data.data;
+          this.startCounter()
         });
       } else {
         this.$toast.add({
@@ -562,6 +645,7 @@ export default {
       };
       this.machineWorkSheetService.pause(id, payload).then((data) => {
         this.workSheet = data.data;
+        this.stopCounter()
       });
     },
     restartWork() {
@@ -571,6 +655,8 @@ export default {
       };
       this.machineWorkSheetService.restart(id, payload).then((data) => {
         this.workSheet = data.data;
+        this.stopCounter()
+        this.startCounter()
       });
     },
     stopWork() {
@@ -580,6 +666,7 @@ export default {
       };
       this.machineWorkSheetService.stop(id, payload).then((data) => {
         this.workSheet = data.data;
+        this.stopCounter()
       });
     },
   },
