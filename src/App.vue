@@ -227,11 +227,10 @@ export default {
     ).permissions;
     permissions_list.map((permission) => permissions.push(permission.name));
     this.permissions = permissions;
-    // console.log(localStorage.getItem("token"));
     window.Echo = new Echo({
       broadcaster: "pusher",
-      key: '50f52a7e704c828f839c',
-      cluster : 'ap1',
+      key: process.env.VUE_APP_PUSHER_KEY,
+      cluster : process.env.VUE_APP_PUSHER_CLUSTER,
       forceTLS: true,
     });
   },
