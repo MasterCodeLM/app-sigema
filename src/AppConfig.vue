@@ -318,7 +318,6 @@ export default {
   methods: {
     setTheme() {
       let theme = localStorage.getItem("theme") ? JSON.parse(localStorage.getItem("theme")) : { theme: 'saga-green', dark: true };
-      console.log(theme);
       EventBus.emit("theme-change", theme);
     },
     toggleConfigurator(event) {
