@@ -28,7 +28,7 @@ import AppMenu from "./AppMenu.vue";
 import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
 import "primeicons/primeicons.css";
-import Echo from "laravel-echo";
+// import Echo from "laravel-echo";
 
 window.Pusher = require("pusher-js");
 export default {
@@ -227,12 +227,16 @@ export default {
     ).permissions;
     permissions_list.map((permission) => permissions.push(permission.name));
     this.permissions = permissions;
-    window.Echo = new Echo({
-      broadcaster: "pusher",
-      key: process.env.VUE_APP_PUSHER_KEY,
-      cluster : process.env.VUE_APP_PUSHER_CLUSTER,
-      forceTLS: true,
+    // window.Echo = new Echo({
+    //   broadcaster: "pusher",
+    //   key: process.env.VUE_APP_PUSHER_KEY,
+    //   cluster : process.env.VUE_APP_PUSHER_CLUSTER,
+    //   forceTLS: true,
+    // });
+		window.MyPusher = new window.Pusher('50f52a7e704c828f839c', {
+      cluster: 'ap1'
     });
+		
   },
   mounted() {
     this.setLenguage();
