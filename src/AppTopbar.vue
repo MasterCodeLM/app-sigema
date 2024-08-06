@@ -167,12 +167,12 @@ export default {
 		this.player.src = this.sound;
 		this.player.volume = this.volume;
 
-		var channel = window.MyPusher.subscribe('my-channel');
-		channel.bind('my-event', (data) => {
+		var channel = window.MyPusher.subscribe('notifications');
+		channel.bind('App\\Events\\NewNotification', (data) => {
+      // console.log(data)
 			// Aquí puedes usar `this` para acceder al contexto de Vue
 			if (this.permissions.includes("notifications")) {
-				this.notifications.unshift(data.notification); // Suponiendo que `data.notification` contiene la nueva notificación
-
+				this.notifications.unshift(data.data); // Suponiendo que `data.notification` contiene la nueva notificación
 				let numberDontView = 0;
 				this.notifications.map((notification) => {
 					if (!notification.is_view) numberDontView++;
