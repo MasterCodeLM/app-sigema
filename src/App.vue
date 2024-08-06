@@ -233,8 +233,8 @@ export default {
     //   cluster : process.env.VUE_APP_PUSHER_CLUSTER,
     //   forceTLS: true,
     // });
-		window.MyPusher = new window.Pusher('74a129997f78ebbd00fc', {
-      cluster: 'us2'
+		window.MyPusher = new window.Pusher(process.env.VUE_APP_PUSHER_KEY, {
+      cluster: process.env.VUE_APP_PUSHER_CLUSTER
     });
 		
   },
